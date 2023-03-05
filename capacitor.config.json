@@ -1,0 +1,11 @@
+{
+  "appId": "relicblade.deckbuilder",
+  "appName": "deckbuilder",
+  "bundledWebRuntime": false,
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}
