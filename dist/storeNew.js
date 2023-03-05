@@ -1,4 +1,4 @@
-const store = {
+const cardsStore = {
     "Add Own": {
         "uid": "Add Own",
         "base": "purchase",

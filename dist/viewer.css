@@ -171,7 +171,7 @@ add label {
   pointer-events: none;
 }
 
-purchase.bought {
+purchase.bought label {
   display: none;
 }
 

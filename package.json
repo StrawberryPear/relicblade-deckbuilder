@@ -11,7 +11,8 @@
   "dependencies": {
     "@capacitor/camera": "latest",
     "@capacitor/core": "latest",
-    "@capacitor/splash-screen": "latest"
+    "@capacitor/splash-screen": "latest",
+    "cordova-plugin-purchase": "^13.3.4"
   },
   "devDependencies": {
     "@capacitor/android": "^4.7.0",

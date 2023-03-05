@@ -51,7 +51,7 @@ const awaitFrame = () => new Promise(resolve => {
 
 const updateDeck = () => {
   // work out total points in deck :D
-  const cards = deck.map(deckStore => [deckStore, ...(deckStore.upgrades || [])]).flat().map(deckStore => store[deckStore.uid]);
+  const cards = deck.map(deckStore => [deckStore, ...(deckStore.upgrades || [])]).flat().map(deckStore => cardsStore[deckStore.uid]);
   const cost = cards.reduce((sum, card) => card ? sum + (parseInt(card.cost) || 0) : sum, 0);
 
   const deckCostEle = document.getElementById('points');
@@ -215,7 +215,7 @@ const addCharacterToDeck = (data, updateDeckStore = true) => {
   const uid = data.uid;
   if (!uid) return;
 
-  const cardStore = store[uid];
+  const cardStore = cardsStore[uid];
   if (!cardStore) return;
 
   const libraryCardEles = [...cardLibraryListEle.children];
@@ -263,7 +263,7 @@ const addCharacterToDeck = (data, updateDeckStore = true) => {
 const addUpgradeToCharacter = (upgradeUID, characterCardEle, deckCharacter, updateDeckStore = true) => {
   if (!upgradeUID) return;
 
-  const upgradeCardStore = store[upgradeUID];
+  const upgradeCardStore = cardsStore[upgradeUID];
   if (!upgradeCardStore) return;
 
   const libraryCardEles = [...cardLibraryListEle.children];
@@ -365,6 +365,7 @@ const init = async () => {
       }
     );
   }
+  document.addEventListener("resume", updateAppSize);
   window.addEventListener('resize', updateAppSize)
   updateAppSize()
 
@@ -512,7 +513,7 @@ const init = async () => {
     }
 
     const uid = deckCurrentCardEle.getAttribute("uid");
-    const cardStore = store[uid];
+    const cardStore = cardsStore[uid];
     if (!cardStore) return;
 
     const currentCardIndex = [...cardDeckListEle.children].indexOf(deckCurrentCardEle.parentElement);
@@ -601,7 +602,7 @@ const init = async () => {
     showToast(`Upgrade Attached`);
     showDeckButton.click();
   });
-  cardScrollerEle.addEventListener('click', (e) => {
+  cardScrollerEle.addEventListener('click', async (e) => {
     // get the card that was clicked
     const cardEle = e.target;
 
@@ -629,7 +630,7 @@ const init = async () => {
     if (!currentCardEle) return;
     
     const uid = currentCardEle.getAttribute("uid");
-    const cardStore = store[uid];
+    const cardStore = cardsStore[uid];
     if (!cardStore) return;
 
     // get the xy of where was clicked
@@ -646,8 +647,15 @@ const init = async () => {
 
     switch (currentCardEle.tagName) {
       case "PURCHASE":
-        if (!currentCardEle.classList.contains("bought")) {
-          window.open("https://relicblade.com/shop?category=Cards");
+        try {
+          const status = await buyProduct(uid);
+
+          if (status) {
+            // install the cards.
+            await installProduct(uid);
+          }
+        } catch (error) {
+          showToast(error.message);
         }
         break;
     }
@@ -822,6 +830,8 @@ const init = async () => {
   })
 
   const onCarouselInteraction = event => {
+    if (!event.touches) return;
+
     const touch = event.touches[0];
     const touchX = touch.clientX - carouselCanvasEle.offsetLeft;
     const scrollRatio = touchX / carouselCanvasEle.clientWidth;

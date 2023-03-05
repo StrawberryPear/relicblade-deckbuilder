@@ -8,7 +8,7 @@ const updateCarousel = () => {
   const scrollPadding = cardScrollerEle.clientWidth * 0.5;
   const scrollScalar = (cardScrollerEle.scrollLeft) / (cardLibraryListEle.clientWidth - scrollPadding * 2);
 
-  const libraryCardEles = [...cardLibraryListEle.children].filter(e => !e.classList.contains('inactive') && !e.classList.contains('bought'));
+  const libraryCardEles = [...cardLibraryListEle.children].filter(e => !e.classList.contains('inactive'));
   const count = libraryCardEles.length;
 
   const cardDrawWidth = (CARD_WIDTH / CARD_HEIGHT) * carouselCanvasEle.height;

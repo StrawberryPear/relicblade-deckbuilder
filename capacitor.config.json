@@ -1,6 +1,6 @@
 {
   "appId": "relicblade.deckbuilder",
-  "appName": "deckbuilder",
+  "appName": "Relicblade Deck Builder",
   "bundledWebRuntime": false,
   "webDir": "dist",
   "plugins": {

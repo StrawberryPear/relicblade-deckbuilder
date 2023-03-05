@@ -109,7 +109,7 @@ const applyFilters = () => {
 
   for (const cardEle of libraryCardEles) {
     const uid = cardEle.getAttribute('uid');
-    const cardStore = store[uid];
+    const cardStore = cardsStore[uid];
 
     if (!cardStore) {
       cardEle.classList.toggle('inactive', subFilter || !allFalse || !!searchText.trim());
@@ -169,15 +169,18 @@ const applyFilters = () => {
   }
 
   // check purchases
+  const baseCardUids = baseCards.map(card => card.uid.toLowerCase());
   for (const purchaseEle of [...libraryCardEles.filter(ele => ele.tagName == "PURCHASE")]) {
     const uid = purchaseEle.getAttribute("uid").toLowerCase();
-
+    
     const hasCardsMatching = libraryCardEles
       .filter(ele => ele.tagName == "CARD")
       .map(ele => ele.getAttribute("uid").toLowerCase())
-      .filter(cardUid => !baseCards.findIndex(baseCard => baseCard.uid.toLowerCase == cardUid))
-      .find(cardUid => (cardUid || "").includes(uid));
+      .filter(cardUid => !baseCardUids.includes(cardUid))
+      .find(cardUid => (cardUid || "").indexOf(uid) != -1);
 
-    purchaseEle.classList.toggle("bought", !!hasCardsMatching);
+    console.log(hasCardsMatching);
+
+    purchaseEle.classList.toggle("inactive", !!hasCardsMatching);
   }
 }

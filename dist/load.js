@@ -3,7 +3,7 @@ const getCardLibraryPlacementBeforeEle = (placeCard) => {
 
   const getCardSortWeighting = (cardEle) => {
     const cardUID = cardEle.getAttribute('uid');
-    const cardStore = store[cardUID];
+    const cardStore = cardsStore[cardUID];
 
     if (!cardStore) return;
 
@@ -183,7 +183,7 @@ const loadCard = (card) => {
   cardEle.setAttribute('uid', card.uid);
   cardEle.setAttribute('index', card.index);
 
-  // const cardStore = store[]
+  // const cardStore = cardsStore[]
   // if (card. == "DELETE"
 
   // where should it be placed.
