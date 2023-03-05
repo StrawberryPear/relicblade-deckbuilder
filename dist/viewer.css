@@ -1,0 +1,1039 @@
+@font-face {
+  font-family: tradeWinds;
+  src: url('./assets/trade-winds.ttf');
+}
+
+@keyframes markboxFlash {
+  0% {
+    opacity: 0;
+  }
+
+  45% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+
+  55% {
+    opacity: 0;
+  }
+
+  60% {
+    opacity: 0.3;
+  }
+
+  65% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+:root {
+  --screen-width: 100%;
+  --screen-height: 100%;
+
+  --safe-area-top: 0px;
+  --safe-area-bottom: 0px;
+
+  --card-base-width: 269;
+  --card-base-height: 367;
+
+  --card-width: min(0.875 * var(--screen-width), calc(0.875 * var(--screen-height) - 104px) * (var(--card-base-width) / var(--card-base-height)));
+  --card-height:
+    calc(var(--card-width) * (var(--card-base-height) / var(--card-base-width)) * 1.03);
+  --offset-top:
+    max(0px, 0.6 * var(--screen-height) - calc(var(--card-height)));
+  --nav-height: 48px;
+  --foot-height: 44px;
+}
+
+html {
+  padding-top: var(--safe-area-top);
+  padding-bottom: var(--safe-area-bottom);
+}
+
+html,
+body {
+  overscroll-behavior: none;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background: #000;
+  font-family: "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #fff;
+  box-sizing: border-box;
+  position: fixed;
+  height: calc(var(--screen-height));
+  max-height: calc(var(--screen-height));
+}
+
+cardScroller {
+  display: block;
+  height: 100%;
+  width: 100%;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overflow-x: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  position: relative;
+  overflow-y: hidden;
+}
+
+body.editing cardScroller {
+  user-select: none;
+  pointer-events: none;
+}
+
+body:not(.editing) cardList.deck card canvas {
+  pointer-events: none;
+}
+
+cardScroller.deck>cardList.library,
+cardScroller.library>cardList.deck {
+  display: none;
+}
+
+cardScroller::-webkit-scrollbar {
+  display: none;
+}
+
+cardList {
+  display: inline-flex;
+  height: 100%;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 50%;
+  scroll-snap-align: none;
+}
+
+card,
+purchase,
+import,
+add {
+  position: relative;
+  width: var(--card-width);
+  height: var(--card-height);
+  display: inline-block;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-color: #000;
+  border-radius: 3.8%;
+  margin: 0 min(2vw, 20px);
+  scroll-snap-align: center;
+  transform-style: preserve-3d;
+}
+
+cardDeckWrapper {
+  position: relative;
+  width: var(--card-width);
+  height: var(--card-height);
+  display: inline-block;
+  border-radius: 3.8%;
+  margin: 0 min(2vw, 20px);
+  scroll-snap-align: center;
+  padding-bottom: 64px;
+}
+
+cardDeckWrapper card {
+  scroll-snap-align: none;
+  margin: 0;
+}
+
+purchase,
+import,
+add {
+  height: var(--card-width);
+  background-color: #113e40;
+}
+
+purchase label,
+import label,
+add label {
+  position: absolute;
+  bottom: 10%;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.9);
+  font-family: 'tradeWinds';
+  text-align: center;
+  font-size: 20px;
+  pointer-events: none;
+}
+
+purchase.bought {
+  display: none;
+}
+
+import {
+  background-color: #0c3133;
+  background-image: url('./assets/import.png');
+  filter: saturate(0.6);
+}
+
+purchase[uid="Lostwood Enclave"] {
+  background-image: url('./assets/cardpacks/Lostwood-Enclave-Faction-Set.jpg');
+}
+
+purchase[uid="Temple of Justice"] {
+  background-image: url('./assets/cardpacks/Temple-of-Justice-Faction-Set.jpg');
+}
+
+purchase[uid="Battle Pigs"] {
+  background-image: url('./assets/cardpacks/Battle-Pig-Faction-Set.jpg');
+}
+
+purchase[uid="Adventure Gear"] {
+  background-image: url('./assets/cardpacks/Adventure-Gear.jpg');
+}
+
+purchase[uid="The Lone Guard"] {
+  background-image: url('./assets/cardpacks/Lone-Guard-Faction-Set.jpg');
+}
+
+purchase[uid="Bone and Darkness"] {
+  background-image: url('./assets/cardpacks/Bone-and-Darkness-Faction-Set.jpg');
+}
+
+purchase[uid="The Wilderkin"] {
+  background-image: url('./assets/cardpacks/Wilderkin-Faction-Set.jpg');
+}
+
+purchase[uid="Wretched Hive"] {
+  background-image: url('./assets/cardpacks/Wretched-Hive-Faction-Set.jpg');
+}
+
+purchase[uid="Moldorf Expedition"] {
+  background-image: url('./assets/cardpacks/moldorf-expedition-faction-set.jpg');
+}
+
+purchase[uid="Apostles of the Deep"] {
+  background-image: url('./assets/cardpacks/apostels-of-the-deep.jpg');
+}
+
+purchase[uid="Kingdoms of Akadh"] {
+  background-image: url('./assets/cardpacks/Kingdoms-of-Akadhk.jpeg');
+}
+
+purchase[uid="Relics of the Volge"] {
+  background-image: url('./assets/cardpacks/Relics-of-the-volge.jpg');
+}
+
+purchase[uid="Storms of Kural"] {
+  background-image: url('./assets/cardpacks/Storms-of-Kural.jpg');
+}
+
+purchase[uid="Singular Champions 1"] {
+  background-image: url('./assets/cardpacks/Singular-Champions-1.jpg');
+}
+
+purchase[uid="Singular Champions 2"] {
+  background-image: url('./assets/cardpacks/Singular-Champions-2.jpg');
+}
+
+purchase[uid="Singular Champions 3"] {
+  background-image: url('./assets/cardpacks/Singular-Champions-3.jpg');
+}
+
+purchase[uid="Singular Champions 4"] {
+  background-image: url('./assets/cardpacks/Singular-Champions-4.jpg');
+}
+
+card.inactive,
+purchase.inactive,
+import.inactive {
+  display: none;
+}
+
+body.editing card {
+  pointer-events: all;
+}
+
+card canvas {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+nav {
+  display: flex;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: var(--nav-height);
+  background: #020607;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  min-height: var(--nav-height);
+  z-index: 2;
+}
+
+call {
+  display: flex;
+  position: relative;
+  margin-left: 4px;
+  font-size: 20px;
+  font-family: tradeWinds;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-content: center;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+ham {
+  position: relative;
+  margin-right: 5px;
+  width: 44px;
+  box-sizing: border-box;
+  height: 100%;
+  background: url('./assets/ham.png');
+  background-size: 34px auto;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+body[showing="library"] .deck,
+body[showing="deck"] .library,
+body.editing cardTabControls cardControl.deck,
+body:not(.editing) cardTabControls cardControl.editing {
+  display: none !important;
+}
+
+cardTabControls {
+  display: flex;
+  position: fixed;
+  top: calc(var(--nav-height) + 30.5px);
+  left: var(--screen-width);
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  height: var(--card-height);
+  transform: translateX(-100%);
+  z-index: 2;
+}
+
+cardTopControls {
+  display: flex;
+  top: calc(var(--nav-height));
+  left: 0px;
+  flex-direction: row;
+  /* pointer-events: none; */
+  flex-wrap: nowrap;
+  align-items: stretch;
+  background: #0d2426;
+  font-size: 16px;
+  overflow: hidden;
+  min-height: 30.5px;
+}
+
+cardControl {
+  position: relative;
+  width: min(calc(0.06 * var(--screen-height)), 80px);
+  height: 100%;
+  background: #0d2426;
+  pointer-events: all;
+  transform: scale(1.15);
+  color: white;
+}
+
+cardControl::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  background-size: 80%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+cardControl::before {
+  content: 'U';
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'tradeWinds';
+  font-size: 20px;
+  /* padding-top: 4px; */
+  height: 100%;
+  background-size: auto 58%;
+  background-position: center;
+  background-repeat: no-repeat;
+  right: 4px;
+  background-size: auto 80%;
+}
+
+cardControl.inactive {}
+
+cardControl.filterCharacter::before {
+  content: '';
+  background-image: url('./assets/character.png');
+  background-size: auto 80%;
+}
+
+cardControl.filterAdvocate::before {
+  content: '';
+  background-image: url('./assets/advocate.png');
+  background-size: auto 90%;
+}
+
+cardControl.filterAdversary::before {
+  content: '';
+  background-image: url('./assets/adversary.png');
+  background-size: auto 70%;
+}
+
+cardControl.filterNeutral::before {
+  content: 'N';
+}
+
+cardControl.filterTactic::before {
+  content: '';
+  background-image: url('./assets/tactic.png');
+  background-size: auto 90%;
+}
+
+cardControl.filterPotion::before {
+  content: '';
+  background-image: url('./assets/potion.png');
+}
+
+cardControl.filterWeapon::before {
+  content: '';
+  background-image: url('./assets/weapon.png');
+}
+
+cardControl.filterItem::before,
+cardControl.filterUpgrade::before {
+  content: '';
+  background-image: url('./assets/item.png');
+  background-size: auto 80%;
+}
+
+cardControl.filterSpell::before {
+  content: '';
+  background-image: url('./assets/spell.png');
+}
+
+cardControl.filterRelic::before,
+cardControl.filterRelicUpgrade::before {
+  content: '';
+  background-image: url('./assets/relic.png');
+}
+
+cardControl.filterShop::before {
+  font-size: 26px;
+  content: '$';
+  padding-top: 3px;
+  padding-left: 2px;
+}
+
+
+cardButtons {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  text-align: center;
+  width: 100%;
+  justify-items: center;
+  padding-bottom: calc(var(--screen-height) * 0.01);
+  align-items: end;
+  background: linear-gradient(00deg, #000a, transparent);
+}
+
+cardButton,
+modalButton {
+  position: relative;
+  display: flex;
+  grid-column: 1;
+  grid-row: 1;
+  background: url(./assets/add-remove.png);
+  height: min(64px, calc(0.085 * var(--screen-height)));
+  width: calc(100% - 2vw);
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-sizing: border-box;
+  align-content: flex-end;
+  justify-content: center;
+  font-family: 'tradeWinds';
+  font-size: min(16px, calc(8px + 0.01 * var(--screen-height)));
+  align-items: center;
+}
+
+cardButton::before {}
+
+cardButton.removeFromDeck::before {}
+
+cardButtons.searched cardButton.search,
+cardButtons:not(.searched) cardButton.clearSearch {
+  display: none;
+}
+
+cardButton.search {
+  grid-column: 3;
+}
+
+cardButton.clearSearch {
+  grid-column: 3;
+}
+
+foot {
+  width: 100%;
+  height: var(--foot-height);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  display: none;
+}
+
+foot footControl {
+  display: inline-block;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  background: #020607;
+  font-family: 'tradeWinds';
+}
+
+cardScroller.library~foot footControl.showLibrary,
+cardScroller.deck~foot footControl.showDeck {
+  background: #0206072F;
+}
+
+helpOverlay {
+  display: flex;
+  position: relative;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  opacity: 1;
+  transition: opacity 0.2s;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+helpMedalion {
+  width: 50%;
+  padding-top: 50%;
+  display: block;
+  background: url('./assets/ham.png');
+  background-size: min(100%, 200px);
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-bottom: 32px;
+}
+
+helpOverlay a {
+  color: #fff;
+}
+
+helpOverlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+toast {
+  position: absolute;
+  top: 50%;
+  height: min(128px, calc(0.17 * var(--screen-height)));
+  width: calc(min(384px, calc(0.17 * var(--screen-height)) * 3));
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: url('./assets/toastBack.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+  user-select: none;
+  font-family: 'tradeWinds';
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
+
+@keyframes loadingSpin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+loading {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 35vw;
+  height: 35vw;
+
+  animation: loadingSpin 3s infinite linear;
+  border-radius: 50%;
+  border: 12px solid #0000;
+  border-top-color: #fff;
+  border-bottom-color: #fff1;
+}
+
+overlayMenu,
+loadingOverlay,
+modalOverlay {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.95);
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  transition: opacity 0.2s;
+  user-select: none;
+  z-index: 10;
+}
+
+loadingOverlay {
+  pointer-events: all;
+}
+
+overlayMenu.hidden,
+modalOverlay.hidden,
+body:not(.loading) loadingOverlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+overlayMenu.hidden *,
+modalOverlay.hidden * {
+  pointer-events: none !important;
+}
+
+label input {
+  display: none;
+}
+
+menuControl,
+.menuControl {
+  display: block;
+  font-size: 24px;
+  font-family: 'tradeWinds';
+  margin-top: 24px;
+  text-decoration: underline;
+}
+
+searchContainer {
+  flex-grow: 1;
+  position: relative;
+}
+
+searchContainer input[type="text"] {
+  width: 100%;
+  background: none;
+  box-sizing: border-box;
+  border: none;
+  position: relative;
+  padding: 6px 32px;
+  color: white;
+  font-size: inherit;
+}
+
+searchIcon {
+  position: absolute;
+  display: block;
+  top: 50%;
+  left: 16px;
+  width: 24px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+  background-image: url('./assets/search.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+topButton {
+  position: relative;
+  width: calc(var(--screen-width) * 0.25);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'tradeWinds';
+  background: #0d2426;
+}
+
+topbutton.grid {
+  width: 46px;
+  background-image: url('./assets/grid.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: auto 74%;
+  min-width: 56px;
+}
+
+searchicon[type="clear"] {
+  left: calc(100% - 16px);
+  background-image: url('./assets/end.png');
+  pointer-events: all;
+}
+
+cardTopControls:not(.searched) searchicon[type="clear"] {
+  display: none;
+}
+
+cardbutton.addToDeck {
+  grid-column: 3;
+}
+
+cardbutton.removeFromDeck {
+  grid-column: 2;
+}
+
+body[displayType="grid"] cardlist.library {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  align-content: center;
+  grid-template-rows: repeat(auto-fill, calc(var(--card-height) * 0.45 + var(--screen-height) * 0.01));
+  grid-auto-flow: column;
+  box-sizing: border-box;
+  position: relative;
+  padding-right: 0px;
+}
+
+body[displayType="grid"] cardlist.library::after {
+  content: "";
+  width: calc(var(--screen-width) * 0.5);
+  margin-right: 0px;
+  height: 100%;
+  grid-row: span round(down, calc(var(--screen-height) - 56.69px - 30.5px - var(--nav-height)));
+}
+
+body[displayType="grid"] cardlist.library card {
+  width: calc(var(--card-width) * 0.45);
+  height: calc(var(--card-height) * 0.45);
+  /* transform: scale(0.5); */
+  margin: 0 min(1vw, 10px);
+}
+
+body[displayType="grid"] cardlist.library purchase,
+body[displayType="grid"] cardlist.library import {
+  width: calc(var(--card-width) * 0.5);
+  height: calc(var(--card-width) * 0.5);
+}
+
+body[displayType="grid"] cardlist.library purchase label,
+body[displayType="grid"] cardlist.library import label {
+  font-size: 12px
+}
+
+cardCarousel {
+  display: none;
+  width: 100%;
+  height: calc(var(--card-height) * 0.125);
+  margin-bottom: calc(var(--screen-height) * 0.01);
+  /* background: url(
+    './assets/toastBack.png'); */
+  background-size: 100%;
+  /* background-repeat: no-repeat; */
+  /* background-position: center; */
+  /* mask: url(
+    './assets/toastBack.png'); */
+  /* -webkit-mask-size: 100%; */
+  /* -webkit-mask-repeat: no-repeat; */
+  /* -webkit-mask-image: url('./assets/toastBack.png'); */
+  /* -webkit-mask-position: center; */
+  /* margin-left: 2%; */
+  position: relative;
+}
+
+cardCarousel canvas {
+  margin: 3px 8px;
+  width: calc(100% - 16px);
+  height: calc(100% - 6px);
+  pointer-events: none;
+}
+
+cardScrollerContainer {
+  display: block;
+  width: 100vw;
+  flex-grow: 1;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  position: relative;
+}
+
+body[showing="library"]:not([displayType="grid"]) cardcarousel {
+  display: block;
+}
+
+body[displayType="grid"] topButton.grid {
+  background-image: url('./assets/single.png');
+}
+
+cardbutton.addUpgrade {
+  grid-column: 3;
+}
+
+cardbutton.attachUpgrade {
+  grid-column: 3;
+}
+
+label.fileUpload {
+  pointer-events: all;
+  top: 0px;
+  bottom: 0px;
+  background: none;
+}
+
+body:not([subfilter="character"]) cardcontrol[type="character"],
+body[subfilter="character"] cardcontrol:not([type="character"]),
+body:not([subfilter="upgrade"]) cardcontrol[type="upgrade"],
+body[subfilter="upgrade"] cardcontrol:not([type="upgrade"]) {
+  display: none;
+}
+
+body:not([subFilter="upgrade"]) cardButton.attachUpgrade,
+body[displayType="grid"] cardButton.attachUpgrade {
+  display: none;
+}
+
+body[subFilter="upgrade"] cardbutton.addToDeck,
+body[displayType="grid"] cardbutton.addToDeck {
+  display: none;
+}
+
+markBox {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url(./assets/marked.png);
+  animation: markboxFlash 12s infinite;
+  filter: grayscale(1);
+}
+
+markBox:first-child:last-child {
+  width: 24px;
+  animation: none;
+  filter: none;
+  height: 24px;
+  background-image: url('./assets/unmarked.png');
+}
+
+markBox.marked:first-child:last-child {
+  width: 24px;
+  height: 24px;
+  background-image: url('./assets/marked.png'), url('./assets/unmarked.png');
+
+}
+
+markBox.marked {
+  opacity: 1;
+  animation: none;
+  filter: none;
+}
+
+card>card {
+  position: absolute;
+  transform: translateY(-73.85px) translateZ(-1px);
+  margin: 0;
+}
+
+card>card:nth-of-type(2) {
+  transform: translateY(-90px) translateZ(-2px);
+}
+
+body[showing="deck"] cardButtons {
+  position: fixed;
+  bottom: var(--safe-area-bottom);
+}
+
+body[showing="deck"] cardScrollerContainer {
+  max-height: calc(var(--screen-height));
+  min-height: calc(var(--screen-height));
+  padding-top: calc(var(--nav-height));
+  top: calc(-1 * var(--nav-height));
+  /* padding-bottom: var(--nav-height); */
+  box-sizing: border-box;
+}
+
+cardlist.deck {
+  padding-top: calc(var(--screen-height) * 0.1);
+}
+
+cardcontrol:not(.inactive) {
+  background: #fff;
+  color: #000;
+}
+
+main {
+  background: #091e21;
+  position: relative;
+  height: var(--screen-height);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+input#title {
+  overflow: hidden;
+  white-space: nowrap;
+  background: none;
+  border: none;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  font-size: 20px;
+  font-family: tradeWinds;
+  color: #fff;
+}
+
+deckTitleContainer {
+  position: relative;
+  display: inline-block;
+}
+
+deckTitleMirror {
+  opacity: 0;
+  pointer-events: none;
+  padding-right: 8px;
+}
+
+edit {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url('./assets/edit.png');
+  background-size: 19px;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+add {
+  margin-bottom: calc(var(--screen-height) * 0.1);
+  background: url('./assets/addCharacter.png');
+  background-size: 110%;
+}
+
+add::after,
+import::after {
+  content: '+';
+  position: absolute;
+  top: 11.5%;
+  width: 100%;
+  left: 0px;
+  right: 0px;
+  font-family: tradeWinds;
+  font-size: 144px;
+  text-align: center;
+  color: #fff;
+  filter: drop-shadow(0px 0px 2px black) drop-shadow(-2px -1px 2px black) drop-shadow(2px 2px 2px black);
+}
+
+overlayMenu:not([showing="mainMenu"]) mainMenu,
+overlayMenu:not([showing="savesMenu"]) savesMenu {
+  display: none;
+}
+
+savesMenu,
+mainMenu {
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+
+body[displayType="grid"] cardlist.library import::after {
+  font-size: 42px;
+}
+
+modaloverlay {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: flex-end;
+  align-items: center;
+  background: #0008;
+  padding-bottom: 10%;
+  box-sizing: border-box;
+}
+
+modaltext {
+  font-family: 'tradeWinds';
+  text-shadow: 2px 2px black;
+  font-size: 16px;
+}
+
+modal {
+  width: 90%;
+  padding: 5%;
+  box-sizing: border-box;
+  background: #091e21ee;
+}
+
+modalbuttons {
+  text-align: right;
+}
+
+modalbuttons {
+  display: grid;
+  margin-top: 32px;
+}
+
+modalbutton#modalReturn {}
+
+modalbutton#modalReturn {
+  grid-column: 2;
+}
+
+modaltext {}

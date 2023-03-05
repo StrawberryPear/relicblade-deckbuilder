@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Relicblade Deck Builder",
+  "description": "Build Relicblade Decks",
+  "display": "standalone",
+  "version": "1.0",
+  "icons": {
+    "512": "assets/icon512.png"
+  },
+  "content_scripts": [
+  ]
+}
