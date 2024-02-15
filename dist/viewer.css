@@ -43,7 +43,7 @@
   --card-base-width: 269;
   --card-base-height: 367;
 
-  --card-width: min(0.875 * var(--screen-width), calc(0.875 * var(--screen-height) - 104px) * (var(--card-base-width) / var(--card-base-height)));
+  --card-width: min(0.875 * var(--screen-width), calc(0.875 * var(--screen-height) - 203px) * (var(--card-base-width) / var(--card-base-height)));
   --card-height:
     calc(var(--card-width) * (var(--card-base-height) / var(--card-base-width)) * 1.03);
   --offset-top:
@@ -181,72 +181,9 @@ import {
   filter: saturate(0.6);
 }
 
-purchase[uid="Lostwood Enclave"] {
-  background-image: url('./assets/cardpacks/Lostwood-Enclave-Faction-Set.jpg');
-}
-
-purchase[uid="Temple of Justice"] {
-  background-image: url('./assets/cardpacks/Temple-of-Justice-Faction-Set.jpg');
-}
-
-purchase[uid="Battle Pigs"] {
-  background-image: url('./assets/cardpacks/Battle-Pig-Faction-Set.jpg');
-}
-
-purchase[uid="Adventure Gear"] {
-  background-image: url('./assets/cardpacks/Adventure-Gear.jpg');
-}
-
-purchase[uid="The Lone Guard"] {
-  background-image: url('./assets/cardpacks/Lone-Guard-Faction-Set.jpg');
-}
-
-purchase[uid="Bone and Darkness"] {
-  background-image: url('./assets/cardpacks/Bone-and-Darkness-Faction-Set.jpg');
-}
-
-purchase[uid="The Wilderkin"] {
-  background-image: url('./assets/cardpacks/Wilderkin-Faction-Set.jpg');
-}
-
-purchase[uid="Wretched Hive"] {
-  background-image: url('./assets/cardpacks/Wretched-Hive-Faction-Set.jpg');
-}
-
-purchase[uid="Moldorf Expedition"] {
-  background-image: url('./assets/cardpacks/moldorf-expedition-faction-set.jpg');
-}
-
-purchase[uid="Apostles of the Deep"] {
-  background-image: url('./assets/cardpacks/apostels-of-the-deep.jpg');
-}
-
-purchase[uid="Kingdoms of Akadh"] {
-  background-image: url('./assets/cardpacks/Kingdoms-of-Akadhk.jpeg');
-}
-
-purchase[uid="Relics of the Volge"] {
-  background-image: url('./assets/cardpacks/Relics-of-the-volge.jpg');
-}
-
-purchase[uid="Storms of Kural"] {
-  background-image: url('./assets/cardpacks/Storms-of-Kural.jpg');
-}
-
-purchase[uid="Singular Champions 1"] {
-  background-image: url('./assets/cardpacks/Singular-Champions-1.jpg');
-}
-
-purchase[uid="Singular Champions 2"] {
-  background-image: url('./assets/cardpacks/Singular-Champions-2.jpg');
-}
-
-purchase[uid="Singular Champions 3"] {
-  background-image: url('./assets/cardpacks/Singular-Champions-3.jpg');
-}
-
-purchase[uid="Singular Champions 4"] {
-  background-image: url('./assets/cardpacks/Singular-Champions-4.jpg');
+purchase[uid="visitRelicblade"] {
+  background-color: #000000;
+  background-image: url('./assets/cardpacks/Metal-King.png');
 }
 
 card.inactive,
@@ -335,7 +272,7 @@ cardTopControls {
   /* pointer-events: none; */
   flex-wrap: nowrap;
   align-items: stretch;
-  background: #0d2426;
+  background: #1d393c;
   font-size: 16px;
   overflow: hidden;
   min-height: 30.5px;
@@ -444,7 +381,6 @@ cardControl.filterShop::before {
   padding-top: 3px;
   padding-left: 2px;
 }
-
 
 cardButtons {
   display: grid;
@@ -897,7 +833,7 @@ body[showing="deck"] cardScrollerContainer {
 }
 
 cardlist.deck {
-  padding-top: calc(var(--screen-height) * 0.1);
+  padding-top: calc(var(--screen-height) * 0.175);
 }
 
 cardcontrol:not(.inactive) {

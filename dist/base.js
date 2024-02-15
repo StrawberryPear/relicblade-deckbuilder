@@ -8,6 +8,8 @@ const CARD_OFFSET_Y = Math.round(18.6666666667 * SCALE);
 
 const CARD_ROW_OFFSET = Math.round(6.66666666667 * SCALE);
 
+const CARD_SLIDE_DURATION = 300;
+
 var database;
 var deckName = "";
 var deck = [];
@@ -65,6 +67,8 @@ const scrollScroller = async (left) => {
   cardScrollerEle.scrollTo({left, top: 0, behavior: 'instant'});
 
   const startTime = Date.now();
+
+  applyCarousel();
 
   do {
     await awaitFrame();
@@ -182,6 +186,11 @@ const applyDeckCardTopScroll = (containerCardEle, rangeScalar, setScalar = true)
 
   // work out how many cards are there to stack
   const upgradeCardEles = [...containerCardEle.children].filter(ele => ele.tagName == "CARD");
+
+  if (upgradeCardEles.length == 0) {
+    containerCardEle.style.setProperty("transform", `translateY(0px)`);
+    return;
+  }
 
   const cardHeight = containerCardEle.clientHeight;
   const rangeCardOffsetY = (0.175 / upgradeCardEles.length) * cardHeight;
@@ -648,24 +657,51 @@ const init = async () => {
     switch (currentCardEle.tagName) {
       case "PURCHASE":
         try {
-          const status = await buyProduct(uid);
-
-          if (status) {
-            // install the cards.
-            await installProduct(uid);
-          }
+          // open a browser window.
+          window.open("https://relicblade.com", "_blank");
         } catch (error) {
           showToast(error.message);
         }
         break;
+      case "IMPORT":
+        document.querySelector("#fileUpload").click();
+        break;
     }
   });
 
-  searchInputEle.addEventListener('keyup', async () => {
+  searchInputEle.addEventListener('keyup', async event => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      event.target.blur();
+    }
+
+    const currentFocusCard = getCurrentCardEle();
+
+    const libraryCardEles = [...cardLibraryListEle.children];
+    const previousActiveLibraryCardEles = libraryCardEles.filter(e => !e.classList.contains('inactive'));
+
     searchText = searchInputEle.value;
 
     applyFilters();
+    
+    const currentActiveLibraryCardEles = libraryCardEles.filter(e => !e.classList.contains('inactive'));
+
+    if (currentActiveLibraryCardEles.length != previousActiveLibraryCardEles.length) {
+      // scroll to the current focus card
+      const currentFocusCardIndex = currentActiveLibraryCardEles.indexOf(currentFocusCard);
+
+      if (currentFocusCardIndex != -1) {
+        const currentFocusCardEle = currentActiveLibraryCardEles[currentFocusCardIndex];
+        const scrollLeft = currentFocusCardEle.offsetLeft;
+        scrollScroller(scrollLeft);
+      } else {
+        scrollScroller(0);
+      }
+    }
+
     applyCarousel();
+
+    // try to maintain the scroll?
 
     cardTopControlsEle.classList.toggle('searched', !!searchText);
   });
@@ -686,7 +722,7 @@ const init = async () => {
       const currentCardEle = getCurrentCardEle();
       if (!currentCardEle) return;
       
-      const confirmValue = await confirm('Are you sure you want to remove this card from your library?');
+      const confirmValue = await showConfirm('Are you sure you want to remove this card from your library?');
       if (!confirmValue) return;
   
       // remove it from the library.
@@ -721,16 +757,17 @@ const init = async () => {
     applyCarousel();
   });
 
-  var scrollTimeout;
   cardScrollerEle.addEventListener("scroll", event => {
-    updateCarousel();
-    //TODO make the buttons update
+    if (document.body.getAttribute("showing") != "library") return;
+    if (document.body.getAttribute("displayType") == "grid") return;
+
+    applyCarousel();
   });
 
   cardScrollerEle.addEventListener("touchstart", event => {
     // check if we're in the deck
     if (document.body.getAttribute("showing") != "deck") return;
-
+    
     setDeckFocusCard(getCurrentDeckCardEle());
     if (!deckFocusCard) return;
 
@@ -747,15 +784,17 @@ const init = async () => {
     if (!deckFocusCard) return;
     
     const touch = event.touches[0];
+
     if (!deckFocusCard.deckDragging) {
-        
       deckFocusCard.currentRangeScalar = deckFocusCard.currentRangeScalar || 0;
-      
+    
       deckFocusCard.scrollY = 0;
       deckFocusCard.momentumY = 0;
 
       deckFocusCard.previousX = touch.pageX;
       deckFocusCard.previousY = touch.pageY;
+
+      deckFocusCard.hasVerticallity = false;
 
       deckFocusCard.deckDragging = true;
     }
@@ -775,7 +814,9 @@ const init = async () => {
       return;
     }
     if (event.cancelable) event.preventDefault();
-    
+
+    deckFocusCard.hasVerticallity = true;
+
     const rangeDelta = getDeckUpgradeRangeScalar(deckFocusCard, deltaY);
     const rangeScalar = deckFocusCard.currentRangeScalar + rangeDelta;
     
@@ -783,6 +824,7 @@ const init = async () => {
 
     applyDeckCardTopScroll(deckFocusCard, rangeScalar);
   }, {passive: false});
+  
   cardScrollerEle.addEventListener("touchend", async (event) => {
     if (document.body.getAttribute("showing") != "deck") return;
 
@@ -793,6 +835,8 @@ const init = async () => {
 
     const upgradeCardEles = [...focusCard.children].filter(ele => ele.tagName == "CARD");
 
+    if (!focusCard.hasVerticallity) return;
+
     // do the flickkkkk
     // animate it toward the closest scalar;
     const unsnappedTime = focusCard.unsnappedTime;
@@ -800,10 +844,14 @@ const init = async () => {
     const momentumScaled = focusCard.momentumY * 2;
     const maxCardIndex = Math.ceil(unsnappedRangeScalar);
     const minCardIndex = Math.floor(unsnappedRangeScalar);
-    const targetRangeScalar = Math.min(upgradeCardEles.length, maxCardIndex, Math.max(0, minCardIndex, Math.round(unsnappedRangeScalar + momentumScaled)));
+    const targetRangeScalar = Math.max(0, Math.min(upgradeCardEles.length, maxCardIndex, Math.max(0, minCardIndex, Math.round(unsnappedRangeScalar + momentumScaled))));
 
     // animate to the card.
-    const animationDuration = 300;
+    const animationDuration = CARD_SLIDE_DURATION;
+
+    focusCard.targetRangeScalar = targetRangeScalar;
+
+    console.log(targetRangeScalar);
 
     do {
       if (unsnappedTime != focusCard.unsnappedTime) return;
@@ -843,9 +891,6 @@ const init = async () => {
 
   carouselEle.addEventListener("touchstart", onCarouselInteraction);
   carouselEle.addEventListener("touchmove", onCarouselInteraction);
-
-  carouselEle.addEventListener("mousedown", onCarouselInteraction);
-  carouselEle.addEventListener("mousemove", onCarouselInteraction);
 
   deckTitleInput.addEventListener("input", event => {
     deckTitleInputMirror.innerText = deckTitleInput.value || deckTitleInput.placeholder;
@@ -926,6 +971,10 @@ const init = async () => {
         handleLoad(saveIdx);
       }
     });
+  });
+
+  document.querySelector("#fileUpload").addEventListener("change", event => {
+    document.body.className = 'loading';
   });
 
   saveReturnEle.addEventListener("click", event => {

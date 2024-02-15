@@ -88,27 +88,28 @@ let relicbladeProducts = [
 ];
 
 const buyProduct = async (productUid) => {
-  const { store } = CdvPurchase;
+  window.open("https://relicblade.com/shop?category=Cards");
+  // const { store } = CdvPurchase;
 
-  // if we own the product just download the thing
-  const product = relicbladeProducts.find(product => product.alias == productUid);
-  if (!product) throw new Error("No Product");
+  // // if we own the product just download the thing
+  // const product = relicbladeProducts.find(product => product.alias == productUid);
+  // if (!product) throw new Error("No Product");
 
-  const storeProduct = store.get(product.id);
-  if (!storeProduct) throw new Error("No Product");
+  // const storeProduct = store.get(product.id);
+  // if (!storeProduct) throw new Error("No Product");
 
-  // if product already owned, just pop the cards there.
-  if (storeProduct.owned) return true;
+  // // if product already owned, just pop the cards there.
+  // if (storeProduct.owned) return true;
 
-  const order = await storeProduct.getOffer().order();
-  if (order?.error) {
-    throw new Error("Unexpected");
-  }
+  // const order = await storeProduct.getOffer().order();
+  // if (order?.error) {
+  //   throw new Error("Unexpected");
+  // }
 
-  const afterStoreProduct = store.get(product.id);
-  if (afterStoreProduct.owned) return true;
+  // const afterStoreProduct = store.get(product.id);
+  // if (afterStoreProduct.owned) return true;
 
-  return order;
+  // return order;
 };
 
 const installProduct = async (productUid) => {
@@ -184,4 +185,4 @@ const initStore = async () => {
     });
 };
 
-document.addEventListener('deviceready', initStore);
+// document.addEventListener('deviceready', initStore);

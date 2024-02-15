@@ -9,6 +9,16 @@ const cardsStore = {
         "types": "purchase",
         "factions": ""
     },
+    "visitRelicblade": {
+        "uid": "visitRelicblade",
+        "base": "purchase",
+        "cost": "0",
+        "name": "",
+        "classes": "",
+        "keywords": "",
+        "types": "purchase",
+        "factions": ""
+    },
     "Temple of Justice": {
         "uid": "Temple of Justice",
         "base": "temple of justice character upgrade questing knight cleric of justice thief advocate purchase",
@@ -2383,7 +2393,7 @@ const cardsStore = {
         "classes": "darkness bone wizard",
         "keywords": "poison range one damage ad",
         "types": "character",
-        "upgradeTypes": "tactic weapon item potion potion",
+        "upgradeTypes": "tactic spell spell potion item",
         "factions": "adversary",
         "markBoxes": [
             [
