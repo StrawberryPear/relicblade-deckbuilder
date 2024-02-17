@@ -1,15 +1,13 @@
 import UIKit
 import Capacitor
-import StoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    // Create the SKProductsRequestDelegate protocol method
-    // to receive the array of products.
 
     var window: UIWindow?
-    
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Override point for customization after application launch.
         
         return true
     }

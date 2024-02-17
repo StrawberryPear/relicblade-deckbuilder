@@ -11,7 +11,8 @@
 
     <title>Relicblade Deck Builder</title>
 
-    <link rel="stylesheet" type="text/css" href="./viewer.css?v=2">
+    <link rel="stylesheet" type="text/css" href="./viewer.css">
+    <link rel="stylesheet" type="text/css" href="./viewerHorizontal.css">
   </head>
 
   <body class="loading" showing="deck" subfilter="">
@@ -21,7 +22,7 @@
         <ham></ham>
       </nav>
 
-      <cardTopControls class="library">
+      <cardTopControls class="library vertical">
         <searchContainer>
           <input type="text" placeholder="Search text" />
           <searchIcon type="view"></searchIcon>
@@ -39,8 +40,6 @@
         <cardControl type="upgrade" class="library filterSpell inactive"></cardControl>
         <cardControl type="upgrade" class="library filterRelicUpgrade inactive"></cardControl>
         <cardControl type="" class="library filterRelic inactive"></cardControl>
-        <cardControl type="" class="library filterShop inactive"></cardControl>
-        <topButton class="grid"></topButton>
       </cardTopControls>
 
       <cardScrollerContainer>
@@ -48,28 +47,30 @@
           <cardList class="library">
             <import uid="Add Own">
               <label>Add Cards from PDF</label>
-              <label class="fileUpload"><input type='file' accept=".pdf"/></label>
+              <label class="fileUpload"></label>
             </import>
             <purchase uid="visitRelicblade">
               <label>PDF cardsets available</label>
             </purchase>
           </cardList>
-          <cardList class="deck"><add><label>Add Character</label></add></cardList>
+          <cardList class="deck"><add><label>Add Character</label></add><random><label>Random Relic</label></random></cardList>
         </cardScroller>
       </cardScrollerContainer>
 
-      <cardCarousel>
+      <cardCarousel class="vertical">
         <canvas></canvas>
       </cardCarousel>
-      
+
       <cardButtons>
-        <cardButton class="deck removeFromDeck">Remove</cardButton>
-        <cardButton class="deck addUpgrade">Add Upgrade</cardButton>
-        <cardButton class="deck showLibrary">Show Library</cardButton>
+        <cardButton class="deck vertical removeFromDeck">Remove</cardButton>
+        <cardButton class="deck vertical addUpgrade">Add<br>Upgrade</cardButton>
+        <cardButton class="deck showLibrary">Show<br>Library</cardButton>
 
         <cardButton class="library showDeck">Return</cardButton>
-        <cardButton class="library addToDeck">Add to Deck</cardButton>
-        <cardButton class="library attachUpgrade">Attach Upgrade</cardButton>
+        <cardButton class="library grid"></cardButton>
+        <cardButton class="library horizontal search"></cardButton>
+        <cardButton class="library vertical addToDeck">Add to<br>Deck</cardButton>
+        <cardButton class="library vertical attachUpgrade">Attach<br>Upgrade</cardButton>
       </cardButtons>
 
       <toast></toast>
@@ -95,7 +96,7 @@
         <br>
 
         <menuControl class="library removeLibraryCard">Remove Card From Library</menuControl>
-        <label class="menuControl fileUpload">Add Cards from PDF<input id="fileUpload" type='file' accept=".pdf" /></label>
+        <label class="menuControl fileUpload">Add Cards from PDF</label>
         <br>
         <br>
         <menuControl class="return">Return</menuControl>
@@ -126,14 +127,14 @@
       </modal>
     </modalOverlay>
     
+    <script src="./capacitor.js"></script>
+    <script type="module" src="./navBar.plugin.js"></script>
+    <script type="module" src="./statusBar.plugin.js"></script>
+
+    <script src="./showOpenFilePicker.polyfill.js"></script>
+    <script src="./long-press-event.js"></script>
+    <script type="module" src="./base.js"></script>
     <script src="./umd.js"></script>
-    <script src="./storeNew.js"></script>
-    <script src="./load.js"></script>
-    <script src="./filters.js"></script>
-    <script src="./carousel.js"></script>
-    <script src="./baseCards.js"></script>
-    <script src="./base.js?v=2"></script>
     <script src="./pdf.js"></script>
-    <script src="./purchase.js"></script>
   </body>
 </html>
