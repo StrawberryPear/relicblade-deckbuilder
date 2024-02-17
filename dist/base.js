@@ -1074,11 +1074,11 @@ const init = async () => {
     const isLandscape = window.innerWidth > window.innerHeight;
 
     if (isLandscape) {
-      Capacitor.Plugins.StatusBar.hide();
-      Capacitor.Plugins.NavigationBar.hide();
+      await Capacitor.Plugins.StatusBar.hide();
+      await Capacitor.Plugins.NavigationBar.hide();
     } else {
-      Capacitor.Plugins.StatusBar.show();
-      Capacitor.Plugins.NavigationBar.show();
+      await Capacitor.Plugins.StatusBar.show();
+      await Capacitor.Plugins.NavigationBar.show();
     }
 
     await awaitFrame();
@@ -1087,28 +1087,52 @@ const init = async () => {
 
     const currentScreenWidth = doc.style.getPropertyValue('--screen-width');
 
-    doc.style.setProperty('--screen-height', `${window.innerHeight}px`);
-    doc.style.setProperty('--screen-width', `${window.innerWidth}px`);
+    try {
+      var {insets} = await Capacitor.Plugins.SafeArea.getSafeAreaInsets();
+    } finally {
+      if (!insets) {
+        doc.style.setProperty('--safe-area-top', `0px`);
+        doc.style.setProperty('--safe-area-bottom', `0px`);
 
-    doc.style.setProperty('--screen-width-raw', `${window.innerWidth}`);
-
-    window?.plugins?.safearea?.get(
-      (result) => {
-        // elegantly set the result somewhere in app state
-        doc.style.setProperty('--safe-area-top', `${result.top}px`);
-        doc.style.setProperty('--safe-area-bottom', `${result.bottom}px`);
-
-        doc.style.setProperty('--screen-height', `${window.innerHeight - result.top - result.bottom}px`);
-      },
-      (error) => {
-        // maybe set some sensible fallbacks?
+        doc.style.setProperty('--screen-height', `${window.screen.height}px`);
+        doc.style.setProperty('--screen-width', `${window.screen.width}px`);
+    
+        doc.style.setProperty('--screen-width-raw', `${window.screen.width}`);
+        
+        return;
       }
-    );
+    }
+    
+    if (window.innerWidth > window.innerHeight) {
+      doc.style.setProperty('--safe-area-top', `0px`);
+      doc.style.setProperty('--safe-area-bottom', `0px`);
+
+      doc.style.setProperty('--screen-height', `${window.screen.height}px`);
+      doc.style.setProperty('--screen-width', `${window.screen.width}px`);
+  
+      doc.style.setProperty('--screen-width-raw', `${window.screen.width}`);
+      return;
+    }
+
+    console.log(`safe area`, JSON.stringify(insets));
+    const safeTop = insets.top ?? 0;
+    const safeBottom = insets.bottom ?? 0;
+
+    // elegantly set the result somewhere in app state
+    doc.style.setProperty('--safe-area-top', `${safeTop}px`);
+    doc.style.setProperty('--safe-area-bottom', `${safeBottom}px`);
+
+    doc.style.setProperty('--screen-width', `${window.screen.width}px`);
+    doc.style.setProperty('--screen-height', `${window.screen.height - safeTop - safeBottom}px`);
+
     console.log(`sw: ${currentScreenWidth}`);
   }
   const triggerReload = async () => {
+    console.log('assessing reload?')
     // check to see if the dimensions have changed
+    const doc = document.documentElement;
     const currentScreenWidth = doc.style.getPropertyValue('--screen-width');
+    console.log(`sw: ${currentScreenWidth} vs ${window.innerWidth}px`);
 
     if (currentScreenWidth == `${window.innerWidth}px`) return;
 

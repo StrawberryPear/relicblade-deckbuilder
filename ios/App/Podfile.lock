@@ -4,14 +4,14 @@ PODS:
   - CapacitorCamera (5.0.9):
     - Capacitor
   - CapacitorCordova (5.7.0)
+  - CapacitorPluginSafeArea (2.0.6):
+    - Capacitor
   - CapacitorSplashScreen (5.0.7):
     - Capacitor
   - CapacitorStatusBar (5.0.7):
     - Capacitor
   - CapawesomeCapacitorFilePicker (5.3.0):
     - Capacitor
-  - CordovaPlugins (5.7.0):
-    - CapacitorCordova
   - HugotomaziCapacitorNavigationBar (3.0.0):
     - Capacitor
 
@@ -19,10 +19,10 @@ DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorCamera (from `../../node_modules/@capacitor/camera`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - CapacitorPluginSafeArea (from `../../node_modules/capacitor-plugin-safe-area`)
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - "CapawesomeCapacitorFilePicker (from `../../node_modules/@capawesome/capacitor-file-picker`)"
-  - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
   - "HugotomaziCapacitorNavigationBar (from `../../node_modules/@hugotomazi/capacitor-navigation-bar`)"
 
 EXTERNAL SOURCES:
@@ -32,14 +32,14 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/camera"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorPluginSafeArea:
+    :path: "../../node_modules/capacitor-plugin-safe-area"
   CapacitorSplashScreen:
     :path: "../../node_modules/@capacitor/splash-screen"
   CapacitorStatusBar:
     :path: "../../node_modules/@capacitor/status-bar"
   CapawesomeCapacitorFilePicker:
     :path: "../../node_modules/@capawesome/capacitor-file-picker"
-  CordovaPlugins:
-    :path: "../capacitor-cordova-ios-plugins"
   HugotomaziCapacitorNavigationBar:
     :path: "../../node_modules/@hugotomazi/capacitor-navigation-bar"
 
@@ -47,12 +47,12 @@ SPEC CHECKSUMS:
   Capacitor: fc155ee2ee45a2093d716f13cf5aa5a865e2d85a
   CapacitorCamera: 4892c5c392f60039d853dde78bc50ba19fbd113e
   CapacitorCordova: e825fce1a2e14e4b5730641c7e098dccf74397b7
+  CapacitorPluginSafeArea: d55e4d4e70c98f611240f11dd80561438d0d70cb
   CapacitorSplashScreen: dd3de3f3644710fa2a697cfb91ec262eece4d242
   CapacitorStatusBar: f390fbb49b82ffb754ea4b3cf71dc8b048baf3e7
   CapawesomeCapacitorFilePicker: 41f486cb4a89c6a7c8a4f5d683dbf96658894182
-  CordovaPlugins: d47cfb4b4e9419c38d6bec418129cbd47e900071
   HugotomaziCapacitorNavigationBar: 5cad666e36f4292aa4e0b71bb3e15a39ffa9eefc
 
-PODFILE CHECKSUM: fa688f3c715e26b37ab8ed367f803d8ef77d5d36
+PODFILE CHECKSUM: 93918b8614bbdfb2faf59228207ba273a4722edf
 
 COCOAPODS: 1.14.2

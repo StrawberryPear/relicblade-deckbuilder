@@ -19,7 +19,7 @@
     "@capacitor/status-bar": "^5.0.7",
     "@capawesome/capacitor-file-picker": "^5.3.0",
     "@hugotomazi/capacitor-navigation-bar": "^3.0.0",
-    "cordova-plugin-safearea": "^1.0.0"
+    "capacitor-plugin-safe-area": "^2.0.6"
   },
   "author": "",
   "license": "ISC"
