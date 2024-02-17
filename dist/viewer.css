@@ -45,13 +45,16 @@
   --card-base-width: 269;
   --card-base-height: 367;
 
-  --card-width: min(var(--screen-width), calc(1.025 * var(--screen-height) - 297px) * (var(--card-base-width) / var(--card-base-height)));
-  --card-height:
-    calc(var(--card-width) * (var(--card-base-height) / var(--card-base-width)) * 1.025);
+  --card-ratio: calc(var(--card-base-height) / var(--card-base-width));
+
+  --height-based-card-width: calc((var(--screen-height) - 252px) / var(--card-ratio));
+  --width-based-card-width: calc(var(--screen-width) * 0.98);
+
+  --card-width: min(var(--height-based-card-width), var(--width-based-card-width));
+  --card-height: calc(var(--card-width) * var(--card-ratio) * 1.025);
     
-  --card-width-deck: min(1.025 * var(--screen-width), calc(1.025 * var(--screen-height) - 267px) * (var(--card-base-width) / var(--card-base-height)));
-  --card-height-deck:
-    calc(var(--card-width-deck) * (var(--card-base-height) / var(--card-base-width)) * 1.025);
+  --card-width-deck: var(--card-width);
+  --card-height-deck: var(--card-height);
 
   --card-width-grid: calc(var(--screen-width) / 3);
   --card-height-grid: calc((var(--screen-width) / 3) * (var(--card-base-height) / var(--card-base-width)));
@@ -339,8 +342,6 @@ cardControl::before {
   background-size: auto 80%;
 }
 
-cardControl.inactive {}
-
 cardControl.filterCharacter::before {
   content: '';
   background-image: url('./assets/character.png');
@@ -437,8 +438,6 @@ modalButton {
 cardButton {
   filter: drop-shadow(2px 4px 6px black);
 }
-
-cardButton.removeFromDeck::before {}
 
 cardButtons.searched cardButton.search,
 cardButtons:not(.searched) cardButton.clearSearch {
@@ -745,7 +744,7 @@ body[displayType="grid"] cardlist.library import label {
 cardCarousel {
   display: none;
   width: 100%;
-  height: calc(var(--card-height) * 0.125);
+  height: min(calc(var(--screen-height) - var(--card-height) - 180px), 96px);
   margin-bottom: calc(var(--screen-height) * 0.01);
   /* background: url(
     './assets/toastBack.png'); */
@@ -860,7 +859,7 @@ card>card:nth-of-type(2) {
 
 body[showing="deck"] cardButtons {
   position: absolute;
-  top: calc(var(--screen-height) - 64px);
+  bottom: 0px;
 }
 
 body[showing="deck"] cardScrollerContainer {
@@ -870,6 +869,10 @@ body[showing="deck"] cardScrollerContainer {
   top: calc(-1 * var(--nav-height));
   /* padding-bottom: var(--nav-height); */
   box-sizing: border-box;
+}
+
+body[displayType="grid"] cardScrollerContainer {
+  height: calc(var(--screen-height) - 156px);
 }
 
 cardlist.deck {

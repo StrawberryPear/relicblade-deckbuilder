@@ -1,7 +1,7 @@
 import cardsStore from './store.js';
 import baseCards from './baseCards.js'
 
-const SCALE = 6;
+const SCALE = 4;
 
 const CARD_WIDTH = Math.round(180 * SCALE);
 const CARD_HEIGHT = Math.round(250 * SCALE);
@@ -649,12 +649,12 @@ const loadDeckFromLocal = () => {
     const CARD_ROW_OFFSET = 10;
 
     return async (url) => {
-      var PDFJS = window['pdfjs-dist/build/pdf'];
-      PDFJS.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
+      var { pdfjsLib } = globalThis;
+      pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf/pdf.worker.mjs';
       
       const cardImages = [];
 
-      const loadingTask = PDFJS.getDocument(url);
+      const loadingTask = pdfjsLib.getDocument(url);
 
       const getCanvasDataURL = (() => {
         const saveCanvas = document.createElement('canvas');
@@ -1070,22 +1070,27 @@ const init = async () => {
   });
 
   const updateAppSize = async (event) => {
+    console.log(`updateAppSize`);
     // check if it's landscape or portrait
     const isLandscape = window.innerWidth > window.innerHeight;
 
-    if (isLandscape) {
-      await Capacitor.Plugins.StatusBar.hide();
-      await Capacitor.Plugins.NavigationBar.hide();
-    } else {
-      await Capacitor.Plugins.StatusBar.show();
-      await Capacitor.Plugins.NavigationBar.show();
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    try {
+      console.log('help?');
+      if (isLandscape) {
+        await Capacitor.Plugins.StatusBar.hide();
+      } else {
+        await Capacitor.Plugins.StatusBar.show();
+      }
+    } catch (err) {
+      console.error(err);
     }
 
     await awaitFrame();
 
     const doc = document.documentElement;
-
-    const currentScreenWidth = doc.style.getPropertyValue('--screen-width');
 
     try {
       var {insets} = await Capacitor.Plugins.SafeArea.getSafeAreaInsets();
@@ -1094,23 +1099,24 @@ const init = async () => {
         doc.style.setProperty('--safe-area-top', `0px`);
         doc.style.setProperty('--safe-area-bottom', `0px`);
 
-        doc.style.setProperty('--screen-height', `${window.screen.height}px`);
-        doc.style.setProperty('--screen-width', `${window.screen.width}px`);
+        doc.style.setProperty('--screen-height', `${screenHeight}px`);
+        doc.style.setProperty('--screen-width', `${screenWidth}px`);
     
-        doc.style.setProperty('--screen-width-raw', `${window.screen.width}`);
+        doc.style.setProperty('--screen-width-raw', `${screenWidth}`);
         
         return;
       }
     }
+    console.log(`done step 2`, JSON.stringify(insets));
     
     if (window.innerWidth > window.innerHeight) {
       doc.style.setProperty('--safe-area-top', `0px`);
       doc.style.setProperty('--safe-area-bottom', `0px`);
 
-      doc.style.setProperty('--screen-height', `${window.screen.height}px`);
-      doc.style.setProperty('--screen-width', `${window.screen.width}px`);
+      doc.style.setProperty('--screen-height', `${screenHeight}px`);
+      doc.style.setProperty('--screen-width', `${screenWidth}px`);
   
-      doc.style.setProperty('--screen-width-raw', `${window.screen.width}`);
+      doc.style.setProperty('--screen-width-raw', `${screenWidth}`);
       return;
     }
 
@@ -1122,12 +1128,11 @@ const init = async () => {
     doc.style.setProperty('--safe-area-top', `${safeTop}px`);
     doc.style.setProperty('--safe-area-bottom', `${safeBottom}px`);
 
-    doc.style.setProperty('--screen-width', `${window.screen.width}px`);
-    doc.style.setProperty('--screen-height', `${window.screen.height - safeTop - safeBottom}px`);
-
-    console.log(`sw: ${currentScreenWidth}`);
+    doc.style.setProperty('--screen-width', `${screenWidth}px`);
+    doc.style.setProperty('--screen-height', `${screenHeight - safeTop - safeBottom}px`);
   }
   const triggerReload = async () => {
+    await awaitFrame();
     console.log('assessing reload?')
     // check to see if the dimensions have changed
     const doc = document.documentElement;
@@ -1144,8 +1149,13 @@ const init = async () => {
     await awaitFrame();
     window.location.reload();
   };
-  document.addEventListener("resume", triggerReload);
-  window.addEventListener('resize', triggerReload)
+  const forceReload = async (e) => {
+    await awaitFrame();
+    await awaitFrame();
+    window.location.reload();
+  };
+  // window.matchMedia("(orientation: portrait)").addEventListener('change', forceReload);
+  // document.addEventListener("resume", triggerReload);
   updateAppSize()
 
   database = await idb.openDB('relicbladeCards', 3, {

@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "idb": "^7.1.1",
-    "pdfjs-dist": "^3.3.122"
+    "pdfjs-dist": "^4.0.379"
   }
 }

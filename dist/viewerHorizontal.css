@@ -1,16 +1,19 @@
 
 /* check if we're horizontal */
 @media (orientation: landscape) {
+
   :root {
-    --card-width: min(345px, calc(var(--screen-height) * 0.9 * (var(--card-base-width) / var(--card-base-height))), calc((1 * var(--screen-width) / 3)));
+    --height-based-card-width: calc((var(--screen-height) - 32px) / var(--card-ratio));
+
+    --card-width: min(var(--screen-width) * 0.25, var(--height-based-card-width));
     --card-height: calc(var(--card-width) * (var(--card-base-height) / var(--card-base-width)) * 1.03);
         
       
     --card-height-grid: calc((var(--screen-height) / 4));
     --card-width-grid: calc((var(--screen-height) / 4) * (var(--card-base-width) / var(--card-base-height)));
-    
-    --card-width-deck: calc(var(--card-width) * 0.95);
-    --card-height-deck: calc(var(--card-height) * 0.95);
+      
+    --card-width-deck: var(--card-width);
+    --card-height-deck: var(--card-height);
   }
 
   .vertical {
@@ -49,7 +52,7 @@
     height: 38px;
     filter:drop-shadow(2px 4px 6px black);
   }
-  
+
   card, purchase, import, add, random {
     margin: 0 min(2vw, 4px);
   }
@@ -126,7 +129,7 @@
     margin-top: -1px;
     margin-left: -1px;
   }
-   
+    
   mainMenu, savesMenu {
     align-items: flex-end;
     padding-right: 48px;
@@ -141,7 +144,7 @@
       text-shadow: none;
       margin-bottom: 13px;
   }
-  
+
   modalOverlay.option modalbutton#modalAccept {
       display: none;
   }
