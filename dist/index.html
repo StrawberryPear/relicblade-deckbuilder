@@ -13,6 +13,8 @@
 
     <link rel="stylesheet" type="text/css" href="./viewer.css">
     <link rel="stylesheet" type="text/css" href="./viewerHorizontal.css">
+
+    <link rel="stylesheet" type="text/css" href="./lib/cropper.css">
   </head>
 
   <body class="loading" showing="deck" subfilter="">
@@ -45,9 +47,13 @@
       <cardScrollerContainer>
         <cardScroller>
           <cardList class="library">
-            <import uid="Add Own">
+            <import uid="addOwn">
               <label>Add Cards from PDF</label>
               <label class="fileUpload"></label>
+            </import>
+            <import uid="addFromPicture">
+              <label>Add Cards from Picture</label>
+              <label class="imageUpload"></label>
             </import>
             <purchase uid="visitRelicblade">
               <label>PDF cardsets available</label>
@@ -84,6 +90,8 @@
     <loadingOverlay>
       <loading>
       </loading>
+      <preview>
+      </preview>
     </loadingOverlay>
 
     <overlayMenu class="hidden" showing="mainMenu">
@@ -97,6 +105,7 @@
 
         <menuControl class="library removeLibraryCard">Remove Card From Library</menuControl>
         <label class="menuControl fileUpload">Add Cards from PDF</label>
+        <label class="menuControl imageUpload">Add Card from Image/Camera</label>
         <br>
         <br>
         <menuControl class="return">Return</menuControl>
@@ -114,6 +123,9 @@
     </overlayMenu>
 
     <modalOverlay class="hidden">
+      <cropper>
+        <img id="cropper" />
+      </cropper>
       <modal>
         <modalText></modalText>
         <modalButtons>
@@ -127,13 +139,15 @@
       </modal>
     </modalOverlay>
     
-    <script src="./capacitor.js"></script>
-    <script type="module" src="./navBar.plugin.js"></script>
-    <script type="module" src="./statusBar.plugin.js"></script>
-    <script type="module" src="./safeArea.plugin.js"></script>
+    <script src="./lib/capacitor.js"></script>
+    <script type="module" src="./lib/navBar.plugin.js"></script>
+    <script type="module" src="./lib/statusBar.plugin.js"></script>
+    <script type="module" src="./lib/safeArea.plugin.js"></script>
 
-    <script src="./showOpenFilePicker.polyfill.js"></script>
-    <script src="./long-press-event.js"></script>
+    <script src="./lib/showOpenFilePicker.polyfill.js"></script>
+    <script src="./lib/long-press-event.js"></script>
+    <script src="./lib/cropper.js"></script>
+    
     <script type="module" src="./base.js"></script>
     <script src="./umd.js"></script>
     <script src="./pdf/pdf.mjs" type="module"></script>
