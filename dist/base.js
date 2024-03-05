@@ -1,7 +1,7 @@
 import cardsStore from './store.js';
 import baseCards from './baseCards.js'
 
-const SCALE = 6;
+const SCALE = 4;
 
 const CARD_WIDTH = Math.round(180 * SCALE);
 const CARD_HEIGHT = Math.round(250 * SCALE);
@@ -649,12 +649,12 @@ const loadDeckFromLocal = () => {
     const CARD_ROW_OFFSET = 10;
 
     return async (url) => {
-      var PDFJS = window['pdfjs-dist/build/pdf'];
-      PDFJS.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
+      var { pdfjsLib } = globalThis;
+      pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf/pdf.worker.mjs';
       
       const cardImages = [];
 
-      const loadingTask = PDFJS.getDocument(url);
+      const loadingTask = pdfjsLib.getDocument(url);
 
       const getCanvasDataURL = (() => {
         const saveCanvas = document.createElement('canvas');
