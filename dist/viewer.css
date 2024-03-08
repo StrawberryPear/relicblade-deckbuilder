@@ -50,7 +50,7 @@
   --height-based-card-width: calc((var(--screen-height) - 252px) / var(--card-ratio));
   --width-based-card-width: calc(var(--screen-width) * 0.98);
 
-  --card-width: min(var(--height-based-card-width), var(--width-based-card-width));
+  --card-width: min(var(--height-based-card-width)  * 0.8, var(--width-based-card-width));
   --card-height: calc(var(--card-width) * var(--card-ratio) * 1.025);
     
   --card-width-deck: var(--card-width);
@@ -204,6 +204,10 @@ import {
   background-color: #0c3133;
   background-image: url('./assets/import.png');
   filter: saturate(0.6);
+}
+
+import[uid="addFromPicture"] {
+  background-image: url('./assets/camera.png');
 }
 
 purchase[uid="visitRelicblade"] {
@@ -789,7 +793,7 @@ cardbutton.attachUpgrade {
   grid-column: 3;
 }
 
-label.fileUpload {
+label.fileUpload, label.imageUpload {
   pointer-events: all;
   top: 0px;
   bottom: 0px;
@@ -1024,4 +1028,27 @@ modalbuttons {
 modalbutton#modalReturn {
   grid-column: 2;
   background-image: url(./assets/add-remove-flipped.png);
+}
+
+
+preview, cropper {
+    position: absolute;
+    top: 64px;
+    left: 50%;
+    width: var(--card-width);
+    height: var(--card-height);
+    transform: translate(-50%, 0);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 0.4s;
+    z-index: 10000;
+}
+
+cropper > img {
+  height: 0px;
+  height: 0px;
+  display: block;
+  max-width: 100%;
 }

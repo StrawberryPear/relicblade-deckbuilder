@@ -31,6 +31,9 @@ const searchInputEles = document.querySelectorAll('searchContainer input');
 const searchInputClearEle = document.querySelector('searchContainer searchicon[type="clear"]');
 const gridButtonEle = document.querySelector('.grid');
 
+const previewEle = document.querySelector('preview');
+const cropperEle = document.querySelector('cropper');
+
 const removeFromDeckButtons = document.querySelectorAll("cardButton.removeFromDeck");
 const showLibraryButton = document.querySelector("cardButton.showLibrary");
 const searchButton = document.querySelector("cardButton.search");
@@ -59,6 +62,8 @@ const getSId = (() => {
     return uid++;
   }
 })();
+
+const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
 const awaitFrame = () => new Promise(resolve => {
   window.requestAnimationFrame(resolve);
@@ -141,7 +146,12 @@ const modalOverlayEle = document.querySelector("modalOverlay");
 const modalOverlayTextEle = modalOverlayEle.querySelector("modalText");
 const modalOverlayReturnButtonEle = modalOverlayEle.querySelector("modalButton#modalReturn");
 const modalOverlayAcceptButtonEle = modalOverlayEle.querySelector("modalButton#modalAccept");
-const showConfirm = async (content) => {
+const reinitializeModal = ({acceptText, returnText} = {}) => {
+  modalOverlayAcceptButtonEle.innerHTML = acceptText || "Accept";
+  modalOverlayReturnButtonEle.innerHTML = returnText || "Return";
+};
+const showConfirm = async (content, options = {}) => {
+  reinitializeModal(options);
   // hide the background 
   modalOverlayEle.classList.remove("hidden");
 
@@ -169,7 +179,8 @@ const showConfirm = async (content) => {
 
   return returnValue;
 };
-const showInput = async (content) => {
+const showInput = async (content, options = {}) => {
+  reinitializeModal(options);
   // hide the background 
   modalOverlayEle.classList.remove("hidden");
 
@@ -191,6 +202,21 @@ const showInput = async (content) => {
   });
 
   modalOverlayTextEle.append(input);
+
+  if (options.dataList) {
+    const datalistEle = document.createElement("datalist");
+    datalistEle.id = "modalDatalist";
+
+    for (const data of options.dataList) {
+      const optionEle = document.createElement("option");
+      optionEle.value = data;
+
+      datalistEle.append(optionEle);
+    }
+
+    input.setAttribute("list", "modalDatalist");
+    modalOverlayTextEle.append(datalistEle);
+  }
 
   input.focus();
 
@@ -216,6 +242,7 @@ const showInput = async (content) => {
   return returnValue;
 };
 const showOption = async (content, options) => {
+  reinitializeModal(options);
   // hide the background 
   modalOverlayEle.classList.remove("hidden");
   modalOverlayEle.classList.add("option");
@@ -296,7 +323,7 @@ const awaitScrollStop = async () => {
 };
 
 const getDeckUpgradeRangeScalar = (containerCardEle, _scrollY) => {
-  const scrollY = _scrollY * -1.3;
+  const scrollY = _scrollY * 1.4;
   // work out how many cards are there to stack
   const upgradeCardEles = [...containerCardEle.children].filter(ele => ele.tagName == "CARD");
 
@@ -315,6 +342,7 @@ const getDeckUpgradeRangeScalar = (containerCardEle, _scrollY) => {
 // then after that hits the bottom, the next card starts to go towards the bototm
 // so everything needs to raise till the container hits the bottom.
 const applyDeckCardTopScroll = (containerCardEle, rangeScalar, setScalar = true) => {
+  // adjust the range scalar
   if (!containerCardEle) return;
 
   if (setScalar) {
@@ -331,36 +359,57 @@ const applyDeckCardTopScroll = (containerCardEle, rangeScalar, setScalar = true)
     return;
   }
 
-  const defaultCardHeight = containerCardEle.clientHeight;
-  const defaultRangeCardOffsetY = (0.175 / upgradeCardEles.length) * defaultCardHeight;
-  const defaultContainerOffsetY = Math.min(1, rangeScalar) * -defaultCardHeight;
+  // lets try something new.
+  const cardList = [...upgradeCardEles];
 
-  for (const upgradeCardIndex in upgradeCardEles) {
-    const cardHeight = containerCardEle.clientHeight;
-    const rangeCardOffsetY = (0.175 / upgradeCardEles.length) * cardHeight;
-    const containerOffsetY = Math.min(1, rangeScalar) * -cardHeight;
+  // the offset should be an set y offset for each, no scaling
+  const cardHeight = containerCardEle.clientHeight;
+  const cardOffset = 0.175 * cardHeight;
 
-    const upgradeCardEle = upgradeCardEles[upgradeCardIndex];
+  const containerMajorOffset = Math.min(1, rangeScalar);
+  const containerMinorOffset = Math.max(rangeScalar - 1, 0);
 
-    const offsetCardOffsetY = rangeCardOffsetY * (parseInt(upgradeCardIndex) + 1);
-    const upgradeScalar = Math.max(-0, Math.min(1, rangeScalar - (parseInt(upgradeCardIndex) + 1)));
+  const adjustUp = clamp(cardList.length - rangeScalar, 0, 2) * cardOffset * 0.65;
 
-    const minPoint = 0;
-    const maxPoint = cardHeight;
+  const containerOffsetPx = containerMajorOffset * -cardHeight + containerMinorOffset * -cardOffset - adjustUp;
 
-    const range = maxPoint - minPoint;
-    const rangeValue = range * upgradeScalar;
+  containerCardEle.style.setProperty("transform", `translateY(${containerOffsetPx}px)`);
 
-    const scrollDown = containerOffsetY + rangeValue - Math.max(containerOffsetY - offsetCardOffsetY, offsetCardOffsetY);
+  // the first card is different, lets treat it as different.
 
-    upgradeCardEle.style.setProperty("transform", `translateY(${scrollDown}px) translateZ(-${upgradeCardIndex + 1}px)`);
+  rangeScalar = Math.max(0, rangeScalar);
+
+  const focusedCardIndex = (rangeScalar - 1);
+
+  for (const cardEle of cardList) {
+    const cardIndex = cardList.indexOf(cardEle);
+    const beforeFocusedOffsetPx = cardOffset * (parseInt(cardIndex) + 1);
+
+    const indexOffset = cardIndex - focusedCardIndex;
+
+    // if the index is greater than 1 or less than -1, it shouldn't be animating toward anything
+    // 0 is the focused card, as the focused card goes toward 1, it moves down, and the card above moves down too
+
+    // if we're at the focused card index, we should be just below the top
+    const focusedOffsetPx = clamp(rangeScalar, 0, 1) * cardHeight + cardOffset * focusedCardIndex;
+    
+    const afterFocusedOffsetPx = focusedOffsetPx + cardOffset * (indexOffset + (1 - clamp(rangeScalar, 0, 1)));
+    
+    const beforeDiffPx = beforeFocusedOffsetPx - focusedOffsetPx;
+    const afterDiffPx = afterFocusedOffsetPx - focusedOffsetPx;
+
+    if (indexOffset < 0) {
+      const positionPx = focusedOffsetPx + beforeDiffPx * clamp(-indexOffset, 0, 1);
+      
+      cardEle.style.setProperty("transform", `translateY(${positionPx}px) translateZ(-${cardIndex + 1}px)`);
+      continue;
+    } else {
+      const positionPx = focusedOffsetPx + afterDiffPx * clamp(indexOffset, 0, 1);
+
+      cardEle.style.setProperty("transform", `translateY(${positionPx}px) translateZ(-${cardIndex + 1}px)`);
+      continue;
+    }
   }
-
-  // slowly move the container down
-  const range = defaultRangeCardOffsetY * rangeScalar * 0.5;
-
-  containerCardEle.style.setProperty("transform", `translateY(${-defaultContainerOffsetY + range}px)`);
-  // find the snap point stuff
 }
 
 const addCharacterToDeck = (data, updateDeckStore = true) => {
@@ -762,9 +811,9 @@ const loadDeckFromLocal = () => {
 
       if (image.length < 8064) continue;
 
-      await addCardToDatabase(image, `${title} - ${cardsLoaded}`);
+      const cardAdded = await addCardToDatabase(image, `${title} - ${cardsLoaded}`);
     
-      cardsLoaded++;
+      if (cardAdded) cardsLoaded++;
     }
     
     showToast(`${cardsLoaded} cards added to library`);
@@ -966,6 +1015,59 @@ const loadDeckFromLocal = () => {
   }
 
   const addCardToDatabase = async (image, uid) => {
+    // check if the card uid is in the card store
+    if (!cardsStore[uid]) {
+      // alert the user that the card is not in the store.
+      // open up a resolver modal
+
+      const cardStoreNames = Object.keys(cardsStore)
+        .filter(key => !cardsStore[key].types.match(/purchase/i))
+        .filter(key => cardsStore[key].name != 'delete')
+        .map(key => cardsStore[key].name)
+        .sort();
+
+      // show the card on the screen.6
+      previewEle.style.setProperty('background-image', `url('${image}')`);
+      previewEle.style.setProperty('opacity', `1`);
+
+      const cardStoreName = await showInput(`Card could not be automatically resolved, please enter the card name`, {
+        dataList: cardStoreNames,
+        acceptText: "Add Card",
+        returnText: "Skip Card"
+      });
+
+      if (!cardStoreName) {
+        previewEle.style.setProperty('opacity', `0`);
+        await awaitTime(400);
+        previewEle.style.setProperty('background-image', `none`);
+        await awaitTime(400);
+        return false;
+      }
+      // check if it's a custom card.
+      const cardStoreKey = Object.keys(cardsStore).find(key => cardsStore[key].name.toLowerCase() == cardStoreName.toLowerCase());
+
+      if (!cardStoreKey) {
+        showToast(`Card not found, custom cards not supported yet.`);
+        await awaitTime(500);
+        previewEle.style.setProperty('opacity', `0`);
+        await awaitTime(1000);
+        previewEle.style.setProperty('background-image', `none`);
+        return false;
+      }
+      showToast(`Adding ${cardStoreName}`);
+      
+      await awaitTime(1000);
+      previewEle.style.setProperty('opacity', `0`);
+      await awaitTime(1000);
+      previewEle.style.setProperty('background-image', `none`);
+
+      // hide the preview
+      
+      // update the uid.
+      debugger
+      uid = Object.keys(cardsStore).find(key => cardsStore[key].name.toLowerCase() == cardStoreName.toLowerCase());
+    }
+
     const transaction = database.transaction('cards', 'readwrite');
 
     try {
@@ -1078,19 +1180,21 @@ const init = async () => {
     const screenHeight = window.innerHeight;
 
     try {
-      console.log('help?');
       if (isLandscape) {
         await Capacitor.Plugins.StatusBar.hide();
       } else {
         await Capacitor.Plugins.StatusBar.show();
       }
-    } catch (err) {
-      console.error(err);
+    }
+    catch (e) {
+      console.error("Capacitor failed to initialize", e);
     }
 
     await awaitFrame();
 
     const doc = document.documentElement;
+
+    const currentScreenWidth = doc.style.getPropertyValue('--screen-width');
 
     try {
       var {insets} = await Capacitor.Plugins.SafeArea.getSafeAreaInsets();
@@ -1107,7 +1211,6 @@ const init = async () => {
         return;
       }
     }
-    console.log(`done step 2`, JSON.stringify(insets));
     
     if (window.innerWidth > window.innerHeight) {
       doc.style.setProperty('--safe-area-top', `0px`);
@@ -1154,7 +1257,7 @@ const init = async () => {
     await awaitFrame();
     window.location.reload();
   };
-  // window.matchMedia("(orientation: portrait)").addEventListener('change', forceReload);
+  window.matchMedia("(orientation: portrait)").addEventListener('change', forceReload);
   // document.addEventListener("resume", triggerReload);
   updateAppSize()
 
@@ -1206,6 +1309,80 @@ const init = async () => {
   applyFilters();
   applyCarousel();
   document.body.className = '';
+
+  [...document.querySelectorAll('label.imageUpload')].map((ele) => {
+    ele.addEventListener('click', async (event) => {
+      document.body.className = 'loading';
+      overlayMenuEle.className = 'hidden';
+
+      // accept a pdf
+      try {
+        let pickedFile = false;
+
+        awaitTime(2000).then(() => {
+          if (pickedFile) return;
+
+          document.body.className = '';
+        });
+
+        const [fileHandle] = await window.showOpenFilePicker({
+          types: [
+            {accept: {'image/*': ['.png', '.jpeg', '.jpg']}}
+          ]
+        });
+        if (fileHandle) {
+          pickedFile = true;
+          document.body.className = 'loading';
+        }
+
+        const file = await fileHandle.getFile();
+
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          try {
+            // start the clipper
+            const imageDom = document.getElementById('cropper');
+      
+            imageDom.src = reader.result;
+
+            cropperEle.style.setProperty('opacity', 1);
+
+            const cropper = new Cropper(imageDom, {
+              viewMode: 1,
+              guides: false,
+              crop(event) {
+              },
+            });
+
+            const confirmValue = await showConfirm("Crop the image to the correct size and press confirm", {
+              acceptText: "Add Card",
+              returnText: "Cancel"
+            });
+
+            const cropperUrl = cropper.getCroppedCanvas().toDataURL();
+
+            cropper.destroy();
+            cropperEle.style.setProperty('opacity', 0);
+
+            if (!confirmValue) {
+              return;
+            }
+
+            await addCardToDatabase(cropperUrl, '');
+
+            applyFilters();
+            applyCarousel();
+          } finally {
+            document.body.className = '';
+          }
+        }
+        reader.readAsDataURL(file)
+      } catch (err) {
+        console.log(err);
+        document.body.className = '';
+      }
+    });
+  });
 
   [...document.querySelectorAll('label.fileUpload')].map((ele) => {
     ele.addEventListener('click', async (event) => {
@@ -1404,6 +1581,8 @@ const init = async () => {
 
   removeFromDeckButtons.forEach(removeForDeckButton => {
     removeForDeckButton.addEventListener('click', async () => {
+      // check if there's a selected card
+      const selectedCardEle = document.querySelector('card.highlight');
       const currentCardEle = getCenterCardEle();
 
       if (!currentCardEle) {
@@ -1418,7 +1597,9 @@ const init = async () => {
         return;
       };
 
-      const currentFocusSubIndex = currentCardEle.currentRangeScalar || 0;
+      const currentFocusSubIndex = selectedCardEle 
+        ? [...currentCardEle.querySelectorAll("card")].indexOf(selectedCardEle) + 1
+        : currentCardEle.currentRangeScalar || 0;
 
       if (!currentFocusSubIndex) {
         const confirmValue = await showConfirm('Are you sure you want to remove this card, and all it\'s upgrades from this deck?');
@@ -1692,19 +1873,21 @@ const init = async () => {
       const scrollLeft = currentFocusCardEle.closest("cardDeckWrapper").offsetLeft;
       scrollScroller(scrollLeft - window.innerWidth * 0.5);
 
+      const currentFocusCard = cardsStore[currentFocusCardEle.getAttribute("uid")];
+
       // show a modal with add upgrade, remove, cancel
-      const optionResult = await showOption("", ["Add Upgrade", "Remove"]);
+      const optionResult = await showOption(`<h4>${currentFocusCard.name} selected</h4> `, ["Add Upgrade", "Remove"]);
 
-      selectedCardEle.classList.toggle("highlight", false);
-
-      await awaitTime(200);
-      
       if (optionResult == "Add Upgrade") {
         addUpgradeButtons[0].click();
       } else if (optionResult == "Remove") {
         removeFromDeckButtons[0].click();
       }
 
+      selectedCardEle.classList.toggle("highlight", false);
+
+      await awaitTime(200);
+      
       return;
     }
 
@@ -1783,7 +1966,6 @@ const init = async () => {
       }
 
       // do the weird cards
-      
       switch (clickedCardEle.tagName) {
         case "PURCHASE":
           try {
@@ -1820,22 +2002,18 @@ const init = async () => {
   
       return;
     }
-  
-    if (document.body.getAttribute("displayType") != "deck") return;
-  
-    
     
     // get the xy of where was clicked
     // get card bounds
-    // const cardBounds = currentCardEle.getBoundingClientRect();
+    // const cardBounds = clickedCardEle.getBoundingClientRect();
   
-    // const markBoxX = (e.clientX - cardBounds.left) / cardBounds.width;
-    // const markBoxY = (e.clientY - cardBounds.top) / cardBounds.height;
+    // const markBoxX = (event.clientX - cardBounds.left) / cardBounds.width;
+    // const markBoxY = (event.clientY - cardBounds.top) / cardBounds.height;
   
     // cardStore.markBoxes = cardStore.markBoxes || [];
     // cardStore.markBoxes.push([markBoxX, markBoxY, 0]);
   
-    // console.log(`box marked: ${markBoxX}, ${markBoxY}`);
+    // console.log(`[${markBoxX}, ${markBoxY}, 0], `);
   });
 
   const onCarouselInteraction = event => {
