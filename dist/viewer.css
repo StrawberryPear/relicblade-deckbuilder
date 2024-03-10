@@ -36,38 +36,25 @@
 :root {
   --screen-width: 100%;
   --screen-height: 100%;
-
   --screen-width-raw: 100;
-
   --safe-area-top: 0px;
   --safe-area-bottom: 0px;
-
   --card-base-width: 269;
   --card-base-height: 367;
-
   --card-ratio: calc(var(--card-base-height) / var(--card-base-width));
-
   --height-based-card-width: calc((var(--screen-height) - 252px) / var(--card-ratio));
   --width-based-card-width: calc(var(--screen-width) * 0.98);
-
   --card-width: min(var(--height-based-card-width)  * 0.8, var(--width-based-card-width));
   --card-height: calc(var(--card-width) * var(--card-ratio) * 1.025);
-    
   --card-width-deck: var(--card-width);
   --card-height-deck: var(--card-height);
-
   --card-width-grid: calc(var(--screen-width) / 3);
   --card-height-grid: calc((var(--screen-width) / 3) * (var(--card-base-height) / var(--card-base-width)));
-
   --offset-top:
     max(0px, 0.6 * var(--screen-height) - calc(var(--card-height)));
   --nav-height: 48px;
   --foot-height: 44px;
-}
-
-html {
-  padding-top: var(--safe-area-top);
-  padding-bottom: var(--safe-area-bottom);
+  --token-fan: min(140px, calc(var(--screen-width) / 2.5));
 }
 
 html,
@@ -592,7 +579,7 @@ modalOverlay {
   opacity: 1;
   transition: opacity 0.4s;
   user-select: none;
-  /* z-index: 10; */
+  z-index: 10;
 }
 
 loadingOverlay {
@@ -603,6 +590,7 @@ overlayMenu.hidden,
 modalOverlay.hidden,
 body:not(.loading) loadingOverlay {
   opacity: 0;
+  transition: opacity 0.2s;
   pointer-events: none;
 }
 
@@ -896,6 +884,9 @@ main {
   flex-direction: column;
   flex-wrap: nowrap;
 }
+body[showing="library"] main {
+  background: #111;
+}
 
 input#title {
   overflow: hidden;
@@ -1022,12 +1013,20 @@ modalbuttons {
 
 modalbuttons {
   display: grid;
-  margin-top: 32px;
+  margin-top: min(5%, 32px);
 }
 
 modalbutton#modalReturn {
   grid-column: 2;
   background-image: url(./assets/add-remove-flipped.png);
+}
+modalbutton.fullwidth {
+    background-size: 100%, 80px;
+    background-repeat: space;
+    background-image: linear-gradient(90deg, transparent 0%, #58d5e6 10%, #58d5e6 90%, transparent 100%), url(./assets/add-remove.png);
+    filter: none;
+    text-shadow: none;
+    margin-bottom: min(2%, 13px);
 }
 
 
@@ -1043,7 +1042,6 @@ preview, cropper {
     background-position: center;
     opacity: 0;
     transition: opacity 0.4s;
-    z-index: 10000;
 }
 
 cropper > img {
@@ -1051,4 +1049,177 @@ cropper > img {
   height: 0px;
   display: block;
   max-width: 100%;
+}
+
+card::before {
+  content: "";
+  position: absolute;
+  z-index: -90;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 3px solid #58d5e6;
+  outline: 6px solid #58d5e688;
+  border-radius: 3.8%;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+card.highlight::before {
+  opacity: 1;
+}
+  
+modalOverlay.option modalbutton#modalAccept {
+  display: none;
+}
+
+
+tokenButton {
+    position: fixed;
+    bottom: 36px;
+    left: calc(0.5 * var(--screen-width));
+    width: 64px;
+    height: 64px;
+    background: url(./assets/token/dodge.png);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: translate(-50%, 50%);
+    border-radius: 50%;
+    filter: drop-shadow(2px 4px 6px black) saturate(0.85);
+    pointer-events: all;
+    z-index: 9;
+}
+tokenButton::before {
+    content: '';
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background: #d20;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+tokenButton.active::before {
+    opacity: 1;
+}
+tokenButton.active::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+tokenButton::after {
+    content: '';
+    background: url(./assets/close.png);
+    background-size: contain;
+    width: 34px;
+    height: 34px;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    transition: transform 0.2s;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    filter: drop-shadow(2px 2px 0px black) drop-shadow(-2px 2px 0px black);
+}
+
+tokenExpander {
+    position: fixed;
+    bottom: 42px;
+    left: calc(0.5 * var(--screen-width));
+    width: 0px;
+    height: 0px;
+    transform: translate(-50%, 50%);
+    pointer-events: none;
+}
+
+tokenOverlay {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: var(--screen-width);
+  height: var(--screen-height);
+  background: linear-gradient(0deg, #000 0%, #0000 20%);
+  pointer-events: all;
+  transition: opacity 0.5s;
+}
+
+tokenExpander > token {
+  
+}
+
+tokenOverlay.hidden {
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+token {
+  position: absolute;
+  
+  top:0px;
+  left: 0px;
+  width: 64px;
+  height: 64px;
+  
+  background: url(./assets/token/dodge.png);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  
+  border-radius: 50%;
+  filter: drop-shadow(2px 4px 6px black) saturate(0.85);
+  pointer-events: all;
+  z-index: 9;
+}
+token.destroy {
+  pointer-events: none;
+  transition: opacity 0.2s;
+  opacity: 0;
+}
+token[type="stun"] {
+  background-image: url(./assets/token/stunned.png);
+}
+token[type="dodge"] {
+  background-image: url(./assets/token/dodge.png);
+}
+token[type="unconscious"] {
+  background-image: url(./assets/token/unconscious.png);
+}
+token[type="bind"] {
+  background-image: url(./assets/token/bound.png);
+}
+token[type="poison"] {
+  background-image: url(./assets/token/poison.png);
+}
+token[type="shieldwall"] {
+  background-image: url(./assets/token/shieldwall.png);
+}
+
+
+tokenExpander > token {
+  transition: transform 0.3s 0.15s;
+}
+tokenOverlay.hidden > tokenExpander > token {
+  transform: translate(-50%, -50%) rotate(-90deg) translate(0px, 0px) rotate(90deg);
+  transition: transform 0.3s;
+  pointer-events: none;
+}
+tokenExpander > token:nth-child(1) {
+  transform: translate(-50%, calc(-50% + 13px)) rotate(-6deg) translate(var(--token-fan), 0px) rotate(6deg);
+}
+tokenExpander > token:nth-child(2) {  
+  transform: translate(-50%, calc(-50% + 13px)) rotate(-38deg) translate(calc(var(--token-fan) * 0.95), 0px) rotate(38deg);
+}
+tokenExpander > token:nth-child(3) {  
+  transform: translate(-50%, calc(-50% + 13px)) rotate(-72deg) translate(calc(var(--token-fan) * 0.9), 0px) rotate(72deg);
+}
+tokenExpander > token:nth-child(4) {  
+  transform: translate(-50%, calc(-50% + 13px)) rotate(-108deg) translate(calc(var(--token-fan) * 0.9), 0px) rotate(108deg);
+}
+tokenExpander > token:nth-child(5) {  
+  transform: translate(-50%, calc(-50% + 13px)) rotate(-142deg) translate(calc(var(--token-fan) * 0.95), 0px) rotate(142deg);
+}
+tokenExpander > token:nth-child(6) {
+  transform: translate(-50%, calc(-50% + 13px)) rotate(-174deg) translate(var(--token-fan), 0px) rotate(174deg);
 }
