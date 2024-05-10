@@ -136,23 +136,6 @@ Resources:
           KeyType: HASH
       StreamSpecification:
         StreamViewType: NEW_AND_OLD_IMAGES
-  DecksS3BucketBucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref DecksS3Bucket
-      PolicyDocument:
-        Id: RequireEncryptionInTransit
-        Version: '2012-10-17'
-        Statement:
-          - Principal: '*'
-            Action: '*'
-            Effect: Deny
-            Resource:
-              - !GetAtt DecksS3Bucket.Arn
-              - !Sub ${DecksS3Bucket.Arn}/*
-            Condition:
-              Bool:
-                aws:SecureTransport: 'false'
 Metadata:
   AWS::Composer::Groups:
     Group:
