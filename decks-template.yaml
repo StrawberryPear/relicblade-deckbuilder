@@ -55,11 +55,11 @@ Resources:
       Description: !Sub
         - Stack ${AWS::StackName} Function ${ResourceName}
         - ResourceName: DecksAPILambda
-      CodeUri: ./server/
-      Handler: app.handler
+      CodeUri: ./
+      Handler: server/app.handler
       Runtime: nodejs20.x
       MemorySize: 512
-      Timeout: 30
+      Timeout: 60
       Tracing: Active
       Events:
         DecksAPIGatewayGETsharedList:
