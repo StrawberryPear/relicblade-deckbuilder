@@ -59,29 +59,48 @@
               <label>PDF cardsets available</label>
             </purchase>
           </cardList>
-          <cardList class="deck"><add><label>Add Character</label></add><random><label>Random Relic</label></random></cardList>
+          <cardList class="deck"><add><label>Add Character</label></add></cardList>
         </cardScroller>
       </cardScrollerContainer>
+
+      <tokenContainer class="deck">
+      </tokenContainer>
 
       <cardCarousel class="vertical">
         <canvas></canvas>
       </cardCarousel>
 
       <cardButtons>
-        <cardButton class="deck vertical removeFromDeck">Remove</cardButton>
-        <cardButton class="deck vertical addUpgrade">Add<br>Upgrade</cardButton>
+        <cardButton class="deck vertical horizontal removeFromDeck">Remove</cardButton>
+        <cardButton class="deck vertical horizontal addUpgrade">Add<br>Upgrade</cardButton>
+        <cardButton class="library vertical horizontal removeLibraryCard">Remove Library Card</cardButton>
+        <cardButton class="deck vertical horizontal randomRelic">Random Relic</cardButton>
         <cardButton class="deck showLibrary">Show<br>Library</cardButton>
 
         <cardButton class="library showDeck">Return</cardButton>
         <cardButton class="library grid"></cardButton>
         <cardButton class="library horizontal search"></cardButton>
-        <cardButton class="library vertical addToDeck">Add to<br>Deck</cardButton>
-        <cardButton class="library vertical attachUpgrade">Attach<br>Upgrade</cardButton>
+        <cardButton class="library vertical horizontal addToDeck">Add to<br>Deck</cardButton>
+        <cardButton class="library vertical horizontal attachUpgrade">Attach<br>Upgrade</cardButton>
+
+        <tokenButton class="deck">
+        </tokenButton>
       </cardButtons>
 
       <toast></toast>
     </main>
     
+    <tokenOverlay class="hidden">
+      <tokenExpander>
+        <token type="stun"></token>
+        <token type="unconscious"></token>
+        <token type="dodge"></token>
+        <token type="bind"></token>
+        <token type="poison"></token>
+        <token type="shieldwall"></token>
+      </tokenExpander>
+    </tokenOverlay>
+
     <helpOverlay class="hidden">
       <helpMedalion></helpMedalion>
       <helpText>To use this app, you have to hit the add cardset button, and import a relicblade card pdf. You can find these pdfs for sale at <a href="https://relicblade.com">Relicblade.com</a>.</helpText>
@@ -103,7 +122,6 @@
         <menuControl class="loadDeck">Load Deck</menuControl>
         <br>
 
-        <menuControl class="library removeLibraryCard">Remove Card From Library</menuControl>
         <label class="menuControl fileUpload">Add Cards from PDF</label>
         <label class="menuControl imageUpload">Add Card from Image/Camera</label>
         <br>
