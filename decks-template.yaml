@@ -25,7 +25,7 @@ Resources:
                 uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DecksAPILambda.Arn}/invocations
               responses: {}
           /sharedCards:
-            get:
+            post:
               x-amazon-apigateway-integration:
                 httpMethod: POST
                 type: aws_proxy
@@ -55,7 +55,7 @@ Resources:
       Description: !Sub
         - Stack ${AWS::StackName} Function ${ResourceName}
         - ResourceName: DecksAPILambda
-      CodeUri: s3://decks-code-bucket/10:05:24.zip
+      CodeUri: ./server/
       Handler: app.handler
       Runtime: nodejs20.x
       MemorySize: 512
