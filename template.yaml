@@ -1,0 +1,146 @@
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  DecksAPIGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub
+        - ${ResourceName} From Stack ${AWS::StackName}
+        - ResourceName: DecksAPIGateway
+      StageName: Prod
+      DefinitionBody:
+        openapi: '3.0'
+        info: {}
+        paths:
+          /sharedList:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DecksAPILambda.Arn}/invocations
+              responses: {}
+            post:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DecksAPILambda.Arn}/invocations
+              responses: {}
+          /sharedCards:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DecksAPILambda.Arn}/invocations
+              responses: {}
+          /storeList:
+            post:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DecksAPILambda.Arn}/invocations
+              responses: {}
+          /uploadCards:
+            post:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DecksAPILambda.Arn}/invocations
+              responses: {}
+      EndpointConfiguration: REGIONAL
+      TracingEnabled: true
+      Cors:
+        MaxAge: 5
+  DecksAPILambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: DecksAPILambda
+      CodeUri: server
+      Handler: app.handler
+      Runtime: nodejs20.x
+      MemorySize: 512
+      Timeout: 30
+      Tracing: Active
+      Events:
+        DecksAPIGatewayGETsharedList:
+          Type: Api
+          Properties:
+            Path: /sharedList
+            Method: GET
+            RestApiId: !Ref DecksAPIGateway
+        DecksAPIGatewayPOSTsharedList:
+          Type: Api
+          Properties:
+            Path: /sharedList
+            Method: POST
+            RestApiId: !Ref DecksAPIGateway
+        DecksAPIGatewayGETsharedCards:
+          Type: Api
+          Properties:
+            Path: /sharedCards
+            Method: GET
+            RestApiId: !Ref DecksAPIGateway
+        DecksAPIGatewayPOSTstoreList:
+          Type: Api
+          Properties:
+            Path: /storeList
+            Method: POST
+            RestApiId: !Ref DecksAPIGateway
+        DecksAPIGatewayPOSTuploadCards:
+          Type: Api
+          Properties:
+            Path: /uploadCards
+            Method: POST
+            RestApiId: !Ref DecksAPIGateway
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: '*'
+  DecksAPILambdaLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${DecksAPILambda}
+  DecksSharedList:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+  DecksSavedList:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+  DecksCards:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+Metadata:
+  AWS::Composer::Groups:
+    Group:
+      Label: Group
+      Members:
+        - DecksCards
+        - DecksSavedList
+        - DecksSharedList
