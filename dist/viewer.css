@@ -60,7 +60,6 @@
 html,
 body {
   overscroll-behavior: none;
-  padding-top: var(--safe-area-top);
 }
 
 body {

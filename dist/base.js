@@ -23,9 +23,6 @@ var deckFocusCard;
 var attachCharacter;
 var dragToken;
 
-var cardHeight = 0;
-var cardWidth = 0;
-
 const cardScrollerEle = document.querySelector('cardScroller');
 const cardLibraryListEle = document.querySelector('cardList.library');
 const cardDeckListEle = document.querySelector('cardList.deck');
@@ -325,7 +322,7 @@ const showOption = async (content, options) => {
   // hide the overlay
   modalOverlayEle.classList.add("hidden");
 
-  awaitTime(200).then(() => {
+  awaitTime(350).then(() => {
     modalOverlayEle.classList.remove("option");
   });
 
@@ -413,6 +410,8 @@ const applyDeckCardTopScroll = (containerCardEle, rangeScalar, setScalar = true)
   const rangeScalarDecimalValue = rangeScalar - rangeScalarIntValue;
 
   const scaledRangeScalar = rangeScalarIntValue + rangeScalarDecimalValue;
+
+  console.log(scaledRangeScalar);
 
   // the offset should be an set y offset for each, no scaling
   const cardHeight = containerCardEle.clientHeight;
@@ -1250,10 +1249,10 @@ const init = async () => {
     try {
       if (isLandscape) {
         await Capacitor.Plugins.StatusBar.hide();
-        // await Capacitor.Plugins.NavigationBar.hide();
+        await Capacitor.Plugins.NavigationBar.hide();
       } else {
         await Capacitor.Plugins.StatusBar.show();
-        // await Capacitor.Plugins.NavigationBar.show();
+        await Capacitor.Plugins.NavigationBar.show();
       }
     }
     catch (e) {
@@ -1293,7 +1292,8 @@ const init = async () => {
       return;
     }
 
-    const safeTop = (insets.top ?? 0) / 2;
+    console.log(`safe area`, JSON.stringify(insets));
+    const safeTop = insets.top ?? 0;
     const safeBottom = insets.bottom ?? 0;
 
     // elegantly set the result somewhere in app state
@@ -1301,13 +1301,14 @@ const init = async () => {
     doc.style.setProperty('--safe-area-bottom', `${safeBottom}px`);
 
     doc.style.setProperty('--screen-width', `${screenWidth}px`);
-    doc.style.setProperty('--screen-height', `${screenHeight - safeBottom - 16}px`);
+    doc.style.setProperty('--screen-height', `${screenHeight}px`);
   }
   const triggerReload = async () => {
-    await awaitFrame();
+    console.log('assessing reload?')
     // check to see if the dimensions have changed
     const doc = document.documentElement;
     const currentScreenWidth = doc.style.getPropertyValue('--screen-width');
+    console.log(`sw: ${currentScreenWidth} vs ${window.innerWidth}px`);
 
     if (currentScreenWidth == `${window.innerWidth}px`) return;
 
@@ -1319,14 +1320,15 @@ const init = async () => {
     await awaitFrame();
     window.location.reload();
   };
-  const forceReload = async (e) => {
-    await awaitFrame();
-    await awaitFrame();
-    window.location.reload();
-  };
-  window.matchMedia("(orientation: portrait)").addEventListener('change', forceReload);
-  // document.addEventListener("resume", triggerReload);
+  document.addEventListener("resume", triggerReload);
+  window.addEventListener('resize', triggerReload)
   updateAppSize();
+
+  await awaitFrame();
+  await awaitFrame();
+  await awaitFrame();
+  await awaitFrame();
+  await awaitFrame();
 
   database = await idb.openDB('relicbladeCards', 3, {
     upgrade: (db, oldVersion) => {
@@ -1524,6 +1526,8 @@ const init = async () => {
       }
     });
   });
+
+  loadDeckFromLocal();
 
   Object.keys(filters)
     .forEach(key => {
@@ -1791,7 +1795,7 @@ const init = async () => {
 
     applyCarousel();
     cardTopControlsEle.classList.toggle('searched', !!getSearchText());
-  });
+  })
 
   removeLibraryCardEle.addEventListener('click', async (event) => {
     overlayMenuEle.className = 'hidden';
@@ -1935,6 +1939,8 @@ const init = async () => {
     const animationDuration = CARD_SLIDE_DURATION;
 
     focusCard.targetRangeScalar = targetRangeScalar;
+
+    console.log(targetRangeScalar);
 
     do {
       if (unsnappedTime != focusCard.unsnappedTime) return;
@@ -2292,6 +2298,7 @@ const init = async () => {
   });
 
   const toggleTokenOverlay = (isShown) => {
+    console.log(`token toggle: ${isShown}`);
     tokenOverlayEle.classList.toggle("hidden", !isShown);
     tokenButtonEle.classList.toggle("active", isShown);
 
@@ -2310,6 +2317,7 @@ const init = async () => {
   // token handling
   tokenButtonEle.addEventListener("click", async (event) => {
     const isTokenOverlayHidden = tokenOverlayEle.classList.contains("hidden");
+    console.log(`token click: ${isTokenOverlayHidden}`);
 
     toggleTokenOverlay(isTokenOverlayHidden);
   });
