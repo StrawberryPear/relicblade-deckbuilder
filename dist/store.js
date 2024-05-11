@@ -684,7 +684,7 @@ export default {
       "uid": "Bone and Darkness AI - 2",
       "base": "bone stalker range move armor bone 12 adversary character",
       "cost": "12",
-      "name": "bone stalker",
+      "name": "bone stalker #1",
       "classes": "bone",
       "keywords": "armor range one move ad",
       "types": "character",
@@ -717,7 +717,7 @@ export default {
       "uid": "Bone and Darkness AI - 3",
       "base": "bone stalker range move armor bone 12 adversary character",
       "cost": "12",
-      "name": "bone stalker",
+      "name": "bone stalker #2",
       "classes": "bone",
       "keywords": "armor range one move ad",
       "types": "character",
@@ -4596,16 +4596,6 @@ export default {
       "types": "relic",
       "factions": ""
     },
-    "Unknown - 1": {
-      "uid": "Unknown - 1",
-      "base": "lost pages of agog relic",
-      "cost": "0",
-      "name": "lost pages of agog",
-      "classes": "",
-      "keywords": "",
-      "types": "relic",
-      "factions": ""
-    },
     "Unknown - 2": {
       "uid": "Unknown - 2",
       "base": "the crowd source relic",
@@ -4620,7 +4610,7 @@ export default {
       "uid": "Unknown - 3",
       "base": "The Piquod relic",
       "cost": "0",
-      "name": "The Piquod source",
+      "name": "The Piquod",
       "classes": "",
       "keywords": "",
       "types": "relic",

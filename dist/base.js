@@ -1,5 +1,5 @@
 import cardsStore from './store.js';
-import baseCards from './baseCards.js'
+import baseCards from './baseCards.js';
 
 const SCALE = 4;
 
@@ -816,7 +816,7 @@ const loadDeckFromLocal = () => {
             return '';
           }
 
-          return saveCanvas.toDataURL('image/jpeg', 0.94);
+          return saveCanvas.toDataURL('image/jpeg', 0.86);
         }
       })();
 
@@ -1356,6 +1356,7 @@ const init = async () => {
     const allCards = await baseObjectStore.getAll();
 
     for (const baseCardKey of Object.keys(baseCards)) {
+      // to avoid server calls, we're going to populate straight from files, but boy is it going to be shit to add all of these things.
       if (allCards.find(card => card.uid == baseCardKey)) continue;
 
       try {
@@ -1390,7 +1391,6 @@ const init = async () => {
       document.body.className = 'loading';
       overlayMenuEle.className = 'hidden';
 
-      // accept a pdf
       try {
         let pickedFile = false;
 
@@ -2436,6 +2436,8 @@ const init = async () => {
     tokenEle.addEventListener("touchmove", onTokenTouchMove);
     tokenEle.addEventListener("touchend", onTokenTouchEnd);
   });
+
+  window.cardsStore = cardsStore;
 };
 
 init();
