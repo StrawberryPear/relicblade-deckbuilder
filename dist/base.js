@@ -1035,11 +1035,14 @@ const loadDeckFromLocal = () => {
         continue;
       }
 
+      const cardStoreValues = Object.values({...cardStore, uid: /[A-z ]*/.exec(cardStore.uid)[0]}).join(" ").toLowerCase();
+
       const filterShow = Object.values(filters).find(o => {
-        return o.active && cardStore.base.match(o.filter);
+        // lets stop using base, lets just use everything.
+        return o.active && cardStoreValues.match(o.filter);
       });
 
-      const searchShow = `${/[A-z ]*/.exec(uid)[0].toLowerCase()} ${cardStore.base.toLowerCase()}`.includes(getSearchText().toLowerCase());
+      const searchShow = cardStoreValues.includes(getSearchText().toLowerCase());
 
       const subFilterShow = !subFilter || (() => {
         if (subFilter == 'upgrade') {  
@@ -1355,12 +1358,12 @@ const init = async () => {
 
     const allCards = await baseObjectStore.getAll();
 
-    for (const baseCardKey of Object.keys(baseCards)) {
+    for (const baseCard of baseCards) {
       // to avoid server calls, we're going to populate straight from files, but boy is it going to be shit to add all of these things.
-      if (allCards.find(card => card.uid == baseCardKey)) continue;
+      if (allCards.find(card => card.uid == baseCard.uid)) continue;
 
       try {
-        await baseObjectStore.add({uid: baseCardKey, image: baseCards[baseCardKey]});
+        await baseObjectStore.add({uid: baseCard.uid, image: baseCard.image});
       } catch (err) {
         console.error(err);
       }
@@ -1460,7 +1463,7 @@ const init = async () => {
             tempContext.drawImage(cropperCanvas, 0, 0, tempCanvas.width, tempCanvas.height);
             
             // get the tempCanvasUri
-            const tempUrl = tempCanvas.toDataURL('image/jpeg', 0.94);
+            const tempUrl = tempCanvas.toDataURL('image/jpeg', 0.75);
 
             cropper.destroy();
             cropperEle.style.setProperty('opacity', 0);

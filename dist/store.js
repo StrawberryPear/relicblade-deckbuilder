@@ -4885,5 +4885,568 @@ export default {
         [0.54163555963935, 0.92913903205273, 0], 
         [0.6445471773961983, 0.9251966078725283, 0],
       ]
-    }
+    },
+    "Legends 1 - 0": {
+      "uid": "Legends 1 - 0",
+      "cost": "23",
+      "name": "Woggie Woggelbuck",
+      "classes": "knight",
+      "keywords": "legends range armor",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [
+      ]
+    },
+    "Legends 1 - 1": {
+      "uid": "Legends 1 - 1",
+      "cost": "23",
+      "name": "Armon Minoux",
+      "classes": "knight holy",
+      "keywords": "legends dodge",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [
+      ]
+    },
+    "Legends 1 - 2": {
+      "uid": "Legends 1 - 2",
+      "cost": "23",
+      "name": "Cora the Bold",
+      "classes": "knight",
+      "keywords": "legends deadly reroll",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [
+      ]
+    },
+    "Legends 1 - 3": {
+      "uid": "Legends 1 - 3",
+      "cost": "23",
+      "name": "Jayne Stokes",
+      "classes": "shield fighter",
+      "keywords": "legends charge dodge",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion potion",
+      "factions": "advocate",
+      "markBoxes": [
+      ]
+    },
+    "Legends 1 - 4": {
+      "uid": "Legends 1 - 4",
+      "cost": "20",
+      "name": "Porter McScotch",
+      "classes": "bard",
+      "keywords": "legends range bind recover",
+      "types": "character",
+      "upgradeTypes": "weapon item spell potion",
+      "factions": "advocate",
+      "markBoxes": [
+      ]
+    },
+    "Legends 1 - 5": {
+      "uid": "Legends 1 - 5",
+      "cost": "26",
+      "name": "Synvar the Sneak",
+      "classes": "rogue",
+      "keywords": "legends ad range defence ",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "adversary",
+      "markBoxes": [
+      ]
+    },
+    "Legends 1 - 6": {
+      "uid": "Legends 1 - 6",
+      "cost": "26",
+      "name": "Tyralyon Larithyan, the Blade Master",
+      "classes": "knight",
+      "keywords": "legends beam deadly",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion potion",
+      "factions": "advocate",
+      "markBoxes": [
+      ]
+    },
+    "Legends 1 - 7": {
+      "uid": "Legends 1 - 7",
+      "cost": "23",
+      "name": "Verin Six-Fingers, captain of the severed company",
+      "classes": "fighter warlord",
+      "keywords": "legends charge ad ",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion potion",
+      "factions": "adversary",
+      "markBoxes": [
+      ]
+    },
+    "Legends 1 - 8": {
+      "uid": "Legends 1 - 8",
+      "cost": "23",
+      "name": "Wulfbad",
+      "classes": "barbarian scout",
+      "keywords": "legends armor damage",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [
+      ]
+    },
+    "Legends 1 - 9": {
+      "uid": "Legends 1 - 9",
+      "base": "",
+      "cost": "0",
+      "name": "Monkey Idol",
+      "classes": "",
+      "keywords": "choose immune",
+      "types": "relic",
+      "factions": ""
+    },
+    "Legends 2 - 0": {
+      "uid": "Legends 2 - 0",
+      "cost": "23",
+      "name": "While Brann",
+      "classes": "shield fighter",
+      "keywords": "legends stun bind",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 2 - 1": {
+      "uid": "Legends 2 - 1",
+      "cost": "20",
+      "name": "Hrolf Dwarven Gadgeteer",
+      "classes": "rogue",
+      "keywords": "legends range push move",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 2 - 2": {
+      "uid": "Legends 2 - 2",
+      "cost": "20",
+      "name": "Hrolf Dwarven Gadgeteer",
+      "classes": "rogue",
+      "keywords": "legends range push move",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 2 - 3": {
+      "uid": "Legends 2 - 3",
+      "cost": "23",
+      "name": "Almar the Hexbreaker",
+      "classes": "fighter cleric",
+      "keywords": "legends spells difficulty",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 2 - 4": {
+      "uid": "Legends 2 - 4",
+      "cost": "23",
+      "name": "The Iron Tyrant",
+      "classes": "knight warlord",
+      "keywords": "legends beam poison reroll",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "adversary",
+      "markBoxes": [ ]
+    },
+    "Legends 2 - 5": {
+      "uid": "Legends 2 - 5",
+      "cost": "23",
+      "name": "Lucas Hayland",
+      "classes": "holy cleric",
+      "keywords": "legends recover",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 2 - 6": {
+      "uid": "Legends 2 - 6",
+      "cost": "23",
+      "name": "Mah'dlin and Lekshi",
+      "classes": "wizard fighter",
+      "keywords": "legends stun range choose",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 2 - 7": {
+      "uid": "Legends 2 - 7",
+      "cost": "23",
+      "name": "Victoria the Demon Hunter",
+      "classes": "rogue scout",
+      "keywords": "legends range stun dodge move",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 2 - 8": {
+      "uid": "Legends 1 - 8",
+      "base": "",
+      "cost": "0",
+      "name": "Runehammer",
+      "classes": "",
+      "keywords": "range stun",
+      "types": "relic",
+      "factions": ""
+    },
+    "Legends 2 - 9": {
+      "uid": "Legends 2 - 9",
+      "cost": "23",
+      "name": "Kenna de Aura",
+      "classes": "nature wizard",
+      "keywords": "legends range stun move",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 2 - 10": {
+      "uid": "Legends 2 - 10",
+      "cost": "23",
+      "name": "Mocifer",
+      "classes": "rogue fighter",
+      "keywords": "legends range dodge move",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "adversary",
+      "markBoxes": [ ]
+    },
+    "Legends 3 - 0": {
+      "uid": "Legends 3 - 0",
+      "cost": "23",
+      "name": "Horedin the Beastlord",
+      "classes": "barbarian nature",
+      "keywords": "legends companion armor damage",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 3 - 1": {
+      "uid": "Legends 3 - 1",
+      "cost": "23",
+      "name": "Malev da Word Weaver",
+      "classes": "rogue bard",
+      "keywords": "legends range stun dodge",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 3 - 2": {
+      "uid": "Legends 3 - 2",
+      "cost": "23",
+      "name": "Alder",
+      "classes": "shield fighter",
+      "keywords": "legends beam recover",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 3 - 3": {
+      "uid": "Legends 3 - 3",
+      "cost": "23",
+      "name": "Quercus Strongbough",
+      "classes": "druid nature",
+      "keywords": "legends range bind recover",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 3 - 4": {
+      "uid": "Legends 3 - 4",
+      "cost": "23",
+      "name": "The Black Knight",
+      "classes": "knight",
+      "keywords": "legends deadly recovery",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "adversary",
+      "markBoxes": [ ]
+    },
+    "Legends 3 - 5": {
+      "uid": "Legends 3 - 5",
+      "cost": "23",
+      "name": "Sabine the Traveler",
+      "classes": "nature scout",
+      "keywords": "legends push stun engage climb",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 3 - 6": {
+      "uid": "Legends 3 - 6",
+      "cost": "23",
+      "name": "Sister Judy",
+      "classes": "cleric holy",
+      "keywords": "legends range stun",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 3 - 7": {
+      "uid": "Legends 3 - 7",
+      "cost": "23",
+      "name": "Liam Fairweather",
+      "classes": "shield fighter",
+      "keywords": "legends dodge",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 3 - 8": {
+      "uid": "Legends 3 - 8",
+      "cost": "26",
+      "name": "Cyrion Everflame",
+      "classes": "wizard knight",
+      "keywords": "legends beam damage",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 3 - 9": {
+      "uid": "Legends 3 - 9",
+      "cost": "26",
+      "name": "Alrik Ashblade",
+      "classes": "darkness witch",
+      "keywords": "legends range stun",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "adversary",
+      "markBoxes": [ ]
+    },
+    "Legends 4 - 0": {
+      "uid": "Legends 4 - 0",
+      "cost": "23",
+      "name": "Flint and Pig",
+      "classes": "knight",
+      "keywords": "legends dodge",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 4 - 1": {
+      "uid": "Legends 4 - 1",
+      "cost": "23",
+      "name": "Miss Tiffy",
+      "classes": "cleric holy",
+      "keywords": "legends range stun",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 4 - 2": {
+      "uid": "Legends 4 - 2",
+      "cost": "23",
+      "name": "Burp the Inebriated",
+      "classes": "rogue",
+      "keywords": "legends range dodge",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 4 - 3": {
+      "uid": "Legends 4 - 3",
+      "cost": "23",
+      "name": "Brogan",
+      "classes": "barbarian",
+      "keywords": "legends dodge bind damage",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "neutral",
+      "markBoxes": [ ]
+    },
+    "Legends 4 - 4": {
+      "uid": "Legends 4 - 4",
+      "cost": "23",
+      "name": "La'ra",
+      "classes": "rogue",
+      "keywords": "legends range dodge speed",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "neutral",
+      "markBoxes": [ ]
+    },
+    "Legends 4 - 5": {
+      "uid": "Legends 4 - 5",
+      "cost": "23",
+      "name": "Ihm' Att",
+      "classes": "nature druid",
+      "keywords": "legends range binds",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "adversary",
+      "markBoxes": [ ]
+    },
+    "Legends 4 - 6": {
+      "uid": "Legends 4 - 6",
+      "cost": "26",
+      "name": "Shard",
+      "classes": "wizard fighter",
+      "keywords": "legends move dodge",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "neutral",
+      "markBoxes": [ ]
+    },
+    "Legends 4 - 7": {
+      "uid": "Legends 4 - 7",
+      "cost": "26",
+      "name": "Karinos",
+      "classes": "knight darkness",
+      "keywords": "legends",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "adversary",
+      "markBoxes": [ ]
+    },
+    "Legends 4 - 8": {
+      "uid": "Legends 4 - 8",
+      "cost": "23",
+      "name": "Tawros the Samarritan",
+      "classes": "knight darkness",
+      "keywords": "legends recover stun",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Legends 4 - 9": {
+      "uid": "Legends 4 - 9",
+      "cost": "23",
+      "name": "Malian",
+      "classes": "fighter",
+      "keywords": "legends armor range",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "neutral",
+      "markBoxes": [ ]
+    },
+    "Legends 4 - 10": {
+      "uid": "Legends 4 - 10",
+      "cost": "23",
+      "name": "Gribardson",
+      "classes": "fighter",
+      "keywords": "legends range recover",
+      "types": "character",
+      "upgradeTypes": "tactic weapon item potion",
+      "factions": "advocate",
+      "markBoxes": [ ]
+    },
+    "Seeker's Campaign Cards - 0": {
+      "uid": "Seeker's Campaign Cards - 0",
+      "cost": "0",
+      "name": "Extraordinary Health Potion",
+      "classes": "",
+      "keywords": "potion heal",
+      "types": "upgrade campaign potion",
+      "factions": ""
+    },
+    "Seeker's Campaign Cards - 1": {
+      "uid": "Seeker's Campaign Cards - 1",
+      "cost": "0",
+      "name": "Flower Crown",
+      "classes": "",
+      "keywords": "item armor",
+      "types": "upgrade campaign item",
+      "factions": ""
+    },
+    "Seeker's Campaign Cards - 2": {
+      "uid": "Seeker's Campaign Cards - 2",
+      "cost": "0",
+      "name": "Masterwork Weapon",
+      "classes": "",
+      "keywords": "item difficulty reroll",
+      "types": "upgrade campaign weapon",
+      "factions": ""
+    },
+    "Seeker's Campaign Cards - 3": {
+      "uid": "Seeker's Campaign Cards - 3",
+      "cost": "0",
+      "name": "Optimized Armor",
+      "classes": "",
+      "keywords": "item reroll",
+      "types": "upgrade campaign item",
+      "factions": ""
+    },
+    "Seeker's Campaign Cards - 4": {
+      "uid": "Seeker's Campaign Cards - 4",
+      "cost": "0",
+      "name": "Rune Engraved Skull",
+      "classes": "",
+      "keywords": "item single use damage",
+      "types": "upgrade campaign item",
+      "factions": ""
+    },
+    "Seeker's Campaign Cards - 5": {
+      "uid": "Seeker's Campaign Cards - 5",
+      "cost": "0",
+      "name": "Warden's Bolas",
+      "classes": "",
+      "keywords": "item range bind",
+      "types": "upgrade campaign weapon",
+      "factions": ""
+    },
+    "Seeker's Campaign Cards - 6": {
+      "uid": "Seeker's Campaign Cards - 6",
+      "base": "",
+      "cost": "0",
+      "name": "Lamp of the Djinn",
+      "classes": "",
+      "keywords": "",
+      "types": "relic campaign",
+      "factions": ""
+    },
+    "Seeker's Campaign Cards - 7": {
+      "uid": "Seeker's Campaign Cards - 7",
+      "base": "",
+      "cost": "0",
+      "name": "Sludge Encrusted Eyeball",
+      "classes": "",
+      "keywords": "",
+      "types": "relic campaign",
+      "factions": ""
+    },
+    "Seeker's Campaign Cards - 8": {
+      "uid": "Seeker's Campaign Cards - 8",
+      "base": "",
+      "cost": "0",
+      "name": "The Stormking's Hammer",
+      "classes": "",
+      "keywords": "",
+      "types": "relic campaign",
+      "factions": ""
+    },
+    "Seeker's Campaign Cards - 9": {
+      "uid": "Seeker's Campaign Cards - 9",
+      "base": "",
+      "cost": "0",
+      "name": "The Lady's Favor",
+      "classes": "",
+      "keywords": "",
+      "types": "relic campaign",
+      "factions": ""
+    },
   }
