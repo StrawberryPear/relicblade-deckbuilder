@@ -155,6 +155,26 @@
     width: 50%;
     height: 90%;
   }
+
+  tokenOverlay {
+    background: none;
+    pointer-events: none;
+  }
+  tokenExpander {
+    display: inline-block;
+    white-space: nowrap;
+    left: 156px;
+  }
+  tokenExpander token {
+    position: relative;
+    display:inline-block;
+  }
+  token {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    pointer-events: all;
+    margin-right: 8px
+  }
 }
 
 @media (orientation: portrait) {
