@@ -61,7 +61,7 @@
     margin-top: 2px;
   }
 
-  body[displayType="grid"] cardlist.library card {
+  body[displayType="grid"] cardScroller.library cardlist card {
     margin: 0 1px;
   }
 
@@ -181,10 +181,4 @@
   .horizontal {
     display: none !important;
   }
-}
-
-
-body[showing="deck"] cardScroller {}
-
-cardlist.deck {
 }

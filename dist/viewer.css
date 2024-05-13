@@ -82,7 +82,7 @@ body {
 }
 
 cardScroller {
-  display: block;
+  display: block !important;
   height: 100%;
   width: 100%;
   scroll-snap-type: x mandatory;
@@ -92,6 +92,9 @@ cardScroller {
   scrollbar-width: none;
   position: relative;
   overflow-y: hidden;
+  grid-row: 1;
+  grid-column: 1;
+  opacity: 1;
 }
 
 body.editing cardScroller {
@@ -99,13 +102,8 @@ body.editing cardScroller {
   pointer-events: none;
 }
 
-body:not(.editing) cardList.deck card canvas {
+body:not(.editing) cardScroller.deck cardList card canvas {
   pointer-events: none;
-}
-
-cardScroller.deck>cardList.library,
-cardScroller.library>cardList.deck {
-  display: none;
 }
 
 cardScroller::-webkit-scrollbar {
@@ -264,7 +262,9 @@ body[showing="library"] .deck,
 body[showing="deck"] .library,
 body.editing cardTabControls cardControl.deck,
 body:not(.editing) cardTabControls cardControl.editing {
-  display: none !important;
+  display: none;
+  opacity: 0;
+  pointer-events: none;
 }
 
 cardTabControls {
@@ -697,7 +697,7 @@ cardbutton.removeFromDeck {
   grid-column: 2;
 }
 
-body[displayType="grid"] cardlist.library {
+body[displayType="grid"] cardScroller.library cardlist {
   display: grid;
   align-items: center;
   justify-items: center;
@@ -708,7 +708,7 @@ body[displayType="grid"] cardlist.library {
   position: relative;
 }
 
-body[displayType="grid"] cardlist.library::after {
+body[displayType="grid"] cardScroller.library cardlist::after {
   content: "";
   width: var(--card-width-grid);
   margin-right: 0px;
@@ -716,20 +716,20 @@ body[displayType="grid"] cardlist.library::after {
   grid-row: 1 / 3;
 }
 
-body[displayType="grid"] cardlist.library card {
+body[displayType="grid"] cardScroller.library cardlist card {
   width: var(--card-width-grid);
   height: var(--card-height-grid);
   margin: 0 min(1vw, 10px);
 }
 
-body[displayType="grid"] cardlist.library purchase,
-body[displayType="grid"] cardlist.library import {
+body[displayType="grid"] cardScroller.library cardlist purchase,
+body[displayType="grid"] cardScroller.library cardlist import {
   width: var(--card-width-grid);
   height: var(--card-width-grid);
 }
 
-body[displayType="grid"] cardlist.library purchase label,
-body[displayType="grid"] cardlist.library import label {
+body[displayType="grid"] cardScroller.library cardlist purchase label,
+body[displayType="grid"] cardScroller.library cardlist import label {
   font-size: 12px
 }
 
@@ -761,12 +761,15 @@ cardCarousel canvas {
 }
 
 cardScrollerContainer {
-  display: block;
+  display: grid;
   width: 100vw;
   flex-grow: 1;
   -ms-overflow-style: none;
   scrollbar-width: none;
   position: relative;
+  justify-content: start;
+  align-items: start;
+  justify-items: start;
 }
 
 body[showing="library"]:not([displayType="grid"]) cardcarousel {
@@ -867,7 +870,7 @@ body[displayType="grid"] cardScrollerContainer {
   height: calc(var(--screen-height) - 156px);
 }
 
-cardlist.deck {
+cardScroller.deck cardlist {
   padding-top: calc(var(--screen-height) * 0.115);
 }
 
@@ -976,7 +979,7 @@ mainMenu {
   align-items: center;
 }
 
-body[displayType="grid"] cardlist.library import::after {
+body[displayType="grid"] cardScroller.library cardlist import::after {
   font-size: 42px;
 }
 
