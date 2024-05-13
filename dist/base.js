@@ -1388,6 +1388,9 @@ const init = async () => {
 
     const allCards = await baseObjectStore.getAll();
 
+    window.cardsStore = cardsStore;
+    window.baseCards = baseCards;
+
     for (const baseCard of baseCards) {
       // to avoid server calls, we're going to populate straight from files, but boy is it going to be shit to add all of these things.
       if (allCards.find(card => card.uid == baseCard.uid)) continue;
@@ -2471,8 +2474,6 @@ const init = async () => {
     tokenEle.addEventListener("touchmove", onTokenTouchMove);
     tokenEle.addEventListener("touchend", onTokenTouchEnd);
   });
-
-  window.cardsStore = cardsStore;
 };
 
 init();

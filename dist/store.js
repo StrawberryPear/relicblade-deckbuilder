@@ -4151,7 +4151,7 @@ export default {
       "cost": "0",
       "name": "delete",
       "classes": "",
-      "keywords": "",
+      "keywords": "",  
       "types": "",
       "factions": ""
     },
