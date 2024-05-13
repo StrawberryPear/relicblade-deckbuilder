@@ -23,9 +23,10 @@ var deckFocusCard;
 var attachCharacter;
 var dragToken;
 
-const cardScrollerEle = document.querySelector('cardScroller');
-const cardLibraryListEle = document.querySelector('cardList.library');
-const cardDeckListEle = document.querySelector('cardList.deck');
+const cardScrollerLibraryEle = document.querySelector('cardScroller.library');
+const cardScrollerDeckEle = document.querySelector('cardScroller.deck');
+const cardLibraryListEle = cardScrollerLibraryEle.querySelector('cardList');
+const cardDeckListEle = cardScrollerDeckEle.querySelector('cardList');
 const cardTopControlsEle = document.querySelector('cardTopControls');
 
 const searchInputEles = document.querySelectorAll('searchContainer input');
@@ -120,8 +121,14 @@ const updateDeck = () => {
   localStorage.setItem("deck", JSON.stringify(deck));
 };
 
+const getCurrentCardScrollerEle = () => {
+  return document.body.getAttribute("showing") == "library" 
+    ? cardScrollerLibraryEle 
+    : cardScrollerDeckEle;
+}
+
 const scrollScroller = async (left) => {
-  cardScrollerEle.scrollTo({left, top: 0, behavior: 'instant'});
+  getCurrentCardScrollerEle().scrollTo({left, top: 0, behavior: 'instant'});
 
   const startTime = Date.now();
 
@@ -352,14 +359,15 @@ const showToast = (() => {
 })();
 
 const awaitScrollStop = async () => {
+  const currentCardScrollerEle = getCurrentCardScrollerEle();
   const startTime = Date.now();
 
-  var lastScrollLeft = cardScrollerEle.scrollLeft;
+  var lastScrollLeft = currentCardScrollerEle.scrollLeft;
 
   await awaitFrame();
 
-  while (lastScrollLeft != cardScrollerEle.scrollLeft) {
-    lastScrollLeft = cardScrollerEle.scrollLeft;
+  while (lastScrollLeft != currentCardScrollerEle.scrollLeft) {
+    lastScrollLeft = currentCardScrollerEle.scrollLeft;
     await awaitFrame();
   }
   return startTime - Date.now();
@@ -710,31 +718,53 @@ const loadDeckFromLocal = () => {
       const isSummonOrCharacter = !!cardStore.types.match(/(character|summon)/i);
       const isAdvocate = !!cardStore.factions.match(/advocate/i);
       const isAdversary = !!cardStore.factions.match(/adversary/i);
+      const isLegend = !!cardStore.keywords.match(/legend/i);
       const cardSet = cardUID.substr(0, cardUID.length - 4);
 
       const isUpgrade = !!cardStore.types.match(/upgrade/i);
       const isRelic = !!cardStore.types.match(/relic/i);
 
+      const isCampaign = !!cardStore.types.match(/campaign/i);
+      const isReference = !!cardStore.types.match(/reference/i);
+
       const score = (() => {
         if (isSummonOrCharacter) {
+          if (isCampaign) {
+            return 'b';
+          }
           if (isAdvocate) {
+            if (isLegend) {
+              return 6
+            }
             return 0;
           } 
           if (isAdversary) {
+            if (isLegend) {
+              return 7
+            }
             return 1;
+          }
+          if (isLegend) {
+            return 8
           }
           return 2;
         }
         if (isUpgrade) {
+          if (isCampaign) {
+            return 9;
+          }
           return 3;
         }
         if (isRelic) {
+          if (isCampaign) {
+            return 'a';
+          }
           return 4;
         }
         return 5;
       })();
 
-      return `${score}${cardSet}${cardStore}`
+      return `${score}${cardSet}${cardStore.name}`
     }
 
     const placeCardWeighting = getCardSortWeighting(placeCard);
@@ -1169,8 +1199,8 @@ const loadDeckFromLocal = () => {
     // rerender the whole thing with index being the selected element, so render that one last.
     if (!cardLibraryListEle.clientWidth) return;
 
-    const scrollPadding = cardScrollerEle.clientWidth * 0.5;
-    const scrollScalar = (cardScrollerEle.scrollLeft) / (cardLibraryListEle.clientWidth - scrollPadding * 2);
+    const scrollPadding = cardScrollerLibraryEle.clientWidth * 0.5;
+    const scrollScalar = (cardScrollerLibraryEle.scrollLeft) / (cardLibraryListEle.clientWidth - scrollPadding * 2);
 
     const libraryCardEles = [...cardLibraryListEle.children].filter(e => !e.classList.contains('inactive'));
     const count = libraryCardEles.length;
@@ -1846,14 +1876,14 @@ const init = async () => {
     applyCarousel();
   });
 
-  cardScrollerEle.addEventListener("scroll", event => {
+  cardScrollerLibraryEle.addEventListener("scroll", event => {
     if (document.body.getAttribute("showing") != "library") return;
     if (document.body.getAttribute("displayType") == "grid") return;
 
     applyCarousel();
   });
 
-  cardScrollerEle.addEventListener("touchstart", event => {
+  cardScrollerDeckEle.addEventListener("touchstart", event => {
     // check if we're in the deck
     if (document.body.getAttribute("showing") != "deck") return;
     
@@ -1867,7 +1897,7 @@ const init = async () => {
 
     return;
   }, {passive: false});
-  cardScrollerEle.addEventListener("touchmove", event => {
+  cardScrollerDeckEle.addEventListener("touchmove", event => {
     // check if a modal is active
     if (!modalOverlayEle.classList.contains("hidden")) return;
 
@@ -1917,7 +1947,7 @@ const init = async () => {
     applyDeckCardTopScroll(deckFocusCard, rangeScalar);
   }, {passive: false});
   
-  cardScrollerEle.addEventListener("touchend", async (event) => {
+  cardScrollerDeckEle.addEventListener("touchend", async (event) => {
     if (document.body.getAttribute("showing") != "deck") return;
 
     if (!deckFocusCard) return;
@@ -1963,196 +1993,199 @@ const init = async () => {
     // do the next crap.
   });
 
-  cardScrollerEle.setAttribute("data-long-press-delay", 450);
-  cardScrollerEle.addEventListener("long-press", async (event) => {
-    var touchEndEvent = new Event("touchend");
-    cardScrollerEle.dispatchEvent(touchEndEvent);
+  [cardScrollerDeckEle, cardScrollerLibraryEle].forEach(cardScrollerEle => {
 
-    // force touch up
-    event.preventDefault();
+    cardScrollerEle.setAttribute("data-long-press-delay", 200);
+    cardScrollerEle.addEventListener("long-press", async (event) => {
+      var touchEndEvent = new Event("touchend");
+      cardScrollerEle.dispatchEvent(touchEndEvent);
 
-    const selectedCardEle = event.target;
+      // force touch up
+      event.preventDefault();
 
-    if (!selectedCardEle) return;
-    if (selectedCardEle.tagName != "CARD") return;
-    
-    // add selected to the card
-    awaitTime(100).then(() => {
-      selectedCardEle.classList.toggle("highlight", true);
-    })
-  
-    // are we in deck mode?
-    if (document.body.getAttribute("showing") == "deck") {
-      const parentCardEle = selectedCardEle.parentElement.tagName == "CARD" ? selectedCardEle.parentElement : selectedCardEle;
+      const selectedCardEle = event.target;
 
-      const deckIndex = [...cardDeckListEle.children].indexOf(parentCardEle);
-      const upgradeIndex = [...parentCardEle.querySelectorAll("card")].indexOf(selectedCardEle);
-
-      applyDeckCardTopScroll(parentCardEle, upgradeIndex + 1);
-
-      // center the card
-      const currentFocusCardEle = selectedCardEle;
-      const scrollLeft = currentFocusCardEle.closest("cardDeckWrapper").offsetLeft;
-      scrollScroller(scrollLeft - window.innerWidth * 0.5);
-
-      const currentFocusCard = cardsStore[currentFocusCardEle.getAttribute("uid")];
-
-      // show a modal with add upgrade, remove, cancel
-      const options = [];
-
-      // check if we're selecting a character
-      if (currentFocusCard.types == "character") {
-        options.push("Add Upgrade");
-        // check if we have a relic in our library
-        if (hasRelicInLibrary) {
-          options.unshift("Add Random Relic");
-        }
-        options.unshift("Remove Character");
-        
-      }
-      else {
-        options.push("Remove Upgrade");
-      }
-
-
-      const optionResult = await showOption(`<h4>${currentFocusCard.name} selected</h4> `, options);
-
-      if (optionResult == "Add Upgrade") {
-        addUpgradeButtons[0].click();
-      } else if (optionResult == "Remove Character" || optionResult == "Remove Upgrade") {
-        removeFromDeckButtons[0].click();
-      } else if (optionResult == "Add Random Relic") {
-        randomRelicButton.click();
-      }
-
-      selectedCardEle.classList.toggle("highlight", false);
-
-      await awaitTime(200);
+      if (!selectedCardEle) return;
+      if (selectedCardEle.tagName != "CARD") return;
       
-      return;
-    }
+      // add selected to the card
+      awaitTime(100).then(() => {
+        selectedCardEle.classList.toggle("highlight", true);
+      })
+    
+      // are we in deck mode?
+      if (document.body.getAttribute("showing") == "deck") {
+        const parentCardEle = selectedCardEle.parentElement.tagName == "CARD" ? selectedCardEle.parentElement : selectedCardEle;
 
-    // center the card
-    const currentFocusCardEle = selectedCardEle;
-    const scrollLeft = currentFocusCardEle.offsetLeft;
-    scrollScroller(scrollLeft - window.innerWidth * 0.5);
+        const deckIndex = [...cardDeckListEle.children].indexOf(parentCardEle);
+        const upgradeIndex = [...parentCardEle.querySelectorAll("card")].indexOf(selectedCardEle);
 
-    // are we in attach upgrade mode?
-    if (attachCharacter) {
-      const attachedCharacterStore = cardsStore[attachCharacter.uid];
-      const confirmResult = await showConfirm(`Do you want to attach this card to ${attachedCharacterStore.name}?`);
+        applyDeckCardTopScroll(parentCardEle, upgradeIndex + 1);
 
-      await awaitTime(200);
-      // await scrolling stopping
-      await awaitScrollStop();
+        // center the card
+        const currentFocusCardEle = selectedCardEle;
+        const scrollLeft = currentFocusCardEle.closest("cardDeckWrapper").offsetLeft;
+        scrollScroller(scrollLeft - window.innerWidth * 0.5);
 
-      if (confirmResult) {
-        attachUpgradeButton.click();
-      }
-      selectedCardEle.classList.toggle("highlight", false);
+        const currentFocusCard = cardsStore[currentFocusCardEle.getAttribute("uid")];
 
-      return;
-    }
+        // show a modal with add upgrade, remove, cancel
+        const options = [];
 
-    // finally we're in add character mode
-    const confirmResult = await showConfirm(`Do you want to add this character to your deck?`);
-
-    await awaitTime(200);
-
-    // await scrolling stopping
-    await awaitScrollStop();
-
-    if (confirmResult) {
-      addToDeckButtons[0].click();
-    }
-    selectedCardEle.classList.toggle("highlight", false);
-
-    return;
-  });
-
-  cardScrollerEle.addEventListener("click", async (event) => {
-    const clickedCardEle = event?.target;
-    if (!clickedCardEle) return;
-    if (clickedCardEle.tagName != "CARD") return;
-  
-    if (document.body.getAttribute("showing") !== 'library') {
-      // do events for horizontal view.
-      return;
-    }
-
-    if (document.body.getAttribute("displayType") !== "grid") {
-      const centerCard = getCenterCardEle();
-  
-      if (centerCard.getAttribute("index") !== clickedCardEle.getAttribute("index")) {
-        // scroll to focus the clicked card, both in the x and "y" coordinates
-  
-        // work out the centre of the screen
-        const cardWidth = clickedCardEle.clientWidth;
-        const cardsPerScreen = Math.floor(window.innerWidth / cardWidth);
-  
-        const offsetCenterLeft = cardsPerScreen * 0.5 * cardWidth;
-        
-        // check if we're in the center already
-        
-        const timeToStop = await awaitScrollStop();
-  
-        if (timeToStop < 50) {
-          const cardScrollX = clickedCardEle.offsetLeft || 0;
-          scrollScroller(cardScrollX - offsetCenterLeft);
+        // check if we're selecting a character
+        if (currentFocusCard.types == "character") {
+          options.push("Add Upgrade");
+          // check if we have a relic in our library
+          if (hasRelicInLibrary) {
+            options.unshift("Add Random Relic");
+          }
+          options.unshift("Remove Character");
+          
         }
+        else {
+          options.push("Remove Upgrade");
+        }
+
+
+        const optionResult = await showOption(`<h4>${currentFocusCard.name} selected</h4> `, options);
+
+        if (optionResult == "Add Upgrade") {
+          addUpgradeButtons[0].click();
+        } else if (optionResult == "Remove Character" || optionResult == "Remove Upgrade") {
+          removeFromDeckButtons[0].click();
+        } else if (optionResult == "Add Random Relic") {
+          randomRelicButton.click();
+        }
+
+        selectedCardEle.classList.toggle("highlight", false);
+
+        await awaitTime(200);
         
         return;
       }
 
-      // do the weird cards
-      switch (clickedCardEle.tagName) {
-        case "PURCHASE":
-          try {
-            // open a browser window.
-            window.open("https://relicblade.com", "_blank");
-          } catch (error) {
-            showToast(error.message);
-          }
-          return;
-        case "IMPORT":
-          document.querySelector("#fileUpload").click();
-          return;
+      // center the card
+      const currentFocusCardEle = selectedCardEle;
+      const scrollLeft = currentFocusCardEle.offsetLeft;
+      scrollScroller(scrollLeft - window.innerWidth * 0.5);
+
+      // are we in attach upgrade mode?
+      if (attachCharacter) {
+        const attachedCharacterStore = cardsStore[attachCharacter.uid];
+        const confirmResult = await showConfirm(`Do you want to attach this card to ${attachedCharacterStore.name}?`);
+
+        await awaitTime(200);
+        // await scrolling stopping
+        await awaitScrollStop();
+
+        if (confirmResult) {
+          attachUpgradeButton.click();
+        }
+        selectedCardEle.classList.toggle("highlight", false);
+
+        return;
       }
 
-      // do the cool cards.
-    }
-  
-    if (document.body.getAttribute("displayType") == "grid") {
-      // target the new card and swap display type
-      document.body.setAttribute("displayType", "");
-  
-      applyCarousel();
-  
-      const timeToStop = await awaitScrollStop();
-      
-      // work out the centre of the screen
-      const cardWidth = clickedCardEle.clientWidth;
-      const cardsPerScreen = Math.floor(window.innerWidth / cardWidth);
+      // finally we're in add character mode
+      const confirmResult = await showConfirm(`Do you want to add this character to your deck?`);
 
-      const offsetCenterLeft = cardsPerScreen * 0.5 * cardWidth;
+      await awaitTime(200);
 
-      const cardScrollX = clickedCardEle.offsetLeft || 0;
-      scrollScroller(cardScrollX - offsetCenterLeft);
-  
+      // await scrolling stopping
+      await awaitScrollStop();
+
+      if (confirmResult) {
+        addToDeckButtons[0].click();
+      }
+      selectedCardEle.classList.toggle("highlight", false);
+
       return;
-    }
+    });
+
+    cardScrollerEle.addEventListener("click", async (event) => {
+      const clickedCardEle = event?.target;
+      if (!clickedCardEle) return;
+      if (clickedCardEle.tagName != "CARD") return;
     
-    // get the xy of where was clicked
-    // get card bounds
-    // const cardBounds = clickedCardEle.getBoundingClientRect();
-  
-    // const markBoxX = (event.clientX - cardBounds.left) / cardBounds.width;
-    // const markBoxY = (event.clientY - cardBounds.top) / cardBounds.height;
-  
-    // cardStore.markBoxes = cardStore.markBoxes || [];
-    // cardStore.markBoxes.push([markBoxX, markBoxY, 0]);
-  
-    // console.log(`[${markBoxX}, ${markBoxY}, 0], `);
+      if (document.body.getAttribute("showing") !== 'library') {
+        // do events for horizontal view.
+        return;
+      }
+
+      if (document.body.getAttribute("displayType") !== "grid") {
+        const centerCard = getCenterCardEle();
+    
+        if (centerCard.getAttribute("index") !== clickedCardEle.getAttribute("index")) {
+          // scroll to focus the clicked card, both in the x and "y" coordinates
+    
+          // work out the centre of the screen
+          const cardWidth = clickedCardEle.clientWidth;
+          const cardsPerScreen = Math.floor(window.innerWidth / cardWidth);
+    
+          const offsetCenterLeft = cardsPerScreen * 0.5 * cardWidth;
+          
+          // check if we're in the center already
+          
+          const timeToStop = await awaitScrollStop();
+    
+          if (timeToStop < 50) {
+            const cardScrollX = clickedCardEle.offsetLeft || 0;
+            scrollScroller(cardScrollX - offsetCenterLeft);
+          }
+          
+          return;
+        }
+
+        // do the weird cards
+        switch (clickedCardEle.tagName) {
+          case "PURCHASE":
+            try {
+              // open a browser window.
+              window.open("https://relicblade.com", "_blank");
+            } catch (error) {
+              showToast(error.message);
+            }
+            return;
+          case "IMPORT":
+            document.querySelector("#fileUpload").click();
+            return;
+        }
+
+        // do the cool cards.
+      }
+    
+      if (document.body.getAttribute("displayType") == "grid") {
+        // target the new card and swap display type
+        document.body.setAttribute("displayType", "");
+    
+        applyCarousel();
+    
+        const timeToStop = await awaitScrollStop();
+        
+        // work out the centre of the screen
+        const cardWidth = clickedCardEle.clientWidth;
+        const cardsPerScreen = Math.floor(window.innerWidth / cardWidth);
+
+        const offsetCenterLeft = cardsPerScreen * 0.5 * cardWidth;
+
+        const cardScrollX = clickedCardEle.offsetLeft || 0;
+        scrollScroller(cardScrollX - offsetCenterLeft);
+    
+        return;
+      }
+      
+      // get the xy of where was clicked
+      // get card bounds
+      // const cardBounds = clickedCardEle.getBoundingClientRect();
+    
+      // const markBoxX = (event.clientX - cardBounds.left) / cardBounds.width;
+      // const markBoxY = (event.clientY - cardBounds.top) / cardBounds.height;
+    
+      // cardStore.markBoxes = cardStore.markBoxes || [];
+      // cardStore.markBoxes.push([markBoxX, markBoxY, 0]);
+    
+      // console.log(`[${markBoxX}, ${markBoxY}, 0], `);
+    });
   });
 
   const onCarouselInteraction = event => {
@@ -2164,7 +2197,6 @@ const init = async () => {
     const newScroll = cardLibraryListEle.clientWidth * scrollRatio;
 
     scrollScroller(newScroll);
-    // cardScrollerEle.scrollTo({left: newScroll, top: 0, behavior: 'instant'});
   }
 
   carouselEle.addEventListener("touchstart", onCarouselInteraction);

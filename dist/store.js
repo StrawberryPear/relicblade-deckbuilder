@@ -4132,17 +4132,17 @@ export default {
       "name": "basic actions",
       "classes": "",
       "keywords": "",
-      "types": "",
+      "types": "reference",
       "factions": ""
     },
     "Storms of Kural cards - 5": {
       "uid": "Storms of Kural cards - 5",
-      "base": "reference ",
+      "base": "reference",
       "cost": "0",
       "name": "fate weave actions",
       "classes": "",
       "keywords": "",
-      "types": "",
+      "types": "reference",
       "factions": ""
     },
     "Storms of Kural cards - 10": {
@@ -4765,7 +4765,7 @@ export default {
       "name": "Ancient Dead",
       "classes": "",
       "keywords": "monster",
-      "types": "character",
+      "types": "character campaign",
       "upgradeTypes": "",
       "factions": "neutral",
       "markBoxes": [[0.13297536323436512, 0.9015420627913184, 0], 
@@ -4785,7 +4785,7 @@ export default {
       "name": "Banshee",
       "classes": "",
       "keywords": "monster",
-      "types": "character",
+      "types": "character campaign",
       "upgradeTypes": "",
       "factions": "neutral",
       "markBoxes": [
@@ -4801,7 +4801,7 @@ export default {
       "name": "Basilisk",
       "classes": "",
       "keywords": "monster",
-      "types": "character",
+      "types": "character campaign",
       "upgradeTypes": "",
       "factions": "neutral",
       "markBoxes": [
@@ -4819,7 +4819,7 @@ export default {
       "name": "Fay Knight",
       "classes": "",
       "keywords": "monster",
-      "types": "character",
+      "types": "character campaign",
       "upgradeTypes": "",
       "factions": "neutral",
       "markBoxes": [
@@ -4837,7 +4837,7 @@ export default {
       "name": "Night Prowlers",
       "classes": "",
       "keywords": "monster",
-      "types": "character",
+      "types": "character campaign",
       "upgradeTypes": "",
       "factions": "neutral",
       "markBoxes": [
@@ -4858,7 +4858,7 @@ export default {
       "name": "Revenant",
       "classes": "",
       "keywords": "monster",
-      "types": "character",
+      "types": "character campaign",
       "upgradeTypes": "",
       "factions": "neutral",
       "markBoxes": [
@@ -4876,7 +4876,7 @@ export default {
       "name": "Ruins Harrier",
       "classes": "",
       "keywords": "monster",
-      "types": "character",
+      "types": "character campaign",
       "upgradeTypes": "",
       "factions": "neutral",
       "markBoxes": [
