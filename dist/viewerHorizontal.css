@@ -78,7 +78,7 @@
   cardButtons {
     position: absolute;
     bottom: -6px;
-    grid-template-columns: 1fr 6fr 1fr 1fr;
+    grid-template-columns: 1fr 5fr 1fr 1fr 1fr;
     width: calc(var(--screen-width) * 1.025);
     left: calc(var(--screen-width) * -0.0125);
   }
@@ -87,13 +87,13 @@
   }
 
   cardButton.grid {
-    grid-column: 3;
-  }
-  cardButton.search {
     grid-column: 4;
   }
+  cardButton.legal {
+  background-position: 0px;
+  }
   cardButton.search {
-    grid-column: 4;
+    grid-column: 5;
   }
   cardButton.removeFromDeck, cardButton.addToDeck, cardButton.attachUpgrade {
     position:fixed;
