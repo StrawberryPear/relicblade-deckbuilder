@@ -21,8 +21,11 @@
     <main>
       <nav>
         <call><edit></edit><deckTitleContainer><input type="text" id="title" contentEditable="true" maxlength="24" placeholder="Untitled Deck" /><deckTitleMirror id="titleMirror">Untitled Deck</deckTitleMirror></deckTitleContainer><span id="points"></span></call>
-        <description></description>
-        <ham></ham>
+        <description class="horizontal"></description>
+        <hamContainer>
+          <share></share>
+          <ham></ham>
+        </hamContainer>
       </nav>
 
       <cardTopControls class="library vertical">
@@ -69,11 +72,11 @@
       <tokenContainer class="deck">
       </tokenContainer>
 
-      <cardCarousel class="vertical">
+      <cardCarousel class="vertical_">
         <canvas></canvas>
       </cardCarousel>
 
-      <cardButtons class="library">
+      <cardButtons class="library_">
         <cardButton class="vertical horizontal removeLibraryCard">Remove Library Card</cardButton>
         <cardButton class="showDeck">Return</cardButton>
         <cardButton class="grid"></cardButton>
@@ -82,7 +85,7 @@
         <cardButton class="vertical horizontal attachUpgrade">Attach<br>Upgrade</cardButton>
       </cardButtons>
       
-      <cardButtons class="deck">
+      <cardButtons class="deck_">
         <cardButton class="vertical horizontal removeFromDeck">Remove</cardButton>
         <cardButton class="vertical horizontal addUpgrade">Add<br>Upgrade</cardButton>
         <cardButton class="vertical horizontal randomRelic">Random Relic</cardButton>
@@ -95,7 +98,7 @@
     </main>
     
     <tokenOverlay class="hidden">
-      <tokenExpander class="deck">
+      <tokenExpander class="deck_">
         <token type="stun"></token>
         <token type="unconscious"></token>
         <token type="dodge"></token>
@@ -124,10 +127,10 @@
         <br>
         <menuControl class="saveDeck">Save Deck</menuControl>
         <menuControl class="loadDeck">Load Deck</menuControl>
+        <menuControl class="shareDeck">Share Deck</menuControl>
         <br>
 
         <label class="menuControl fileUpload">Add Cards from PDF</label>
-        <label class="menuControl imageUpload">Add Card from Image/Camera</label>
         <br>
         <br>
         <menuControl class="return">Return</menuControl>

@@ -246,14 +246,32 @@ call {
   justify-content: flex-start;
   align-items: center;
 }
-
+hamContainer {
+  display: inline-block;
+  position: relative;
+  width: auto;
+  height: 100%;
+}
 ham {
+  display: inline-block;
   position: relative;
   margin-right: 5px;
   width: 44px;
   box-sizing: border-box;
   height: 100%;
   background: url('./assets/ham.png');
+  background-size: 34px auto;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+share {
+  display: inline-block;
+  position: relative;
+  margin-right: 5px;
+  width: 44px;
+  box-sizing: border-box;
+  height: 100%;
+  background: url('./assets/share.png');
   background-size: 34px auto;
   background-position: center;
   background-repeat: no-repeat;
@@ -400,6 +418,9 @@ cardButtons {
   align-items: end;
   /* background: linear-gradient(00deg, #1b6570, transparent); */
   pointer-events: none;
+  position: absolute;
+  bottom: 0px;
+  transition: transform 0.3s;
 }
 
 cardButton,
@@ -607,7 +628,7 @@ overlayMenu.hidden,
 modalOverlay.hidden,
 body:not(.loading) loadingOverlay {
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s 0.2s;
   pointer-events: none;
 }
 
@@ -680,7 +701,7 @@ cardButton.grid::after, cardButton.search::after {
   width: 56px;
   height: 80%;
   overflow: hidden;
-  background-image: url('./assets/grid.png');
+  background-image: url(./assets/single.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: auto 74%;
@@ -693,7 +714,10 @@ cardButton.searched::after {
 }
 
 body[displayType="grid"] cardButton.grid::after {
-  background-image: url('./assets/single.png');
+  background-image: url(./assets/grid.png);
+}
+body[displayType="grid"] cardButton.grid {
+  background-image: url(./assets/add-remove-white.png);
 }
 
 searchicon[type="clear"] {
@@ -751,7 +775,7 @@ body[displayType="grid"] cardScroller.library cardlist import label {
 }
 
 cardCarousel {
-  display: none;
+  display: block;
   width: 100%;
   height: min(calc(var(--screen-height) - var(--card-height) - 180px), 96px);
   margin-bottom: calc(var(--screen-height) * 0.01);
@@ -768,6 +792,8 @@ cardCarousel {
   /* -webkit-mask-position: center; */
   /* margin-left: 2%; */
   position: relative;
+  transition: transform 0.3s;
+  transform: translate(0, 0);
 }
 
 cardCarousel canvas {
@@ -789,9 +815,7 @@ cardScrollerContainer {
   justify-items: start;
 }
 
-body[showing="library"]:not([displayType="grid"]) cardcarousel {
-  display: block;
-}
+body[showing="library"][displayType="grid"] cardcarousel {display: none;}
 
 cardbutton.addUpgrade {
   grid-column: 3;
@@ -867,11 +891,6 @@ card>card {
 
 card>card:nth-of-type(2) {
   transform: translateY(-90px) translateZ(-2px);
-}
-
-body[showing="deck"] cardButtons {
-  position: absolute;
-  bottom: 0px;
 }
 
 body[showing="deck"] cardScrollerContainer {
@@ -1007,7 +1026,7 @@ modaloverlay {
   align-content: center;
   justify-content: flex-end;
   align-items: center;
-  background: linear-gradient(0deg, black, black 30%, transparent 100%);
+  background: linear-gradient(0deg, black, black 30%, transparent 70%, black 100%);
   padding-bottom: 10%;
   box-sizing: border-box;
   z-index: 10;
@@ -1107,13 +1126,14 @@ tokenContainer {
 }
 
 tokenExpander {
-    position: fixed;
-    bottom: 42px;
-    left: calc(0.5 * var(--screen-width));
-    width: 0px;
-    height: 0px;
-    transform: translate(-50%, 50%);
-    pointer-events: none;
+  position: fixed;
+  bottom: 42px;
+  left: calc(0.5 * var(--screen-width));
+  width: 0px;
+  height: 0px;
+  transform: translate(-50%, 50%);
+  pointer-events: none;
+  transition: transform 0.3s;
 }
 
 tokenOverlay {
@@ -1166,6 +1186,9 @@ token[type="shieldwall"] {
 
 
 @media (orientation: portrait) {
+  cardButtons.library_ {
+    position: relative;
+  }
   tokenButton {
       position: fixed;
       bottom: 36px;
@@ -1264,7 +1287,11 @@ token[type="shieldwall"] {
 body[showing="deck"] cardscroller.library {
   transform: translate(0px, -100vh);
 }
-body[showing="library"] cardscroller.deck {
+body[showing="library"] cardscroller.deck,
+body[showing="deck"] cardButtons.library_,
+body[showing="library"] cardButtons.deck_,
+body[showing="library"] tokenExpander.deck_,
+body[showing="deck"] cardCarousel.vertical_ {
   transform: translate(0px, 100vh);
 }
 

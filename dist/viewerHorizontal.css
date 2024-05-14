@@ -50,6 +50,16 @@
     background-position:center;
     background-repeat: no-repeat;
     height: 38px;
+    margin-top: 6px;
+    filter:drop-shadow(2px 4px 6px black);
+  }
+  share {
+    background: url('./assets/share-black.png'), url(./assets/add-remove-flipped.png);
+    background-size: 80%, 100%;
+    background-position:center;
+    background-repeat: no-repeat;
+    height: 38px;
+    margin-top: 6px;
     filter:drop-shadow(2px 4px 6px black);
   }
 
@@ -192,6 +202,22 @@
 
   snappoint {
       scroll-snap-align: center;
+  }
+
+  description {
+    font-family: 'tradeWinds';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -35%);
+    transition: transform 0.3s;
+    font-size: 1.35rem;
+    width: 50%;
+    line-height: 100%;
+    text-align: center;
+  }
+  body[showing="deck"] description {
+    transform: translate(-50%, calc(-50% - 25vh));
   }
 }
 

@@ -13,6 +13,9 @@ const PDF_CARD_ROW_OFFSET = Math.round(6.66666666667 * PDF_SCALE);
 
 const CARD_SLIDE_DURATION = 300;
 
+const API_URL = "https://bi04kvgbjg.execute-api.ap-southeast-2.amazonaws.com/Prod";
+const SHARE_URL = "https://gungobs.com";
+
 var database;
 var deckName = "";
 var deck = [];
@@ -65,9 +68,11 @@ const tokenContainerEle = document.querySelector('tokenContainer');
 const tokenButtonEle = document.querySelector('tokenButton');
 
 const baseTokens = document.querySelectorAll('token');
+const descriptionEle = document.querySelector('description');
 
 const modalCardEle = document.querySelector('modalOverlay card');
 
+const modalEle = document.querySelector('modal');
 const modalOverlayEle = document.querySelector("modalOverlay");
 const modalOverlayTextEle = modalOverlayEle.querySelector("modalText");
 const modalOverlayReturnButtonEle = modalOverlayEle.querySelector("modalButton#modalReturn");
@@ -150,7 +155,6 @@ const scrollDeckToCard = async (cardEle) => {
   const cardWidth = closestCardContainerEle.clientWidth;
 
   const offsetCenterLeft = window.innerWidth * 0.5 - cardWidth * 0.5;
-  console.log(closestCardContainerEle.offsetLeft);
   const cardScrollX = closestCardContainerEle.offsetLeft || 0;
 
   scrollDeckScroller(cardScrollX - offsetCenterLeft);
@@ -232,9 +236,26 @@ const getCenterCardEle = (options) => {
   return getCardFromPoint(window.innerWidth * 0.5, window.innerHeight * 0.5, options);
 };
 
-const reinitializeModal = ({acceptText, returnText} = {}) => {
+const reinitializeModal = async ({acceptText, returnText} = {}) => {
   modalOverlayAcceptButtonEle.innerHTML = acceptText || "Accept";
   modalOverlayReturnButtonEle.innerHTML = returnText || "Return";
+
+  // flash the modal
+  modalEle.style.setProperty("opacity", "0");
+
+  const timeStart = Date.now();
+
+  const fadeInDuration = 400;
+
+  while (Date.now() - timeStart < fadeInDuration) {
+    const delta = (Date.now() - timeStart) / fadeInDuration;
+
+    modalEle.style.setProperty("opacity", `${delta}`);
+
+    await awaitFrame();
+  }
+
+  modalEle.style.setProperty("opacity", "1");
 };
 const interactCardOptions = {};
 const showInteractCard = async (cardEle, options = {}) => {
@@ -497,8 +518,6 @@ const applyDeckCardTopScroll = (containerCardEle, rangeScalar, setScalar = true)
   const rangeScalarDecimalValue = rangeScalar - rangeScalarIntValue;
 
   const scaledRangeScalar = rangeScalarIntValue + rangeScalarDecimalValue;
-
-  console.log(scaledRangeScalar);
 
   // the offset should be an set y offset for each, no scaling
   const cardHeight = containerCardEle.clientHeight;
@@ -1213,6 +1232,26 @@ const loadDeckFromLocal = () => {
 
       cardEle.classList.toggle('inactive', (!allFalse && !filterShow) || !searchShow || !subFilterShow || specifiedFiltersShow);
     }
+    const libraryText = (() => {
+      if (attachCharacter && subFilter == "upgrade") {
+        const attachedCharacterStore = cardsStore[attachCharacter?.uid];
+  
+        if (!attachedCharacterStore) {
+          return;
+        };
+  
+        return `Showing <b>upgrades</b> for <b>${attachedCharacterStore.name}</b>`;
+      }
+      if (subFilter) {
+        return `Showing <b>${subFilter}</b> cards`;
+      }
+      return;
+    })() || `Showing Library`;
+    const searchText = getSearchText();
+
+    const descriptor = `${libraryText}${searchText ? ` matching <b>${searchText}</b>` : ''}`;
+    // input the explanation into it.
+    descriptionEle.innerHTML = descriptor;
   }
 
   const addCardToDatabase = async (image, uid) => {
@@ -1755,10 +1794,10 @@ const init = async () => {
   
       const currentCardIndex = getDeckIndexOfCardEle(deckCurrentCardEle);
   
-      setSubFilter('upgrade', { classes: cardStore.classes, upgradeType: cardStore.upgradeTypes});
-  
       setDeckFocusCard(deckCurrentCardEle);
       attachCharacter = deck[currentCardIndex];
+
+      setSubFilter('upgrade', { classes: cardStore.classes, upgradeType: cardStore.upgradeTypes});
   
       onShowLibrary();
     });
@@ -1966,6 +2005,47 @@ const init = async () => {
   document.querySelector('ham').addEventListener('click', () => {
     overlayMenuEle.className = '';
     overlayMenuEle.setAttribute("showing", "mainMenu");
+  });
+
+  document.querySelector('share').addEventListener('click', async () => {
+    // show a confirm
+    const confirmValue = await showConfirm(`Would you like to generate a link to share ${deckName || "this deck"}?`);
+
+    if (!confirmValue) return;
+
+    // set loading
+    document.body.className = 'loading';
+
+    const deckString = JSON.stringify({deck: JSON.stringify(deck), deckName});
+
+    debugger;
+
+    try {
+      var response = await fetch(`${API_URL}/sharedDeck`, {
+        method: 'POST',
+        contentType: 'text/plain',
+        body: deckString
+      });
+    } catch (e) {
+      console.error(e);
+
+      showToast("Failed to generate a share link");
+      document.body.className = "";
+      return;
+    }
+
+    const responseJson = await response.json();
+    const shareCode = responseJson.id;
+    const uploadCards = responseJson.uploadCards;
+
+    if (uploadCards) {
+      
+    } 
+
+    // check if we need to upload any cards.
+    // show the share link using the share navigator, otherwise fallback to a modal
+
+    const shareUrl = `${SHARE_URL}/decks?id=${shareCode}`;
   });
 
   gridButtonEle.addEventListener('click', () => {
@@ -2179,7 +2259,12 @@ const init = async () => {
 
         if (confirmResult) {
           attachUpgradeButton.click();
+
+          return;
         }
+
+        hideInteractCard(!confirmResult);
+        selectedCardEle.classList.toggle("highlight", false);
 
         return;
       }
@@ -2438,7 +2523,6 @@ const init = async () => {
   });
 
   const toggleTokenOverlay = (isShown) => {
-    console.log(`token toggle: ${isShown}`);
     tokenOverlayEle.classList.toggle("hidden", !isShown);
     tokenButtonEle.classList.toggle("active", isShown);
 
@@ -2457,7 +2541,6 @@ const init = async () => {
   // token handling
   tokenButtonEle.addEventListener("click", async (event) => {
     const isTokenOverlayHidden = tokenOverlayEle.classList.contains("hidden");
-    console.log(`token click: ${isTokenOverlayHidden}`);
 
     toggleTokenOverlay(isTokenOverlayHidden);
   });
