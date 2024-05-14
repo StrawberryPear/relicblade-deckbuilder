@@ -2527,7 +2527,7 @@ export default {
       "base": "shadowglass dagger dire bonus die 4 upgrade weapon",
       "cost": "4",
       "name": "shadowglass dagger",
-      "classes": "",
+      "classes": "rogue",
       "keywords": "dire bonus die dagger bonus ad",
       "types": "upgrade weapon",
       "factions": ""

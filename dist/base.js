@@ -1,15 +1,15 @@
 import cardsStore from './store.js';
 import baseCards from './baseCards.js';
 
-const SCALE = 4;
+const PDF_SCALE = 4;
 
-const CARD_WIDTH = Math.round(180 * SCALE);
-const CARD_HEIGHT = Math.round(250 * SCALE);
+const PDF_CARD_WIDTH = Math.round(180 * PDF_SCALE);
+const PDF_CARD_HEIGHT = Math.round(250 * PDF_SCALE);
 
-const CARD_OFFSET_X = Math.round(36.6666666667 * SCALE);
-const CARD_OFFSET_Y = Math.round(18.6666666667 * SCALE);
+const PDF_CARD_OFFSET_X = Math.round(36.6666666667 * PDF_SCALE);
+const PDF_CARD_OFFSET_Y = Math.round(18.6666666667 * PDF_SCALE);
 
-const CARD_ROW_OFFSET = Math.round(6.66666666667 * SCALE);
+const PDF_CARD_ROW_OFFSET = Math.round(6.66666666667 * PDF_SCALE);
 
 const CARD_SLIDE_DURATION = 300;
 
@@ -22,6 +22,9 @@ var deckFocusCard;
 
 var attachCharacter;
 var dragToken;
+
+var CARD_WIDTH = 250;
+var CARD_HEIGHT = 350;
 
 const cardScrollerLibraryEle = document.querySelector('cardScroller.library');
 const cardScrollerDeckEle = document.querySelector('cardScroller.deck');
@@ -62,6 +65,13 @@ const tokenContainerEle = document.querySelector('tokenContainer');
 const tokenButtonEle = document.querySelector('tokenButton');
 
 const baseTokens = document.querySelectorAll('token');
+
+const modalCardEle = document.querySelector('modalOverlay card');
+
+const modalOverlayEle = document.querySelector("modalOverlay");
+const modalOverlayTextEle = modalOverlayEle.querySelector("modalText");
+const modalOverlayReturnButtonEle = modalOverlayEle.querySelector("modalButton#modalReturn");
+const modalOverlayAcceptButtonEle = modalOverlayEle.querySelector("modalButton#modalAccept");
 
 const getSId = (() => {
   var uid = 0;
@@ -127,23 +137,53 @@ const getCurrentCardScrollerEle = () => {
     : cardScrollerDeckEle;
 }
 
-const scrollScroller = async (left) => {
-  getCurrentCardScrollerEle().scrollTo({left, top: 0, behavior: 'instant'});
+const scrollDeckScroller = async (left) => {
+  cardScrollerDeckEle.scrollTo({left, top: 0, behavior: 'smooth'});
 
-  const startTime = Date.now();
+  await awaitFrame();
+
+  await awaitScrollStop();
+}
+
+const scrollDeckToCard = async (cardEle) => {
+  const closestCardContainerEle = cardEle.closest("cardDeckWrapper");
+  const cardWidth = closestCardContainerEle.clientWidth;
+
+  const offsetCenterLeft = window.innerWidth * 0.5 - cardWidth * 0.5;
+  console.log(closestCardContainerEle.offsetLeft);
+  const cardScrollX = closestCardContainerEle.offsetLeft || 0;
+
+  scrollDeckScroller(cardScrollX - offsetCenterLeft);
+};
+
+const scrollLibraryScroller = async (left) => {
+  if (document.body.getAttribute("displayType") == "grid") {
+    left = Math.max(left, window.innerWidth * 0.4);
+  }
+  cardScrollerLibraryEle.scrollTo({left, top: 0, behavior: 'smooth'});
 
   applyCarousel();
 
-  do {
-    await awaitFrame();
-  } while (Date.now() - startTime < 1600);
+  await awaitFrame();
+
+  await awaitScrollStop();
 }
+
 
 const setDeckFocusCard = (newDeckFocusCard) => {
   // check if they're different
   if (deckFocusCard == newDeckFocusCard) return; 
 
   deckFocusCard = newDeckFocusCard;
+};
+
+const getParentCardEleFromAny = (ele) => {
+  // find the top level parent
+  while (ele.parentElement && ele.parentElement.tagName == "CARD") {
+    ele = ele.parentElement;
+  }
+
+  return ele;
 };
 
 const getCardFromPoint = (x, y, {canBePurchase, canBeChild} = {}) => {
@@ -192,14 +232,53 @@ const getCenterCardEle = (options) => {
   return getCardFromPoint(window.innerWidth * 0.5, window.innerHeight * 0.5, options);
 };
 
-const modalOverlayEle = document.querySelector("modalOverlay");
-const modalOverlayTextEle = modalOverlayEle.querySelector("modalText");
-const modalOverlayReturnButtonEle = modalOverlayEle.querySelector("modalButton#modalReturn");
-const modalOverlayAcceptButtonEle = modalOverlayEle.querySelector("modalButton#modalAccept");
 const reinitializeModal = ({acceptText, returnText} = {}) => {
   modalOverlayAcceptButtonEle.innerHTML = acceptText || "Accept";
   modalOverlayReturnButtonEle.innerHTML = returnText || "Return";
 };
+const interactCardOptions = {};
+const showInteractCard = async (cardEle, options = {}) => {
+  // we don't clone the card element, we have an element sitting around just for this
+  // we do move it to be exactly where the card element would be.
+  
+  const currentCardBounds = cardEle.getBoundingClientRect();
+
+  const cx = currentCardBounds.left + currentCardBounds.width * 0.5;
+  const cy = currentCardBounds.top + currentCardBounds.height * 0.5;
+
+  const cw = currentCardBounds.width;
+  const ch = currentCardBounds.height;
+
+  const csx = cw / CARD_WIDTH;
+  const csy = ch / CARD_HEIGHT;
+
+  interactCardOptions.cx = cx;
+  interactCardOptions.cy = cy;
+  interactCardOptions.csx = csx;
+  interactCardOptions.csy = csy;
+
+  modalCardEle.style.setProperty("transition", "none");
+  modalCardEle.style.setProperty("transform", `translate(-50%, -50%) translate(${cx}px, ${cy}px) scale(${csx}, ${csy})`);
+  
+  modalCardEle.style.setProperty("opacity", "0");
+  modalCardEle.style.setProperty("background-image", cardEle.style.getPropertyValue("background-image"));
+
+  await awaitFrame();
+
+  modalCardEle.style.setProperty("opacity", "1");
+  modalCardEle.style.setProperty("transition", `opacity 200ms, transform 300ms ease-in-out`);
+
+  await awaitFrame();
+
+  modalCardEle.style.setProperty("transform", ``);
+};
+const hideInteractCard = async (doReturn) => {
+  if (doReturn) {
+    modalCardEle.style.setProperty("transition", `opacity 200ms 100ms, transform 300ms ease-in-out`);
+    modalCardEle.style.setProperty("transform", `translate(-50%, -50%) translate(${interactCardOptions.cx}px, ${interactCardOptions.cy}px) scale(${interactCardOptions.csx}, ${interactCardOptions.csy})`);
+  }
+  modalCardEle.style.setProperty("opacity", "0");
+}
 const showConfirm = async (content, options = {}) => {
   reinitializeModal(options);
   // hide the background 
@@ -474,6 +553,14 @@ const applyDeckCardTopScroll = (containerCardEle, rangeScalar, setScalar = true)
   }
 }
 
+const getDeckIndexOfCardEle = (cardEle) => {
+  const cardWrapperEle = cardEle.closest("cardDeckWrapper");
+  if (!cardWrapperEle) return -1;
+
+  return [...cardDeckListEle.children].filter(ele => ele.tagName == "CARDDECKWRAPPER").indexOf(cardWrapperEle);
+
+}
+
 const addCharacterToDeck = (data, updateDeckStore = true) => {
   const uid = data.uid;
   if (!uid) return;
@@ -487,6 +574,10 @@ const addCharacterToDeck = (data, updateDeckStore = true) => {
 
   const wrapperEle = document.createElement("cardDeckWrapper");
   cardDeckListEle.insertBefore(wrapperEle, addCharacterButton);
+  
+  // add a snap point infront and behind it
+  const beforeSnapEle = document.createElement("snapPoint");
+  cardDeckListEle.insertBefore(beforeSnapEle, wrapperEle);
 
   const cardCloneEle = cardEle.cloneNode(true);
   cardCloneEle.className = "";
@@ -548,7 +639,9 @@ const addCharacterToDeck = (data, updateDeckStore = true) => {
 const getUpgradeType = (upgrade) => {
   try {
     return /(tactic|item|potion|spell|weapon)/.exec(cardsStore[upgrade.uid].types)[0];
-  } finally {
+  } 
+  catch (e) {
+    console.error(e);
     return true;
   }
 }
@@ -626,7 +719,7 @@ const addUpgradeToCharacter = (upgradeUID, characterCardEle, deckCharacter, upda
     .then(awaitFrame)
     .then(
       () => {
-      applyDeckCardTopScroll(characterCardEle, 0, false);
+      applyDeckCardTopScroll(characterCardEle, deckCharacter.upgrades.length, false);
       });
   }
 
@@ -650,9 +743,9 @@ const performSearchForString = (newSearchText) => {
     if (currentFocusCardIndex != -1) {
       const currentFocusCardEle = currentActiveLibraryCardEles[currentFocusCardIndex];
       const scrollLeft = currentFocusCardEle.offsetLeft;
-      scrollScroller(scrollLeft);
+      scrollLibraryScroller(scrollLeft);
     } else {
-      scrollScroller(0);
+      scrollLibraryScroller(0);
     }
   }
 
@@ -665,7 +758,7 @@ const performSearchForString = (newSearchText) => {
 
 const loadDeckFromLocal = () => {
   // clear the deck.
-  [...cardDeckListEle.children].filter(ele => ele.tagName == "CARDDECKWRAPPER").forEach(ele => ele.remove());
+  [...cardDeckListEle.children].filter(ele => ["CARDDECKWRAPPER", "SNAPPOINT"].includes(ele.tagName)).forEach(ele => ele.remove());
   
   var localJsonDeck = [];
   var localDeckName = "";
@@ -861,7 +954,7 @@ const loadDeckFromLocal = () => {
         
         const text = await page.getTextContent();
 
-        var viewport = page.getViewport({ scale: SCALE });
+        var viewport = page.getViewport({ scale: PDF_SCALE });
 
         // Prepare canvas using PDF page dimensions
         var context = loadingCanvas.getContext('2d');
@@ -877,10 +970,10 @@ const loadDeckFromLocal = () => {
           const r = Math.floor(i / CARD_COLS);
           const c = i % CARD_COLS;
 
-          const x = CARD_OFFSET_X + CARD_WIDTH * c;
-          const y = CARD_OFFSET_Y + CARD_HEIGHT * r + CARD_ROW_OFFSET * r;
+          const x = PDF_CARD_OFFSET_X + PDF_CARD_WIDTH * c;
+          const y = PDF_CARD_OFFSET_Y + PDF_CARD_HEIGHT * r + CARD_ROW_OFFSET * r;
 
-          const imageUrl = await getCanvasDataURL(loadingCanvas, x, y, CARD_WIDTH, CARD_HEIGHT);
+          const imageUrl = await getCanvasDataURL(loadingCanvas, x, y, PDF_CARD_WIDTH, PDF_CARD_HEIGHT);
 
           await new Promise(resolve => window.requestAnimationFrame(resolve));
 
@@ -1038,6 +1131,8 @@ const loadDeckFromLocal = () => {
       filter.active = false;
       filter.ele.classList.add("inactive");
     });
+
+    scrollLibraryScroller(0);
 
     applyFilters();
   }
@@ -1205,7 +1300,7 @@ const loadDeckFromLocal = () => {
     const libraryCardEles = [...cardLibraryListEle.children].filter(e => !e.classList.contains('inactive'));
     const count = libraryCardEles.length;
 
-    const cardDrawWidth = (CARD_WIDTH / CARD_HEIGHT) * carouselCanvasEle.height;
+    const cardDrawWidth = (PDF_CARD_WIDTH / PDF_CARD_HEIGHT) * carouselCanvasEle.height;
     const drawWidth = carouselCanvasEle.width - cardDrawWidth;
     const drawOffsetX = cardDrawWidth * 0.5;
 
@@ -1415,7 +1510,18 @@ const init = async () => {
   awaitTime(300)
     .then(() => {
       loadDeckFromLocal();
+      
+      document.body.setAttribute("displayType", localStorage.getItem("displayType") || "");
     
+      // now lets center the deck
+      const deckCardContainerEles = [...cardScrollerDeckEle.querySelectorAll("cardDeckWrapper")];
+      const deckCardOffsetSum = deckCardContainerEles.map(ele => ele.offsetLeft).reduce((s, v) => s + v, 0);
+      const deckCardCenter = deckCardOffsetSum / (deckCardContainerEles.length || 1);
+      const halfScreenWidth = window.innerWidth * 0.5;
+
+      scrollDeckScroller(deckCardCenter - halfScreenWidth);
+      scrollLibraryScroller(0)
+
       applyFilters();
       applyCarousel();
 
@@ -1490,8 +1596,8 @@ const init = async () => {
             const tempCanvas = document.createElement('canvas');
             const tempContext = tempCanvas.getContext('2d');
 
-            tempCanvas.width = CARD_WIDTH * 4;
-            tempCanvas.height = CARD_HEIGHT * 4;
+            tempCanvas.width = PDF_CARD_WIDTH * 4;
+            tempCanvas.height = PDF_CARD_HEIGHT * 4;
 
             tempContext.drawImage(cropperCanvas, 0, 0, tempCanvas.width, tempCanvas.height);
             
@@ -1579,11 +1685,14 @@ const init = async () => {
         applyCarousel();
       });
     });
-  scrollScroller(0);
-  // cardScrollerEle.scrollTo({left: 0, top: 0, behavior: 'instant'});
-    
+
   applyFilters();
   applyCarousel();
+
+  // get the size of things
+  const _cardEleBoundingRect = modalCardEle.getBoundingClientRect();
+  CARD_WIDTH = _cardEleBoundingRect.width / 1.5;
+  CARD_HEIGHT = _cardEleBoundingRect.height / 1.5;
 
   const onShowLibrary = async (event) => {
     if (event) {
@@ -1593,26 +1702,12 @@ const init = async () => {
     document.body.className = '';
 
     if (document.body.getAttribute("showing") !== 'deck') return;
-    const centerCardEle = getCenterCardEle();
-
-    if (centerCardEle) {
-      console.log(`Save deck card - ${centerCardEle.getAttribute("uid")}`);
-    }
-
-    setDeckFocusCard(centerCardEle);
     // get the top level element
 
     // scroll to the last library focused' card
     document.body.setAttribute("showing", "library");
 
     applyCarousel();
-    
-    await awaitScrollStop();
-
-    const screenWidthOffset = window.innerWidth * 0.5;
-    const cardScrollX = (libraryFocusCard?.offsetLeft || 0) - screenWidthOffset;
-
-    scrollScroller(cardScrollX);
   };
 
   showLibraryButton.addEventListener('click', onShowLibrary);
@@ -1639,17 +1734,10 @@ const init = async () => {
 
     setSubFilter();
 
-    const currentCard = getCenterCardEle({canBePurchase: true});
-    libraryFocusCard = currentCard;
-
     // scroll to the last library focused' card
     document.body.setAttribute("showing", "deck");
 
     await awaitScrollStop();
-
-    const screenWidthOffset = window.innerWidth * 0.5;
-    const cardScrollX = (deckFocusCard?.parentElement.offsetLeft || 0) - screenWidthOffset;
-    scrollScroller(cardScrollX);
   });
   addUpgradeButtons.forEach(addUpgradeButton => {
     addUpgradeButton.addEventListener('click', () => {
@@ -1665,7 +1753,7 @@ const init = async () => {
       const cardStore = cardsStore[uid];
       if (!cardStore) return;
   
-      const currentCardIndex = [...cardDeckListEle.children].indexOf(deckCurrentCardEle.parentElement);
+      const currentCardIndex = getDeckIndexOfCardEle(deckCurrentCardEle);
   
       setSubFilter('upgrade', { classes: cardStore.classes, upgradeType: cardStore.upgradeTypes});
   
@@ -1700,7 +1788,7 @@ const init = async () => {
 
     const upgradeUId = randomRelicEle.getAttribute("uid");
 
-    const currentCardIndex = [...cardDeckListEle.children].indexOf(selectedCardEle.parentElement);
+    const currentCardIndex = getDeckIndexOfCardEle(selectedCardEle);
     const deckAttachCharacter = deck[currentCardIndex];
 
     const cardEleClone = addUpgradeToCharacter(upgradeUId, selectedCardEle, deckAttachCharacter, true);
@@ -1713,10 +1801,6 @@ const init = async () => {
     // scroll to the newly created card
     showToast(`Random Relic Added`);
 
-    // scroll to show the upgrade
-    const upgradeIndex = deckAttachCharacter.upgrades.length;
-    applyDeckCardTopScroll(selectedCardEle, upgradeIndex);
-    
     // highlight the card
     cardEleClone.classList.add("highlight");
 
@@ -1728,23 +1812,24 @@ const init = async () => {
     removeForDeckButton.addEventListener('click', async () => {
       // check if there's a selected card
       const selectedCardEle = document.querySelector('card.highlight');
-      const currentCardEle = getCenterCardEle();
+      const parentCardEle = getParentCardEleFromAny(selectedCardEle);
+      const containerCardEle = parentCardEle.parentElement;
 
-      if (!currentCardEle) {
+      if (!parentCardEle) {
         showToast('Can\'t remove that');
         return;
       }
 
-      const currentCardIndex = [...cardDeckListEle.children].indexOf(currentCardEle.parentElement);
+      const currentCardIndex = getDeckIndexOfCardEle(selectedCardEle);
 
       if (currentCardIndex == -1) {
         showToast('Can\'t remove that');
         return;
       };
 
-      const currentFocusSubIndex = selectedCardEle 
-        ? [...currentCardEle.querySelectorAll("card")].indexOf(selectedCardEle) + 1
-        : currentCardEle.currentRangeScalar || 0;
+      const currentFocusSubIndex = parentCardEle 
+        ? [...parentCardEle.querySelectorAll("card")].indexOf(selectedCardEle) + 1
+        : parentCardEle.currentRangeScalar || 0;
 
       if (!currentFocusSubIndex) {
         const confirmValue = await showConfirm('Are you sure you want to remove this card, and all it\'s upgrades from this deck?');
@@ -1753,16 +1838,16 @@ const init = async () => {
         if (!confirmValue) return;
 
         deck.splice(currentCardIndex, 1);
-        currentCardEle.parentElement.remove();
+        containerCardEle.remove();
       } else {
         const upgradeIndex = currentFocusSubIndex - 1;
 
         deck[currentCardIndex].upgrades.splice(upgradeIndex, 1);
-        const upgradeCardEle = [...currentCardEle.querySelectorAll("card")][upgradeIndex];
+        const upgradeCardEle = [...parentCardEle.querySelectorAll("card")][upgradeIndex];
 
         upgradeCardEle.remove();
 
-        applyDeckCardTopScroll(currentCardEle, 0);
+        applyDeckCardTopScroll(parentCardEle, 0);
       }
       updateDeck();
 
@@ -1782,6 +1867,7 @@ const init = async () => {
       updateDeck();
       setDeckFocusCard(cardEleClone);
       showToast(`Card added to deck`);
+      scrollDeckToCard(cardEleClone);
       currentCardEle.classList.toggle("highlight", false);
       showDeckButton.click();
     });
@@ -1797,14 +1883,19 @@ const init = async () => {
 
     // check if the character can use the card
     const isAcceptable = canCharacterEquipUpgrade(attachCharacter, uid);
-    
-    if (!isAcceptable) {
-      // prompt the user saying the character can't ususally use this
-      const upgradeType = getUpgradeType(cardsStore[uid]);
-      const confirmValue = await showConfirm(`This character already has too many, ${upgradeType}s. Do you want to still add this?`);
-      await awaitTime(200);
+    const upgradeType = getUpgradeType(cardsStore[uid]);
+    const dontAdd = !isAcceptable && !(await showConfirm(`This character already has too many, ${upgradeType}s. Do you want to still add this?`));
 
-      if (!confirmValue) return;
+    if (!isAcceptable) {
+      await awaitTime(200);
+    }
+    
+    hideInteractCard(dontAdd);
+    currentCardEle.classList.toggle("highlight", false);
+
+    if (dontAdd) {
+      // prompt the user saying the character can't ususally use this
+      return;
     }
 
     const cardEleClone = addUpgradeToCharacter(uid, deckFocusCard, attachCharacter, true);
@@ -1813,7 +1904,14 @@ const init = async () => {
     updateDeck();
 
     showToast(`Upgrade Attached`);
+
+    scrollDeckToCard(deckFocusCard);
     showDeckButton.click();
+
+    cardEleClone.classList.add("highlight");
+
+    await awaitTime(500);
+    cardEleClone.classList.remove("highlight");
   });
 
   searchInputEles.forEach(searchInputEle => searchInputEle.addEventListener('keyup', async event => {
@@ -1838,7 +1936,7 @@ const init = async () => {
     if (event.cancelable) event.preventDefault();
 
     setTimeout(async () => {
-      const currentCardEle = getCenterCardEle();
+      const currentCardEle = document.querySelector('card.highlight');
       if (!currentCardEle) return;
       
       const confirmValue = await showConfirm('Are you sure you want to remove this card from your library?');
@@ -1872,8 +1970,10 @@ const init = async () => {
 
   gridButtonEle.addEventListener('click', () => {
     const currentDisplayType = document.body.getAttribute("displayType");
+    const nextDisplayType = currentDisplayType == 'grid' ? '' : 'grid';
 
-    document.body.setAttribute("displayType", currentDisplayType == 'grid' ? '' : 'grid');
+    document.body.setAttribute("displayType", nextDisplayType);
+    localStorage.setItem("displayType", nextDisplayType);
 
     if (currentDisplayType != "grid") return;
     applyCarousel();
@@ -1997,7 +2097,6 @@ const init = async () => {
   });
 
   [cardScrollerDeckEle, cardScrollerLibraryEle].forEach(cardScrollerEle => {
-
     cardScrollerEle.setAttribute("data-long-press-delay", 200);
     cardScrollerEle.addEventListener("long-press", async (event) => {
       var touchEndEvent = new Event("touchend");
@@ -2014,23 +2113,21 @@ const init = async () => {
       // add selected to the card
       awaitTime(100).then(() => {
         selectedCardEle.classList.toggle("highlight", true);
-      })
+      });
     
       // are we in deck mode?
       if (document.body.getAttribute("showing") == "deck") {
         const parentCardEle = selectedCardEle.parentElement.tagName == "CARD" ? selectedCardEle.parentElement : selectedCardEle;
 
-        const deckIndex = [...cardDeckListEle.children].indexOf(parentCardEle);
+        const deckIndex = getDeckIndexOfCardEle(parentCardEle);
         const upgradeIndex = [...parentCardEle.querySelectorAll("card")].indexOf(selectedCardEle);
 
         applyDeckCardTopScroll(parentCardEle, upgradeIndex + 1);
 
         // center the card
-        const currentFocusCardEle = selectedCardEle;
-        const scrollLeft = currentFocusCardEle.closest("cardDeckWrapper").offsetLeft;
-        scrollScroller(scrollLeft - window.innerWidth * 0.5);
+        showInteractCard(selectedCardEle);
 
-        const currentFocusCard = cardsStore[currentFocusCardEle.getAttribute("uid")];
+        const currentFocusCard = cardsStore[selectedCardEle.getAttribute("uid")];
 
         // show a modal with add upgrade, remove, cancel
         const options = [];
@@ -2049,16 +2146,18 @@ const init = async () => {
           options.push("Remove Upgrade");
         }
 
-
         const optionResult = await showOption(`<h4>${currentFocusCard.name} selected</h4> `, options);
 
         if (optionResult == "Add Upgrade") {
           addUpgradeButtons[0].click();
+          // center the card
         } else if (optionResult == "Remove Character" || optionResult == "Remove Upgrade") {
           removeFromDeckButtons[0].click();
         } else if (optionResult == "Add Random Relic") {
           randomRelicButton.click();
         }
+
+        hideInteractCard(!optionResult);
 
         selectedCardEle.classList.toggle("highlight", false);
 
@@ -2067,13 +2166,10 @@ const init = async () => {
         return;
       }
 
-      // center the card
-      const currentFocusCardEle = selectedCardEle;
-      const scrollLeft = currentFocusCardEle.offsetLeft;
-      scrollScroller(scrollLeft - window.innerWidth * 0.5);
-
       // are we in attach upgrade mode?
       if (attachCharacter) {
+        showInteractCard(selectedCardEle);
+        
         const attachedCharacterStore = cardsStore[attachCharacter.uid];
         const confirmResult = await showConfirm(`Do you want to attach this card to ${attachedCharacterStore.name}?`);
 
@@ -2084,13 +2180,14 @@ const init = async () => {
         if (confirmResult) {
           attachUpgradeButton.click();
         }
-        selectedCardEle.classList.toggle("highlight", false);
 
         return;
       }
 
+      showInteractCard(selectedCardEle);
       // finally we're in add character mode
       const confirmResult = await showConfirm(`Do you want to add this character to your deck?`);
+      hideInteractCard(!confirmResult);
 
       await awaitTime(200);
 
@@ -2111,7 +2208,16 @@ const init = async () => {
       if (clickedCardEle.tagName != "CARD") return;
     
       if (document.body.getAttribute("showing") !== 'library') {
-        // do events for horizontal view.
+        const deckIndex = getDeckIndexOfCardEle(clickedCardEle);
+        
+        if (deckIndex == -1) return;
+
+        const parentCardEle = getParentCardEleFromAny(clickedCardEle);
+        const upgradeIndex = [...parentCardEle.querySelectorAll("card")].indexOf(clickedCardEle);
+
+        // scroll to the thingie
+        applyDeckCardTopScroll(parentCardEle, upgradeIndex + 1);
+
         return;
       }
 
@@ -2133,7 +2239,7 @@ const init = async () => {
     
           if (timeToStop < 50) {
             const cardScrollX = clickedCardEle.offsetLeft || 0;
-            scrollScroller(cardScrollX - offsetCenterLeft);
+            scrollLibraryScroller(cardScrollX - offsetCenterLeft);
           }
           
           return;
@@ -2159,10 +2265,6 @@ const init = async () => {
     
       if (document.body.getAttribute("displayType") == "grid") {
         // target the new card and swap display type
-        document.body.setAttribute("displayType", "");
-    
-        applyCarousel();
-    
         const timeToStop = await awaitScrollStop();
         
         // work out the centre of the screen
@@ -2172,7 +2274,7 @@ const init = async () => {
         const offsetCenterLeft = cardsPerScreen * 0.5 * cardWidth;
 
         const cardScrollX = clickedCardEle.offsetLeft || 0;
-        scrollScroller(cardScrollX - offsetCenterLeft);
+        scrollLibraryScroller(cardScrollX - offsetCenterLeft);
     
         return;
       }
@@ -2199,7 +2301,7 @@ const init = async () => {
     const scrollRatio = touchX / carouselCanvasEle.clientWidth;
     const newScroll = cardLibraryListEle.clientWidth * scrollRatio;
 
-    scrollScroller(newScroll);
+    scrollLibraryScroller(newScroll);
   }
 
   carouselEle.addEventListener("touchstart", onCarouselInteraction);
@@ -2277,7 +2379,7 @@ const init = async () => {
     showDeckButton.click();
 
     // scroll to the front
-    scrollScroller(0);
+    scrollLibraryScroller(0);
 
     showToast(`Deck, ${deckName || "Untitled Deck"} loaded!`);
   };
