@@ -1415,8 +1415,7 @@ const init = async () => {
   });
 
   try {
-    console.log('adding back button listener');
-    Capacitor.Plugins.App.addListener("backButton", (e) => {
+    Capacitor.Plugins.App.addListener("backButton", (event) => {
 
       // exit the menu
       if (overlayMenuEle.className != "hidden") {
@@ -1449,6 +1448,21 @@ const init = async () => {
     });
   } catch (e) {
     
+  }
+
+  try {
+    Capacitor.Plugins.App.addListener("appUrlOpen", async (event) => {
+      // check the url
+      const url = event.url;
+      const urlParams = new URLSearchParams(url);
+
+      if (urlParams.has("id")) {
+        
+        await loadShareDeckFromCode(urlParams.get("id"));
+      }
+    });
+  } catch (e) {
+
   }
 
   const updateAppSize = async (event) => {
@@ -2004,20 +2018,9 @@ const init = async () => {
     overlayMenuEle.setAttribute("showing", "mainMenu");
   });
 
-  document.querySelector('.newShare').addEventListener('click', async () => {
-    overlayMenuEle.classList.add("hidden");
-    // we need to put it into share mode.
-    // disable the library, etc.
-    const rawCode = await showInput("Enter the share code", { acceptText: "Enter Code" });
-
-    if (!rawCode) return;
-
+  const loadShareDeckFromCode = async (code) => {
     document.body.className = 'loading';
     
-    // we want everything before an equals, if one exists
-    const codeSeparated = rawCode.split("=");
-    const code = codeSeparated[codeSeparated.length - 1];
-
     try {
       var sharedResponse = await fetch(`${API_URL}/sharedDeck?id=${code}`);
     } catch (e) {
@@ -2064,6 +2067,21 @@ const init = async () => {
     showToast(`${deckName || "Shared Deck"} Loaded`);
 
     document.body.className = '';
+  };
+
+  document.querySelector('.newShare').addEventListener('click', async () => {
+    overlayMenuEle.classList.add("hidden");
+    // we need to put it into share mode.
+    // disable the library, etc.
+    const rawCode = await showInput("Enter the share code", { acceptText: "Enter Code" });
+
+    if (!rawCode) return;
+    
+    // we want everything before an equals, if one exists
+    const codeSeparated = rawCode.split("=");
+    const code = codeSeparated[codeSeparated.length - 1];
+
+    await loadShareDeckFromCode(code);
   });
 
   document.querySelector('share').addEventListener('click', async () => {

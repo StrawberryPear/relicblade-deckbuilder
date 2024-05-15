@@ -253,6 +253,10 @@ export const init = async () => {
 
     console.log(`Parsed file data - ${contents.data.length}`);
     console.log(`Found ${localData.length} entries`);
+
+    if (!localData.length) {
+      setBaseLoaded(false);
+    }
   } catch (e) {
     console.log(e);
     localData = [];
