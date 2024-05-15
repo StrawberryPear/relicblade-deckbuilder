@@ -1,5 +1,4 @@
 import cardsStore from './store.js';
-import { init as initStorage, getStoredDecks, setStoredDecks, getStoredDeck, getStoredDisplayType, setStoredDeck, setStoredDisplayType, writeCardToDatabase, getAllCards } from './storage.js';
 
 const PDF_SCALE = 4;
 
@@ -27,6 +26,16 @@ var dragToken;
 
 var CARD_WIDTH = 250;
 var CARD_HEIGHT = 350;
+
+const storage = await (async () => {
+  console.log('loading storage');
+  if (!Capacitor?.getPlatform || Capacitor?.getPlatform() == "web") {
+    console.log('loading web storage');
+    return await import('./storage.web.js');
+  }
+  console.log('loading capacitor storage');
+  return await import('./storage.js');
+})();
 
 const cardScrollerLibraryEle = document.querySelector('cardScroller.library');
 const cardScrollerDeckEle = document.querySelector('cardScroller.deck');
@@ -140,7 +149,7 @@ const updateDeck = () => {
 
   deckCostEle.innerHTML = cost ? `&nbsp;(${cost})` : '';
 
-  setStoredDeck(deckName, deck);
+  storage.setStoredDeck(deckName, deck);
 };
 
 const getCurrentCardScrollerEle = () => {
@@ -667,6 +676,7 @@ const getUpgradeType = (upgrade) => {
     return /(tactic|item|potion|spell|weapon)/.exec(cardsStore[upgrade.uid].types)[0];
   } 
   catch (e) {
+    console.error(`unable to get upgrade type for ${upgrade.uid}`);
     console.error(e);
     return true;
   }
@@ -786,7 +796,7 @@ const loadDeckFromLocal = () => {
   // clear the deck.
   [...cardDeckListEle.children].filter(ele => ["CARDDECKWRAPPER", "SNAPPOINT"].includes(ele.tagName)).forEach(ele => ele.remove());
   
-  const storedDeck = getStoredDeck();
+  const storedDeck = storage.getStoredDeck();
   
   const libraryCards = [...cardLibraryListEle.children].map(ele => ({uid: ele.getAttribute("uid")}));
 
@@ -804,7 +814,7 @@ const loadDeckFromLocal = () => {
   }
   scrollDeckScroller(0);
 
-  var storedDecks = getStoredDecks();
+  var storedDecks = storage.getStoredDecks();
 
   // update the deckstore
   [...document.querySelectorAll("menuControl.saveSlot")].forEach((saveSlotEle) => {
@@ -1312,7 +1322,9 @@ const loadDeckFromLocal = () => {
     }
 
     try {
-      await writeCardToDatabase(uid, image);
+      const result = await storage.writeCardToDatabase(uid, image);
+
+      loadCard(result);
     } catch (e) {
       showToast(`Failed to add card ${uid}`);
     }
@@ -1401,6 +1413,43 @@ const init = async () => {
     });
     return false;
   });
+
+  try {
+    console.log('adding back button listener');
+    Capacitor.Plugins.App.addListener("backButton", (e) => {
+
+      // exit the menu
+      if (overlayMenuEle.className != "hidden") {
+
+        if (overlayMenuEle.getAttribute("showing") != "mainMenu") {
+          overlayMenuEle.setAttribute("showing", "mainMenu");
+
+          return;
+        }
+
+        overlayMenuEle.className = 'hidden';
+        return;
+      }
+      
+      if (!modalOverlayEle.classList.contains("hidden")) {
+        // no idea what to do...
+        return;
+      }
+
+      const isLibrary = document.body.getAttribute("showing") == "library";
+    
+      if (isLibrary) {
+        onShowDeck();
+
+        return;
+      }
+
+      Capacitor.Plugins.App.exitApp();
+      return;
+    });
+  } catch (e) {
+    
+  }
 
   const updateAppSize = async (event) => {
     // check if it's landscape or portrait
@@ -1491,9 +1540,9 @@ const init = async () => {
   await awaitFrame();
   await awaitFrame();
 
-  await initStorage();
+  await storage.init();
   
-  const cards = await getAllCards();
+  const cards = await storage.getAllCards();
 
   for (const card of cards) {
     loadCard(card);
@@ -1503,7 +1552,7 @@ const init = async () => {
     .then(() => {
       loadDeckFromLocal();
       
-      document.body.setAttribute("displayType", getStoredDisplayType() || "");
+      document.body.setAttribute("displayType", storage.getStoredDisplayType() || "");
     
       // now lets center the deck
       const deckCardContainerEles = [...cardScrollerDeckEle.querySelectorAll("cardDeckWrapper")];
@@ -1897,6 +1946,7 @@ const init = async () => {
 
   addCharacterButton.addEventListener('click', () => {
     if (document.body.getAttribute("showing") !== 'deck') return;
+    attachCharacter = undefined;
 
     setSubFilter('character');
 
@@ -1937,7 +1987,7 @@ const init = async () => {
       if (!confirmValue) return;
   
       // remove it from the library.
-      await removeCardFromDatabase(currentCardEle.getAttribute('uid'));
+      await storage.removeCardFromDatabase(currentCardEle.getAttribute('uid'));
 
       showToast('Card Removed');
       currentCardEle.remove();
@@ -2116,7 +2166,7 @@ const init = async () => {
     const nextDisplayType = currentDisplayType == 'grid' ? '' : 'grid';
 
     document.body.setAttribute("displayType", nextDisplayType);
-    setStoredDisplayType(nextDisplayType);
+    storage.setStoredDisplayType(nextDisplayType);
 
     if (currentDisplayType != "grid") return;
     applyCarousel();
@@ -2306,15 +2356,11 @@ const init = async () => {
       }
 
       // are we in attach upgrade mode?
-      if (attachCharacter) {
+      if (attachCharacter && subFilter == "upgrade") {
         showInteractCard(selectedCardEle);
         
         const attachedCharacterStore = cardsStore[attachCharacter.uid];
         const confirmResult = await showConfirm(`Do you want to attach this card to ${attachedCharacterStore.name}?`);
-
-        await awaitTime(200);
-        // await scrolling stopping
-        await awaitScrollStop();
 
         if (confirmResult) {
           await finishAttachUpgrade();
@@ -2455,11 +2501,11 @@ const init = async () => {
     deckTitleInputMirror.innerText = deckTitleInput.value || deckTitleInput.placeholder;
     deckName = deckTitleInput.value;
     
-    setStoredDeck(deckName, deck);
+    storage.setStoredDeck(deckName, deck);
   });
 
   const handleSave = async (saveSlotIdx) => {
-    var storedDecks = getStoredDecks();
+    var storedDecks = storage.getStoredDecks();
     
     // check if a save is already up there
     if (storedDecks[saveSlotIdx]) {
@@ -2474,7 +2520,7 @@ const init = async () => {
     // save to that slot
     storedDecks[saveSlotIdx] = {deck, deckName};
 
-    setStoredDecks(storedDecks);
+    storage.setStoredDecks(storedDecks);
 
     loadDeckFromLocal();
     // hide the menu
@@ -2484,7 +2530,7 @@ const init = async () => {
   };
 
   const handleLoad = async (loadSlotIdx) => {
-    var localJsonDecks = getStoredDecks();
+    var localJsonDecks = storage.getStoredDecks();
     
     // check if a save is already up there
     if (!localJsonDecks[loadSlotIdx]) {
@@ -2505,7 +2551,7 @@ const init = async () => {
     deck = localJsonDecks[loadSlotIdx].deck || {};
     deckName = localJsonDecks[loadSlotIdx].deckName || "";
 
-    setStoredDeck(deckName, deck);
+    storage.setStoredDeck(deckName, deck);
 
     loadDeckFromLocal();
     // hide the menu
@@ -2563,7 +2609,7 @@ const init = async () => {
 
     overlayMenuEle.classList.add("hidden");
 
-    setStoredDeck("", []);
+    storage.setStoredDeck("", []);
 
     loadDeckFromLocal();
   });

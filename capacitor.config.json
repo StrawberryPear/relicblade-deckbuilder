@@ -3,6 +3,9 @@
   "appName": "Relicblade Deck Builder",
   "bundledWebRuntime": false,
   "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 2000

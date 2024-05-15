@@ -662,9 +662,9 @@ label input {
 menuControl,
 .menuControl {
   display: block;
-  font-size: 24px;
+  font-size: min(5vh, 24px);
   font-family: 'tradeWinds';
-  margin-top: 24px;
+  margin-top: min(4vh, 24px);
   text-decoration: underline;
 }
 
