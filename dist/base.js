@@ -13,7 +13,7 @@ const PDF_CARD_ROW_OFFSET = Math.round(6.66666666667 * PDF_SCALE);
 const CARD_SLIDE_DURATION = 300;
 
 const API_URL = "https://bi04kvgbjg.execute-api.ap-southeast-2.amazonaws.com/Prod";
-const SHARE_URL = "https://gungobs.com";
+const SHARE_URL = "https://gungob.com";
 
 var deckName = "";
 var deck = [];
