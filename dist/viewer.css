@@ -465,6 +465,23 @@ cardButton.grid::before {
   background-image: url(./assets/add-remove-flipped.png);
 }
 
+body:not([subfilter="upgrade"]) cardButton.legal {
+  display: none;
+}
+cardButton.legal {
+  grid-column: 3;
+  background-image: url(./assets/add-remove.png);
+  background-position: 0px -60px;
+}
+cardButton.legal::before {
+  content: 'Legal';
+  background-size: auto 80%;
+}
+body[legal="false"] cardButton.legal::before {
+  content: 'All';
+  background-size: auto 80%;
+}
+
 cardButton.search {
   grid-column: 3;
 }
@@ -629,7 +646,7 @@ overlayMenu.hidden,
 modalOverlay.hidden,
 body:not(.loading) loadingOverlay {
   opacity: 0;
-  transition: opacity 0.2s 0.2s;
+  transition: opacity 0.4s;
   pointer-events: none;
 }
 
@@ -778,7 +795,7 @@ body[displayType="grid"] cardScroller.library cardlist import label {
 cardCarousel {
   display: block;
   width: 100%;
-  height: min(calc(var(--screen-height) - var(--card-height) - 180px), 96px);
+  height: min(calc(var(--screen-height) - var(--card-height) - 200px), 72px);
   margin-bottom: calc(var(--screen-height) * 0.01);
   /* background: url(
     './assets/toastBack.png'); */
@@ -1304,4 +1321,8 @@ modalOverlay cardContainer {
 }
 modalOverlay card::before {
   opacity: 1;
+}
+
+a {
+    color: #59d4e5;
 }

@@ -37,6 +37,7 @@ const cardTopControlsEle = document.querySelector('cardTopControls');
 const searchInputEles = document.querySelectorAll('searchContainer input');
 const searchInputClearEle = document.querySelector('searchContainer searchicon[type="clear"]');
 const gridButtonEle = document.querySelector('.grid');
+const legalButtonEle = document.querySelector('.legal');
 
 const previewEle = document.querySelector('preview');
 const cropperEle = document.querySelector('cropper');
@@ -117,6 +118,18 @@ const awaitFrame = () => new Promise(resolve => {
 const awaitTime = (time) => new Promise(resolve => {
   setTimeout(resolve, time);
 });
+
+const getAllCardsIdsInDeck = (deck) => {
+  return deck
+    .map(card => {
+      const upgrades = card.upgrades || [];
+
+      return [{uid: card.uid}, ...upgrades];
+    })
+    .flat()
+    .map(card => card.uid);
+};
+
 
 const updateDeck = () => {
   // work out total points in deck :D
@@ -789,6 +802,7 @@ const loadDeckFromLocal = () => {
   for (const cardData of deck) {
     addCharacterToDeck(cardData, false);
   }
+  scrollDeckScroller(0);
 
   var storedDecks = getStoredDecks();
 
@@ -1150,6 +1164,8 @@ const loadDeckFromLocal = () => {
   }
 
   const applyFilters = () => {
+    const legal = document.body.getAttribute("legal") != "false";
+
     const allFalse = !Object.values(filters).find(o => o.active);
 
     const libraryCardEles = [...cardLibraryListEle.children];
@@ -1183,8 +1199,11 @@ const loadDeckFromLocal = () => {
       })();
 
       const specifiedFiltersShow = !!specifiedFilters && (() => {
+        if (!legal) return false;
+        
         return Object.keys(specifiedFilters)
           .reduce((shouldHide, key) => {
+
             const keyValue = specifiedFilters[key];
 
             if (key == "upgradeType") {
@@ -1935,6 +1954,68 @@ const init = async () => {
     overlayMenuEle.setAttribute("showing", "mainMenu");
   });
 
+  document.querySelector('.newShare').addEventListener('click', async () => {
+    overlayMenuEle.classList.add("hidden");
+    // we need to put it into share mode.
+    // disable the library, etc.
+    const rawCode = await showInput("Enter the share code", { acceptText: "Enter Code" });
+
+    if (!rawCode) return;
+
+    document.body.className = 'loading';
+    
+    // we want everything before an equals, if one exists
+    const codeSeparated = rawCode.split("=");
+    const code = codeSeparated[codeSeparated.length - 1];
+
+    try {
+      var sharedResponse = await fetch(`${API_URL}/sharedDeck?id=${code}`);
+    } catch (e) {
+      console.error(e);
+      showToast("Failed to load shared deck");
+      document.body.className = '';
+      return;
+    }
+
+    const deckData = await sharedResponse.json();
+
+    try {
+      const sharedDeck = JSON.parse(deckData.deck);
+      const allCardUidsInDeck = getAllCardsIdsInDeck(sharedDeck);
+
+      // look through the deck see if it has any cards we do not have in our library
+      const libraryCardEles = [...cardLibraryListEle.children];
+      const missingCards = allCardUidsInDeck.some(cardUid => {
+        return !libraryCardEles.some(ele => ele.getAttribute('uid') == cardUid);
+      });
+
+      if (missingCards) {
+        showToast("Shared deck contains cards not in your library.");
+        document.body.className = '';
+        return;
+      }
+
+      deck = JSON.parse(deckData.deck || "[]");
+      deckName = deckData.deckName || "";
+
+      // save to that slot
+
+      localStorage.setItem('deck', JSON.stringify(deck));
+      localStorage.setItem('deckName', deckName);
+
+      loadDeckFromLocal();
+    } catch (e) {
+      console.error(e);
+      showToast("Failed to load shared deck");
+
+      return;
+    }
+
+    showToast(`${deckName || "Shared Deck"} Loaded`);
+
+    document.body.className = '';
+  });
+
   document.querySelector('share').addEventListener('click', async () => {
     // show a confirm
     const confirmValue = await showConfirm(`Would you like to generate a link to share ${deckName || "this deck"}?`);
@@ -1945,8 +2026,6 @@ const init = async () => {
     document.body.className = 'loading';
 
     const deckString = JSON.stringify({deck: JSON.stringify(deck), deckName});
-
-    debugger;
 
     try {
       var response = await fetch(`${API_URL}/sharedDeck`, {
@@ -1967,13 +2046,69 @@ const init = async () => {
     const uploadCards = responseJson.uploadCards;
 
     if (uploadCards) {
-      
+      // do the upload cards
+      for (const cardUid of uploadCards) {
+        const cardImage = cardStore[cardUid].image;
+
+        try {
+          await fetch(`${API_URL}/uploadCard`, {
+            method: 'POST',
+            contentType: 'text/plain',
+            body: JSON.stringify({uid: cardUid, image: cardImage})
+          });
+        } catch (uploadCardError) {
+          showToast("Failed to generate a share link -- Related to using photo-uploaded cards");
+
+          document.body.className = "";
+          return;
+        }
+      }
     } 
+    document.body.className = "";
 
     // check if we need to upload any cards.
     // show the share link using the share navigator, otherwise fallback to a modal
 
     const shareUrl = `${SHARE_URL}/decks?id=${shareCode}`;
+
+    const shareData = {
+      title: `Relicblade Deck - ${deckName || "Untitled"}`,
+      text: `Check out this Relicblade Deck`,
+      url: shareUrl
+    };
+
+    try {
+      await navigator.share(shareData);
+      
+      // we have a success
+    } catch (navigatorError) {
+      // we have a failure, show a thingie
+      var copiedLink = true;
+
+      try{
+        navigator.clipboard.writeText(shareUrl);
+      } catch (clipboardError) {
+        copiedLink = false;
+      }
+
+      await showOption(`${copiedLink ? `<b>I've copied this link to your clipboard!</b> ` : ``}You can share the following link with all your Relicbuds<br><br><a href="${shareUrl}">${shareUrl}</a><br><br>`, []);
+    }
+  });
+
+  document.querySelector('.contact').addEventListener('click', async () => {
+    overlayMenuEle.classList.add("hidden");
+
+    await showOption(`Made by Perry Fraser (<a href="mailto:perryfraser@gmail.com">perryfraser@gmail.com</a>)<br>Special Thanks to <a href="https://www.instagram.com/artofandyisaac/">Andy Isaac</a>.<br><br>Relicblade is a game by Sean Sutter at Metal King Studios. This is intended as a game aid for his 11/10 creation. <a href="https://www.relicblade.com/contact">https://www.relicblade.com/contact</a><br><br>`, []);
+  });
+
+  legalButtonEle.addEventListener('click', async () => {
+    const currentLegal = document.body.getAttribute("legal");
+    const newLegal = currentLegal == "false" ? "" : "false";
+
+    document.body.setAttribute("legal", newLegal);
+
+    applyFilters();
+    applyCarousel();
   });
 
   gridButtonEle.addEventListener('click', () => {
