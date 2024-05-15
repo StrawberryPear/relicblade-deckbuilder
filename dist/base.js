@@ -1724,7 +1724,21 @@ const init = async () => {
     });
   });
 
-  loadDeckFromLocal();
+  // check if we have an id in our query params
+  const urlParams = new URLSearchParams(window.location.search);
+
+  if (urlParams.has("id")) {
+    try {
+      await loadShareDeckFromCode(urlParams.get("id"));
+    } catch (e) {
+      loadDeckFromLocal();
+    }
+
+    // remove the id params
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else {
+    loadDeckFromLocal();
+  }
 
   Object.keys(filters)
     .forEach(key => {
