@@ -187,7 +187,7 @@
   }
 
   modalOverlay {
-    background: linear-gradient(0deg, black, black 30%, transparent 90%);
+    background: linear-gradient(0deg, black, black 30%, rgba(0,0,0,0.5) 70%, black);
   }
   body[showing="library"] modalOverlay {
     background: linear-gradient(0deg, black, black 20%, transparent 100%);
