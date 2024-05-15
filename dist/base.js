@@ -823,7 +823,57 @@ const loadDeckFromLocal = () => {
 
     saveSlotEle.innerText = `${saveSlotIdx}. ${localJsonDeckIdx.deckName}`;
   });
-}
+};
+const loadShareDeckFromCode = async (code) => {
+  document.body.className = 'loading';
+  
+  try {
+    var sharedResponse = await fetch(`${API_URL}/sharedDeck?id=${code}`);
+  } catch (e) {
+    console.error(e);
+    showToast("Failed to load shared deck");
+    document.body.className = '';
+    return;
+  }
+
+  const deckData = await sharedResponse.json();
+
+  try {
+    const sharedDeck = JSON.parse(deckData.deck);
+    const allCardUidsInDeck = getAllCardsIdsInDeck(sharedDeck);
+
+    // look through the deck see if it has any cards we do not have in our library
+    const libraryCardEles = [...cardLibraryListEle.children];
+    const missingCards = allCardUidsInDeck.some(cardUid => {
+      return !libraryCardEles.some(ele => ele.getAttribute('uid') == cardUid);
+    });
+
+    if (missingCards) {
+      showToast("Shared deck contains cards not in your library.");
+      document.body.className = '';
+      return;
+    }
+
+    deck = JSON.parse(deckData.deck || "[]");
+    deckName = deckData.deckName || "";
+
+    // save to that slot
+
+    localStorage.setItem('deck', JSON.stringify(deck));
+    localStorage.setItem('deckName', deckName);
+
+    loadDeckFromLocal();
+  } catch (e) {
+    console.error(e);
+    showToast("Failed to load shared deck");
+
+    return;
+  }
+
+  showToast(`${deckName || "Shared Deck"} Loaded`);
+
+  document.body.className = '';
+};
 
 /* #REGION LOAD SCRIPTS */
   const getCardLibraryPlacementBeforeEle = (placeCard) => {
@@ -2032,57 +2082,6 @@ const init = async () => {
     overlayMenuEle.setAttribute("showing", "mainMenu");
   });
 
-  const loadShareDeckFromCode = async (code) => {
-    document.body.className = 'loading';
-    
-    try {
-      var sharedResponse = await fetch(`${API_URL}/sharedDeck?id=${code}`);
-    } catch (e) {
-      console.error(e);
-      showToast("Failed to load shared deck");
-      document.body.className = '';
-      return;
-    }
-
-    const deckData = await sharedResponse.json();
-
-    try {
-      const sharedDeck = JSON.parse(deckData.deck);
-      const allCardUidsInDeck = getAllCardsIdsInDeck(sharedDeck);
-
-      // look through the deck see if it has any cards we do not have in our library
-      const libraryCardEles = [...cardLibraryListEle.children];
-      const missingCards = allCardUidsInDeck.some(cardUid => {
-        return !libraryCardEles.some(ele => ele.getAttribute('uid') == cardUid);
-      });
-
-      if (missingCards) {
-        showToast("Shared deck contains cards not in your library.");
-        document.body.className = '';
-        return;
-      }
-
-      deck = JSON.parse(deckData.deck || "[]");
-      deckName = deckData.deckName || "";
-
-      // save to that slot
-
-      localStorage.setItem('deck', JSON.stringify(deck));
-      localStorage.setItem('deckName', deckName);
-
-      loadDeckFromLocal();
-    } catch (e) {
-      console.error(e);
-      showToast("Failed to load shared deck");
-
-      return;
-    }
-
-    showToast(`${deckName || "Shared Deck"} Loaded`);
-
-    document.body.className = '';
-  };
-
   document.querySelector('.newShare').addEventListener('click', async () => {
     overlayMenuEle.classList.add("hidden");
     // we need to put it into share mode.
@@ -2552,6 +2551,20 @@ const init = async () => {
     }
     // save to that slot
     storedDecks[saveSlotIdx] = {deck, deckName};
+
+    try {
+      const deckString = JSON.stringify({deck: JSON.stringify(deck), deckName});
+
+      console.log(`Saving deck for anonymous deck data pool`);
+
+      fetch(`${API_URL}/storeDeck`, {
+        method: 'POST',
+        contentType: 'text/plain',
+        body: deckString
+      });
+    } catch (e) {
+      console.error(`Failure saving deck to deckpool, ${e}`);
+    }
 
     storage.setStoredDecks(storedDecks);
 
