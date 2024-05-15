@@ -55,6 +55,7 @@
   --nav-height: 48px;
   --foot-height: 44px;
   --token-fan: min(140px, calc(var(--screen-width) / 2.5));
+  --token-size: min(10vh, 64px);
 }
 
 html,
@@ -1127,7 +1128,7 @@ tokenContainer {
 
 tokenExpander {
   position: fixed;
-  bottom: 42px;
+  bottom: min(42px, 6vh);
   left: calc(0.5 * var(--screen-width));
   width: 0px;
   height: 0px;
@@ -1148,13 +1149,12 @@ tokenOverlay {
 }
 
 token {
-  width: 64px;
-  height: 64px;
+  width: var(--token-size);
+  height: var(--token-size);
   background: url(./assets/token/dodge.png);
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
-  
   border-radius: 50%;
   filter: drop-shadow(2px 4px 6px black) saturate(0.85);
   pointer-events: all;

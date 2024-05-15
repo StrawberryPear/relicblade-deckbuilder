@@ -1,5 +1,5 @@
 import cardsStore from './store.js';
-import baseCards from './baseCards.js';
+import { init as initStorage, getStoredDecks, setStoredDecks, getStoredDeck, getStoredDisplayType, setStoredDeck, setStoredDisplayType, writeCardToDatabase, getAllCards } from './storage.js';
 
 const PDF_SCALE = 4;
 
@@ -16,7 +16,6 @@ const CARD_SLIDE_DURATION = 300;
 const API_URL = "https://bi04kvgbjg.execute-api.ap-southeast-2.amazonaws.com/Prod";
 const SHARE_URL = "https://gungobs.com";
 
-var database;
 var deckName = "";
 var deck = [];
 
@@ -42,15 +41,10 @@ const gridButtonEle = document.querySelector('.grid');
 const previewEle = document.querySelector('preview');
 const cropperEle = document.querySelector('cropper');
 
-const removeFromDeckButtons = document.querySelectorAll("cardButton.removeFromDeck");
 const showLibraryButton = document.querySelector("cardButton.showLibrary");
 const searchButton = document.querySelector("cardButton.search");
-const addUpgradeButtons = document.querySelectorAll("cardButton.addUpgrade");
 const showDeckButton = document.querySelector("cardButton.showDeck");
-const addToDeckButtons = document.querySelectorAll("cardButton.addToDeck");
 const addCharacterButton = document.querySelector("add");
-const attachUpgradeButton = document.querySelector("cardButton.attachUpgrade");
-const randomRelicButton = document.querySelector("cardButton.randomRelic");
 
 const deckTitleInput = document.querySelector("input#title");
 const deckTitleInputMirror = document.querySelector("deckTitleMirror#titleMirror");
@@ -133,7 +127,7 @@ const updateDeck = () => {
 
   deckCostEle.innerHTML = cost ? `&nbsp;(${cost})` : '';
 
-  localStorage.setItem("deck", JSON.stringify(deck));
+  setStoredDeck(deckName, deck);
 };
 
 const getCurrentCardScrollerEle = () => {
@@ -779,18 +773,13 @@ const loadDeckFromLocal = () => {
   // clear the deck.
   [...cardDeckListEle.children].filter(ele => ["CARDDECKWRAPPER", "SNAPPOINT"].includes(ele.tagName)).forEach(ele => ele.remove());
   
-  var localJsonDeck = [];
-  var localDeckName = "";
-  try {
-    localJsonDeck = JSON.parse(localStorage.getItem('deck') || '[]');
-    localDeckName = localStorage.getItem('deckName') || '';
-  } catch (e) { }
-
+  const storedDeck = getStoredDeck();
+  
   const libraryCards = [...cardLibraryListEle.children].map(ele => ({uid: ele.getAttribute("uid")}));
 
   // inital deck production
-  deck = localJsonDeck.filter(v => v && libraryCards.find(card => card.uid == v.uid));
-  deckName = localDeckName ;
+  deck = storedDeck.deck.filter(v => v && libraryCards.find(card => card.uid == v.uid));
+  deckName = storedDeck.deckName;
 
   deckTitleInput.value = deckName;
   deckTitleInputMirror.innerText = deckName || deckTitleInput.placeholder;
@@ -801,16 +790,12 @@ const loadDeckFromLocal = () => {
     addCharacterToDeck(cardData, false);
   }
 
-  var localJsonDecks = {};
-
-  try {
-    localJsonDecks = JSON.parse(localStorage.getItem('decks') || '{}');
-  } catch (e) { }
+  var storedDecks = getStoredDecks();
 
   // update the deckstore
   [...document.querySelectorAll("menuControl.saveSlot")].forEach((saveSlotEle) => {
     const saveSlotIdx = saveSlotEle.getAttribute("idx");
-    const localJsonDeckIdx = localJsonDecks[saveSlotIdx] || {deckName: "Empty Slot"};
+    const localJsonDeckIdx = storedDecks[saveSlotIdx] || {deckName: "Empty Slot"};
 
     saveSlotEle.innerText = `${saveSlotIdx}. ${localJsonDeckIdx.deckName}`;
   });
@@ -1287,7 +1272,7 @@ const loadDeckFromLocal = () => {
       const cardStoreKey = Object.keys(cardsStore).find(key => cardsStore[key].name.toLowerCase() == cardStoreName.toLowerCase());
 
       if (!cardStoreKey) {
-        showToast(`Card not found, custom cards not supported yet.`);
+        showToast(`Card not found, custom cards not supported.`);
         await awaitTime(500);
         previewEle.style.setProperty('opacity', `0`);
         await awaitTime(1000);
@@ -1307,20 +1292,10 @@ const loadDeckFromLocal = () => {
       uid = Object.keys(cardsStore).find(key => cardsStore[key].name.toLowerCase() == cardStoreName.toLowerCase());
     }
 
-    const transaction = database.transaction('cards', 'readwrite');
-
     try {
-      const objectStore = transaction.objectStore('cards');
-      const storeId = await objectStore.add({uid, image});
-
-      const result = await objectStore.get(storeId);
-
-      loadCard(result);
-      
-      return true;
-    } catch(err) {
-      console.error(err);
-      return false;
+      await writeCardToDatabase(uid, image);
+    } catch (e) {
+      showToast(`Failed to add card ${uid}`);
     }
   };
 /* #END FILTER */
@@ -1497,50 +1472,9 @@ const init = async () => {
   await awaitFrame();
   await awaitFrame();
 
-  database = await idb.openDB('relicbladeCards', 3, {
-    upgrade: (db, oldVersion) => {
-      if (oldVersion < 2) {
-        localStorage.setItem("deck", JSON.stringify([]));
-      }
-      if (oldVersion < 3) {
-        try {
-          db.deleteObjectStore('cards');
-        } catch (err) {
-          // ignore error
-        }
-      }
-
-      const cardObjectStore = db.createObjectStore('cards', { keyPath: 'index', autoIncrement: true }); 
-
-      cardObjectStore.createIndex('uid', 'uid', { unique: true });
-
-    }});
-
-  await (async () => {
-    const baseTransaction = database.transaction('cards', 'readwrite');
-    const baseObjectStore = baseTransaction.objectStore('cards');
-
-    const allCards = await baseObjectStore.getAll();
-
-    window.cardsStore = cardsStore;
-    window.baseCards = baseCards;
-
-    for (const baseCard of baseCards) {
-      // to avoid server calls, we're going to populate straight from files, but boy is it going to be shit to add all of these things.
-      if (allCards.find(card => card.uid == baseCard.uid)) continue;
-
-      try {
-        await baseObjectStore.add({uid: baseCard.uid, image: baseCard.image});
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  })();
+  await initStorage();
   
-  const transaction = database.transaction('cards');
-  const cardStore = transaction.objectStore('cards');
-
-  const cards = (await cardStore.getAll() || []).sort((ca, cb) => ca.index - cb.index);
+  const cards = await getAllCards();
 
   for (const card of cards) {
     loadCard(card);
@@ -1550,7 +1484,7 @@ const init = async () => {
     .then(() => {
       loadDeckFromLocal();
       
-      document.body.setAttribute("displayType", localStorage.getItem("displayType") || "");
+      document.body.setAttribute("displayType", getStoredDisplayType() || "");
     
       // now lets center the deck
       const deckCardContainerEles = [...cardScrollerDeckEle.querySelectorAll("cardDeckWrapper")];
@@ -1749,6 +1683,17 @@ const init = async () => {
     applyCarousel();
   };
 
+  const onShowDeck = async () => {
+    if (document.body.getAttribute("showing") !== 'library') return;
+
+    setSubFilter();
+
+    // scroll to the last library focused' card
+    document.body.setAttribute("showing", "deck");
+
+    await awaitScrollStop();
+  };
+
   showLibraryButton.addEventListener('click', onShowLibrary);
   searchButton.addEventListener('click', async () => {
     // check if we're already searching
@@ -1768,48 +1713,72 @@ const init = async () => {
     if (!searchValue) return;
     searchButton.classList.add("searched");
   });
-  showDeckButton.addEventListener('click', async () => {
-    if (document.body.getAttribute("showing") !== 'library') return;
+  showDeckButton.addEventListener('click', onShowDeck);
 
-    setSubFilter();
-
-    // scroll to the last library focused' card
-    document.body.setAttribute("showing", "deck");
-
-    await awaitScrollStop();
-  });
-  addUpgradeButtons.forEach(addUpgradeButton => {
-    addUpgradeButton.addEventListener('click', () => {
-      if (document.body.getAttribute("showing") !== 'deck') return;
-  
-      const deckCurrentCardEle = document.querySelector('card.highlight');
-      if (!deckCurrentCardEle) {
-        showToast("Can't attach upgrade to that");
-        return;
-      }
-  
-      const uid = deckCurrentCardEle.getAttribute("uid");
-      const cardStore = cardsStore[uid];
-      if (!cardStore) return;
-  
-      const currentCardIndex = getDeckIndexOfCardEle(deckCurrentCardEle);
-  
-      setDeckFocusCard(deckCurrentCardEle);
-      attachCharacter = deck[currentCardIndex];
-
-      setSubFilter('upgrade', { classes: cardStore.classes, upgradeType: cardStore.upgradeTypes});
-  
-      onShowLibrary();
-    });
-  });
-  addCharacterButton.addEventListener('click', () => {
+  const startAttachUpgrade = async () => {
     if (document.body.getAttribute("showing") !== 'deck') return;
 
-    setSubFilter('character');
+    const deckCurrentCardEle = document.querySelector('card.highlight');
+    if (!deckCurrentCardEle) {
+      showToast("Can't attach upgrade to that");
+      return;
+    }
 
-    showLibraryButton.click();
-  });
-  randomRelicButton.addEventListener('click', async () => {
+    const uid = deckCurrentCardEle.getAttribute("uid");
+    const cardStore = cardsStore[uid];
+    if (!cardStore) return;
+
+    const currentCardIndex = getDeckIndexOfCardEle(deckCurrentCardEle);
+
+    setDeckFocusCard(deckCurrentCardEle);
+    attachCharacter = deck[currentCardIndex];
+
+    setSubFilter('upgrade', { classes: cardStore.classes, upgradeType: cardStore.upgradeTypes});
+
+    onShowLibrary();
+  };
+  const finishAttachUpgrade = async () => {
+    if (!attachCharacter) return;
+
+    const currentCardEle = document.querySelector('card.highlight');
+    if (!currentCardEle) return;
+
+    const uid = currentCardEle.getAttribute("uid");
+    if (!uid) return;
+
+    // check if the character can use the card
+    const isAcceptable = canCharacterEquipUpgrade(attachCharacter, uid);
+    const upgradeType = getUpgradeType(cardsStore[uid]);
+    const dontAdd = !isAcceptable && !(await showConfirm(`This character already has too many, ${upgradeType}s. Do you want to still add this?`));
+
+    if (!isAcceptable) {
+      await awaitTime(200);
+    }
+    
+    hideInteractCard(dontAdd);
+    currentCardEle.classList.toggle("highlight", false);
+
+    if (dontAdd) {
+      // prompt the user saying the character can't ususally use this
+      return;
+    }
+
+    const cardEleClone = addUpgradeToCharacter(uid, deckFocusCard, attachCharacter, true);
+
+    if (!cardEleClone) return;
+    updateDeck();
+
+    showToast(`Upgrade Attached`);
+
+    scrollDeckToCard(deckFocusCard);
+    onShowDeck();
+
+    cardEleClone.classList.add("highlight");
+
+    await awaitTime(500);
+    cardEleClone.classList.remove("highlight");
+  };
+  const attachRandomRelic = async () => {
     // get all the relics
     const relicEles = [...cardLibraryListEle.children].filter(ele => {
       const uid = ele.getAttribute("uid")
@@ -1845,114 +1814,77 @@ const init = async () => {
 
     await awaitTime(500);
     cardEleClone.classList.remove("highlight");
-  });
-
-  removeFromDeckButtons.forEach(removeForDeckButton => {
-    removeForDeckButton.addEventListener('click', async () => {
-      // check if there's a selected card
-      const selectedCardEle = document.querySelector('card.highlight');
-      const parentCardEle = getParentCardEleFromAny(selectedCardEle);
-      const containerCardEle = parentCardEle.parentElement;
-
-      if (!parentCardEle) {
-        showToast('Can\'t remove that');
-        return;
-      }
-
-      const currentCardIndex = getDeckIndexOfCardEle(selectedCardEle);
-
-      if (currentCardIndex == -1) {
-        showToast('Can\'t remove that');
-        return;
-      };
-
-      const currentFocusSubIndex = parentCardEle 
-        ? [...parentCardEle.querySelectorAll("card")].indexOf(selectedCardEle) + 1
-        : parentCardEle.currentRangeScalar || 0;
-
-      if (!currentFocusSubIndex) {
-        const confirmValue = await showConfirm('Are you sure you want to remove this card, and all it\'s upgrades from this deck?');
-        await awaitTime(200);
-  
-        if (!confirmValue) return;
-
-        deck.splice(currentCardIndex, 1);
-        containerCardEle.remove();
-      } else {
-        const upgradeIndex = currentFocusSubIndex - 1;
-
-        deck[currentCardIndex].upgrades.splice(upgradeIndex, 1);
-        const upgradeCardEle = [...parentCardEle.querySelectorAll("card")][upgradeIndex];
-
-        upgradeCardEle.remove();
-
-        applyDeckCardTopScroll(parentCardEle, 0);
-      }
-      updateDeck();
-
-      showToast(`Card removed from deck`);
-    }); 
-  });
-  addToDeckButtons.forEach(addToDeckButton => {
-    addToDeckButton.addEventListener('click', () => {
-      const currentCardEle = document.querySelector('card.highlight');
-      if (!currentCardEle) return;
-  
-      const uid = currentCardEle.getAttribute("uid");
-  
-      const cardEleClone = addCharacterToDeck({uid});
-      if (!cardEleClone) return;
-  
-      updateDeck();
-      setDeckFocusCard(cardEleClone);
-      showToast(`Card added to deck`);
-      scrollDeckToCard(cardEleClone);
-      currentCardEle.classList.toggle("highlight", false);
-      showDeckButton.click();
-    });
-  });
-  attachUpgradeButton.addEventListener('click', async (e) => {
-    if (!attachCharacter) return;
-
+  };
+  const addCharacter = async () => {
     const currentCardEle = document.querySelector('card.highlight');
     if (!currentCardEle) return;
 
     const uid = currentCardEle.getAttribute("uid");
-    if (!uid) return;
 
-    // check if the character can use the card
-    const isAcceptable = canCharacterEquipUpgrade(attachCharacter, uid);
-    const upgradeType = getUpgradeType(cardsStore[uid]);
-    const dontAdd = !isAcceptable && !(await showConfirm(`This character already has too many, ${upgradeType}s. Do you want to still add this?`));
+    const cardEleClone = addCharacterToDeck({uid});
+    if (!cardEleClone) return;
 
-    if (!isAcceptable) {
-      await awaitTime(200);
-    }
-    
-    hideInteractCard(dontAdd);
+    updateDeck();
+    setDeckFocusCard(cardEleClone);
+    showToast(`Card added to deck`);
+    scrollDeckToCard(cardEleClone);
     currentCardEle.classList.toggle("highlight", false);
+    await onShowDeck();
+  };
+  const removeCharacter = async () => {
+    // check if there's a selected card
+    const selectedCardEle = document.querySelector('card.highlight');
+    const parentCardEle = getParentCardEleFromAny(selectedCardEle);
+    const containerCardEle = parentCardEle.parentElement;
 
-    if (dontAdd) {
-      // prompt the user saying the character can't ususally use this
+    if (!parentCardEle) {
+      showToast('Can\'t remove that');
       return;
     }
 
-    const cardEleClone = addUpgradeToCharacter(uid, deckFocusCard, attachCharacter, true);
+    const currentCardIndex = getDeckIndexOfCardEle(selectedCardEle);
 
-    if (!cardEleClone) return;
+    if (currentCardIndex == -1) {
+      showToast('Can\'t remove that');
+      return;
+    };
+
+    const currentFocusSubIndex = parentCardEle 
+      ? [...parentCardEle.querySelectorAll("card")].indexOf(selectedCardEle) + 1
+      : parentCardEle.currentRangeScalar || 0;
+
+    if (!currentFocusSubIndex) {
+      const confirmValue = await showConfirm('Are you sure you want to remove this card, and all it\'s upgrades from this deck?');
+      await awaitTime(200);
+
+      if (!confirmValue) return;
+
+      deck.splice(currentCardIndex, 1);
+      containerCardEle.remove();
+    } else {
+      const upgradeIndex = currentFocusSubIndex - 1;
+
+      deck[currentCardIndex].upgrades.splice(upgradeIndex, 1);
+      const upgradeCardEle = [...parentCardEle.querySelectorAll("card")][upgradeIndex];
+
+      upgradeCardEle.remove();
+
+      applyDeckCardTopScroll(parentCardEle, 0);
+    }
     updateDeck();
 
-    showToast(`Upgrade Attached`);
+    showToast(`Card removed from deck`);
+  };
 
-    scrollDeckToCard(deckFocusCard);
-    showDeckButton.click();
+  addCharacterButton.addEventListener('click', () => {
+    if (document.body.getAttribute("showing") !== 'deck') return;
 
-    cardEleClone.classList.add("highlight");
+    setSubFilter('character');
 
-    await awaitTime(500);
-    cardEleClone.classList.remove("highlight");
+    onShowLibrary();
   });
 
+  // Search crap
   searchInputEles.forEach(searchInputEle => searchInputEle.addEventListener('keyup', async event => {
     if (event.keyCode === 13) {
       event.preventDefault();
@@ -1970,6 +1902,7 @@ const init = async () => {
     cardTopControlsEle.classList.toggle('searched', !!getSearchText());
   })
 
+  // remove card from library
   removeLibraryCardEle.addEventListener('click', async (event) => {
     overlayMenuEle.className = 'hidden';
     if (event.cancelable) event.preventDefault();
@@ -1985,13 +1918,8 @@ const init = async () => {
       if (!confirmValue) return;
   
       // remove it from the library.
-      const transaction = database.transaction(['cards'], 'readwrite');
-      const objectStore = transaction.objectStore('cards');
-  
-      const index = parseInt(currentCardEle.getAttribute('index'))
-  
-      await objectStore.delete(index);
-  
+      await removeCardFromDatabase(currentCardEle.getAttribute('uid'));
+
       showToast('Card Removed');
       currentCardEle.remove();
     }, 200);
@@ -2053,7 +1981,7 @@ const init = async () => {
     const nextDisplayType = currentDisplayType == 'grid' ? '' : 'grid';
 
     document.body.setAttribute("displayType", nextDisplayType);
-    localStorage.setItem("displayType", nextDisplayType);
+    setStoredDisplayType(nextDisplayType);
 
     if (currentDisplayType != "grid") return;
     applyCarousel();
@@ -2229,19 +2157,15 @@ const init = async () => {
         const optionResult = await showOption(`<h4>${currentFocusCard.name} selected</h4> `, options);
 
         if (optionResult == "Add Upgrade") {
-          addUpgradeButtons[0].click();
+          await startAttachUpgrade();
           // center the card
         } else if (optionResult == "Remove Character" || optionResult == "Remove Upgrade") {
-          removeFromDeckButtons[0].click();
+          await removeCharacter();
         } else if (optionResult == "Add Random Relic") {
-          randomRelicButton.click();
+          await attachRandomRelic();
         }
-
-        hideInteractCard(!optionResult);
-
+        // remove the highlight
         selectedCardEle.classList.toggle("highlight", false);
-
-        await awaitTime(200);
         
         return;
       }
@@ -2258,7 +2182,7 @@ const init = async () => {
         await awaitScrollStop();
 
         if (confirmResult) {
-          attachUpgradeButton.click();
+          await finishAttachUpgrade();
 
           return;
         }
@@ -2280,7 +2204,7 @@ const init = async () => {
       await awaitScrollStop();
 
       if (confirmResult) {
-        addToDeckButtons[0].click();
+        await addCharacter();
       }
       selectedCardEle.classList.toggle("highlight", false);
 
@@ -2395,19 +2319,16 @@ const init = async () => {
   deckTitleInput.addEventListener("input", event => {
     deckTitleInputMirror.innerText = deckTitleInput.value || deckTitleInput.placeholder;
     deckName = deckTitleInput.value;
-    localStorage.setItem("deckName", deckName);
+    
+    setStoredDeck(deckName, deck);
   });
 
   const handleSave = async (saveSlotIdx) => {
-    var localJsonDecks = {};
-  
-    try {
-      localJsonDecks = JSON.parse(localStorage.getItem('decks') || '{}');
-    } catch (e) { }
-
+    var storedDecks = getStoredDecks();
+    
     // check if a save is already up there
-    if (localJsonDecks[saveSlotIdx]) {
-      const confirmValue = await showConfirm(`Are you sure you want to override ${localJsonDecks[saveSlotIdx].deckName || 'Untitled Deck'}?`);
+    if (storedDecks[saveSlotIdx]) {
+      const confirmValue = await showConfirm(`Are you sure you want to override ${storedDecks[saveSlotIdx].deckName || 'Untitled Deck'}?`);
 
       await awaitTime(200);
 
@@ -2416,9 +2337,9 @@ const init = async () => {
       }
     }
     // save to that slot
-    localJsonDecks[saveSlotIdx] = {deck, deckName};
+    storedDecks[saveSlotIdx] = {deck, deckName};
 
-    localStorage.setItem('decks', JSON.stringify(localJsonDecks));
+    setStoredDecks(storedDecks);
 
     loadDeckFromLocal();
     // hide the menu
@@ -2428,12 +2349,8 @@ const init = async () => {
   };
 
   const handleLoad = async (loadSlotIdx) => {
-    var localJsonDecks = {};
-  
-    try {
-      localJsonDecks = JSON.parse(localStorage.getItem('decks') || '{}');
-    } catch (e) { }
-
+    var localJsonDecks = getStoredDecks();
+    
     // check if a save is already up there
     if (!localJsonDecks[loadSlotIdx]) {
       showToast(`Deck slot, ${loadSlotIdx} is empty`);
@@ -2453,15 +2370,14 @@ const init = async () => {
     deck = localJsonDecks[loadSlotIdx].deck || {};
     deckName = localJsonDecks[loadSlotIdx].deckName || "";
 
-    localStorage.setItem('deck', JSON.stringify(deck));
-    localStorage.setItem('deckName', deckName);
+    setStoredDeck(deckName, deck);
 
     loadDeckFromLocal();
     // hide the menu
     overlayMenuEle.classList.add("hidden");
 
     // show deck
-    showDeckButton.click();
+    onShowDeck();
 
     // scroll to the front
     scrollLibraryScroller(0);
@@ -2512,8 +2428,7 @@ const init = async () => {
 
     overlayMenuEle.classList.add("hidden");
 
-    localStorage.setItem("deck", "[]");
-    localStorage.setItem("deckName", "");
+    setStoredDeck("", []);
 
     loadDeckFromLocal();
   });
