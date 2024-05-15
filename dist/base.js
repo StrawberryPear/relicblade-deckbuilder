@@ -2381,7 +2381,7 @@ const init = async () => {
           await attachRandomRelic();
         }
         // remove the highlight
-        hideInteractCard();
+        hideInteractCard(!optionResult);
         selectedCardEle.classList.toggle("highlight", false);
         
         return;
