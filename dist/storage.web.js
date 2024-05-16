@@ -55,9 +55,7 @@ export const writeCardToDatabase = async (uid, image) => {
 
     const result = await objectStore.get(storeId);
 
-    loadCard(result);
-    
-    return true;
+    return result;
   } catch(err) {
     console.error(err);
     return false;

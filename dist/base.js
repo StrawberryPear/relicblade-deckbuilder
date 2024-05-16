@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core';
 import cardsStore from './store.js';
 
 const PDF_SCALE = 4;
@@ -26,6 +27,9 @@ var dragToken;
 
 var CARD_WIDTH = 250;
 var CARD_HEIGHT = 350;
+
+console.log(`capacitor ${Object.keys(Capacitor).join(", ")}`);
+console.log(`capacitor plugins ${Object.keys(Capacitor.Plugins).join(", ")}`);
 
 const storage = await (async () => {
   console.log('loading storage');
