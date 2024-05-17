@@ -1,0 +1,9 @@
+export const API_URL = "https://bi04kvgbjg.execute-api.ap-southeast-2.amazonaws.com/Prod";
+export const SHARE_URL = "https://gungob.com";
+export const PDF_SCALE = 4;
+export const PDF_CARD_WIDTH = Math.round(180 * PDF_SCALE);
+export const PDF_CARD_HEIGHT = Math.round(250 * PDF_SCALE);
+export const PDF_CARD_OFFSET_X = Math.round(36.6666666667 * PDF_SCALE);
+export const PDF_CARD_OFFSET_Y = Math.round(18.6666666667 * PDF_SCALE);
+export const PDF_CARD_ROW_OFFSET = Math.round(6.66666666667 * PDF_SCALE);
+export const CARD_SLIDE_DURATION = 300;

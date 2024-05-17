@@ -1,19 +1,7 @@
+import { PDF_SCALE, PDF_CARD_WIDTH, PDF_CARD_HEIGHT, PDF_CARD_OFFSET_X, PDF_CARD_OFFSET_Y, PDF_CARD_ROW_OFFSET, CARD_SLIDE_DURATION, API_URL, SHARE_URL } from './constants.js';
+import { storage, init as initStorage } from './storage.js';
+
 import cardsStore from './store.js';
-
-const PDF_SCALE = 4;
-
-const PDF_CARD_WIDTH = Math.round(180 * PDF_SCALE);
-const PDF_CARD_HEIGHT = Math.round(250 * PDF_SCALE);
-
-const PDF_CARD_OFFSET_X = Math.round(36.6666666667 * PDF_SCALE);
-const PDF_CARD_OFFSET_Y = Math.round(18.6666666667 * PDF_SCALE);
-
-const PDF_CARD_ROW_OFFSET = Math.round(6.66666666667 * PDF_SCALE);
-
-const CARD_SLIDE_DURATION = 300;
-
-const API_URL = "https://bi04kvgbjg.execute-api.ap-southeast-2.amazonaws.com/Prod";
-const SHARE_URL = "https://gungob.com";
 
 var deckName = "";
 var deck = [];
@@ -26,16 +14,6 @@ var dragToken;
 
 var CARD_WIDTH = 250;
 var CARD_HEIGHT = 350;
-
-const storage = await (async () => {
-  console.log('loading storage');
-  if (!Capacitor?.getPlatform || Capacitor?.getPlatform() == "web") {
-    console.log('loading web storage');
-    return await import('./storage.web.js');
-  }
-  console.log('loading capacitor storage');
-  return await import('./storage.js');
-})();
 
 const cardScrollerLibraryEle = document.querySelector('cardScroller.library');
 const cardScrollerDeckEle = document.querySelector('cardScroller.deck');
@@ -1449,6 +1427,8 @@ const loadShareDeckFromCode = async (code) => {
 
 // initialize the database.
 const init = async () => {
+  await initStorage();
+
   // constantly measure the scrolling
   document.addEventListener("contextmenu", (event) => {
     event.preventDefault();
