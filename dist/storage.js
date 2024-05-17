@@ -18,6 +18,6 @@ export const init = async () => {
   }
   console.log('loading capacitor storage');
   storage = await import('./storage.cap.js');
-  
+
   return;
 };

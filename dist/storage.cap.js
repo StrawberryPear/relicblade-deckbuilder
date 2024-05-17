@@ -190,7 +190,12 @@ export const init = async () => {
   if (!localPreferences.version || localPreferences.version <= 1) {
     console.log('Removing dependency on localdb');
 
-    localPreferences.version = 2;
+    localPreferences = {
+      deck: localStorage.getItem('deck') || '[]',
+      deckName: localStorage.getItem('deckName') || '',
+      decks: localStorage.getItem('decks') || '{}',
+      version: 2
+    };
     await writePreferences();
     
     var database = await idb.openDB('relicbladeCards', 3, {
