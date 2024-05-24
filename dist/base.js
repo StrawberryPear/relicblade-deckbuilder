@@ -5,7 +5,7 @@ import { getCardFromPoint, getPointerCardEle, getCenterCardEle } from './dom.js'
 import { awaitFrame, awaitTime, getSId, clamp, getAllCardsIdsInDeck } from './utils.js';
 import cardsStore from './store.js';
 
-import { showInteractCard, hideInteractCard, showConfirm, showInput, showOption, isModalShowing } from './dom.modal.js';
+import { showInteractCard, hideInteractCard, showConfirm, showInput, showOption, isModalShowing, init as initModal } from './dom.modal.js';
 
 var deckName = "";
 var deck = [];
@@ -1117,6 +1117,355 @@ const loadShareDeckFromCode = async (code) => {
   }
 /* #END CAROUSEL */
 
+const onShowLibrary = async (event) => {
+  if (event) {
+    attachCharacter = undefined;
+  }
+  
+  document.body.className = '';
+
+  if (document.body.getAttribute("showing") !== 'deck') return;
+  // get the top level element
+
+  // scroll to the last library focused' card
+  document.body.setAttribute("showing", "library");
+
+  applyCarousel();
+};
+const onShowDeck = async () => {
+  if (document.body.getAttribute("showing") !== 'library') return;
+
+  setSubFilter();
+
+  // scroll to the last library focused' card
+  document.body.setAttribute("showing", "deck");
+
+  await awaitScrollStop();
+};
+const startAttachUpgrade = async () => {
+  if (document.body.getAttribute("showing") !== 'deck') return;
+
+  const deckCurrentCardEle = document.querySelector('card.highlight');
+  if (!deckCurrentCardEle) {
+    showToast("Can't attach upgrade to that");
+    return;
+  }
+
+  const uid = deckCurrentCardEle.getAttribute("uid");
+  const cardStore = cardsStore[uid];
+  if (!cardStore) return;
+
+  const currentCardIndex = getDeckIndexOfCardEle(deckCurrentCardEle);
+
+  setDeckFocusCard(deckCurrentCardEle);
+  attachCharacter = deck[currentCardIndex];
+
+  setSubFilter('upgrade', { classes: cardStore.classes, upgradeType: cardStore.upgradeTypes});
+
+  onShowLibrary();
+};
+const finishAttachUpgrade = async () => {
+  if (!attachCharacter) return;
+
+  const currentCardEle = document.querySelector('card.highlight');
+  if (!currentCardEle) return;
+
+  const uid = currentCardEle.getAttribute("uid");
+  if (!uid) return;
+
+  // check if the character can use the card
+  const isAcceptable = canCharacterEquipUpgrade(attachCharacter, uid);
+  const upgradeType = getUpgradeType(cardsStore[uid]);
+  const dontAdd = !isAcceptable && !(await showConfirm(`This character already has too many, ${upgradeType}s. Do you want to still add this?`));
+
+  if (!isAcceptable) {
+    await awaitTime(200);
+  }
+  
+  hideInteractCard(dontAdd);
+  currentCardEle.classList.toggle("highlight", false);
+
+  if (dontAdd) {
+    // prompt the user saying the character can't ususally use this
+    return;
+  }
+
+  const cardEleClone = addUpgradeToCharacter(uid, deckFocusCard, attachCharacter, true);
+
+  if (!cardEleClone) return;
+  updateDeck();
+
+  showToast(`Upgrade Attached`);
+
+  scrollDeckToCard(deckFocusCard);
+  onShowDeck();
+
+  cardEleClone.classList.add("highlight");
+
+  await awaitTime(500);
+  cardEleClone.classList.remove("highlight");
+};
+const attachRandomRelic = async () => {
+  // get all the relics
+  const relicEles = [...cardLibraryListEle.children].filter(ele => {
+    const uid = ele.getAttribute("uid")
+    const cardStore = cardsStore[uid];
+
+    return cardStore && cardStore.types.match(/relic/i);
+  });
+
+  // get the attach character
+  const selectedCardEle = document.querySelector('card.highlight');
+  if (!selectedCardEle) return;
+
+  const randomRelicEle = relicEles[Math.floor(Math.random() * relicEles.length)];
+  if (!randomRelicEle) return;
+
+  const upgradeUId = randomRelicEle.getAttribute("uid");
+
+  const currentCardIndex = getDeckIndexOfCardEle(selectedCardEle);
+  const deckAttachCharacter = deck[currentCardIndex];
+
+  const cardEleClone = addUpgradeToCharacter(upgradeUId, selectedCardEle, deckAttachCharacter, true);
+  if (!cardEleClone) return;
+
+  updateDeck();
+
+  await awaitTime(200);
+
+  // scroll to the newly created card
+  showToast(`Random Relic Added`);
+
+  // highlight the card
+  cardEleClone.classList.add("highlight");
+
+  await awaitTime(500);
+  cardEleClone.classList.remove("highlight");
+};
+const addCharacter = async () => {
+  const currentCardEle = document.querySelector('card.highlight');
+  if (!currentCardEle) return;
+
+  const uid = currentCardEle.getAttribute("uid");
+
+  const cardEleClone = addCharacterToDeck({uid});
+  if (!cardEleClone) return;
+
+  updateDeck();
+  setDeckFocusCard(cardEleClone);
+  showToast(`Card added to deck`);
+  scrollDeckToCard(cardEleClone);
+  currentCardEle.classList.toggle("highlight", false);
+  await onShowDeck();
+};
+const removeCharacter = async () => {
+  // check if there's a selected card
+  const selectedCardEle = document.querySelector('card.highlight');
+  const parentCardEle = getParentCardEleFromAny(selectedCardEle);
+  const containerCardEle = parentCardEle.parentElement;
+
+  if (!parentCardEle) {
+    showToast('Can\'t remove that');
+    return;
+  }
+
+  const currentCardIndex = getDeckIndexOfCardEle(selectedCardEle);
+
+  if (currentCardIndex == -1) {
+    showToast('Can\'t remove that');
+    return;
+  };
+
+  const currentFocusSubIndex = parentCardEle 
+    ? [...parentCardEle.querySelectorAll("card")].indexOf(selectedCardEle) + 1
+    : parentCardEle.currentRangeScalar || 0;
+
+  if (!currentFocusSubIndex) {
+    const confirmValue = await showConfirm('Are you sure you want to remove this card, and all it\'s upgrades from this deck?');
+    await awaitTime(200);
+
+    if (!confirmValue) return;
+
+    deck.splice(currentCardIndex, 1);
+    containerCardEle.remove();
+  } else {
+    const upgradeIndex = currentFocusSubIndex - 1;
+
+    deck[currentCardIndex].upgrades.splice(upgradeIndex, 1);
+    const upgradeCardEle = [...parentCardEle.querySelectorAll("card")][upgradeIndex];
+
+    upgradeCardEle.remove();
+
+    applyDeckCardTopScroll(parentCardEle, 0);
+  }
+  updateDeck();
+
+  showToast(`Card removed from deck`);
+};
+const onCarouselInteraction = event => {
+  if (!event.touches) return;
+
+  const touch = event.touches[0];
+  const touchX = touch.clientX - carouselCanvasEle.offsetLeft;
+  const scrollRatio = touchX / carouselCanvasEle.clientWidth;
+  const newScroll = cardLibraryListEle.clientWidth * scrollRatio;
+
+  scrollLibraryScroller(newScroll);
+};
+const handleSave = async (saveSlotIdx) => {
+  var storedDecks = storage.getStoredDecks();
+  
+  // check if a save is already up there
+  if (storedDecks[saveSlotIdx]) {
+    const confirmValue = await showConfirm(`Are you sure you want to override ${storedDecks[saveSlotIdx].deckName || 'Untitled Deck'}?`);
+
+    await awaitTime(200);
+
+    if (!confirmValue) {
+      return;
+    }
+  }
+  // save to that slot
+  storedDecks[saveSlotIdx] = {deck, deckName};
+
+  try {
+    const deckString = JSON.stringify({deck: JSON.stringify(deck), deckName});
+
+    console.log(`Saving deck for anonymous deck data pool`);
+
+    fetch(`${API_URL}/storeDeck`, {
+      method: 'POST',
+      contentType: 'text/plain',
+      body: deckString
+    });
+  } catch (e) {
+    console.error(`Failure saving deck to deckpool, ${e}`);
+  }
+
+  storage.setStoredDecks(storedDecks);
+
+  loadDeckFromLocal();
+  // hide the menu
+  overlayMenuEle.classList.add("hidden");
+
+  showToast(`Deck, ${deckName} saved to slot ${saveSlotIdx}`);
+};
+const handleLoad = async (loadSlotIdx) => {
+  var localJsonDecks = storage.getStoredDecks();
+  
+  // check if a save is already up there
+  if (!localJsonDecks[loadSlotIdx]) {
+    showToast(`Deck slot, ${loadSlotIdx} is empty`);
+    return;
+  }
+
+  if (deck.length) {
+    const confirmValue = await showConfirm("If your current deck is unsaved, it will be lost. Are you sure you want to load a new deck?");
+
+    await awaitTime(200);
+
+    if (!confirmValue) {
+      return;
+    }
+  }
+  // save to that slot
+  deck = localJsonDecks[loadSlotIdx].deck || {};
+  deckName = localJsonDecks[loadSlotIdx].deckName || "";
+
+  storage.setStoredDeck(deckName, deck);
+
+  loadDeckFromLocal();
+  // hide the menu
+  overlayMenuEle.classList.add("hidden");
+
+  // show deck
+  onShowDeck();
+
+  // scroll to the front
+  scrollLibraryScroller(0);
+
+  showToast(`Deck, ${deckName || "Untitled Deck"} loaded!`);
+};
+const updateAppSize = async (event) => {
+  // check if it's landscape or portrait
+  const isLandscape = window.innerWidth > window.innerHeight;
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
+  try {
+    if (isLandscape) {
+      await Capacitor.Plugins.StatusBar.hide();
+      await Capacitor.Plugins.NavigationBar.hide();
+    } else {
+      await Capacitor.Plugins.StatusBar.show();
+      await Capacitor.Plugins.NavigationBar.show();
+    }
+  }
+  catch (e) {
+    console.error("Capacitor failed to initialize", e);
+  }
+
+  await awaitFrame();
+
+  const doc = document.documentElement;
+
+  const currentScreenWidth = doc.style.getPropertyValue('--screen-width');
+
+  try {
+    var {insets} = await Capacitor.Plugins.SafeArea.getSafeAreaInsets();
+  } finally {
+    if (!insets) {
+      doc.style.setProperty('--safe-area-top', `0px`);
+      doc.style.setProperty('--safe-area-bottom', `0px`);
+
+      doc.style.setProperty('--screen-height', `${screenHeight}px`);
+      doc.style.setProperty('--screen-width', `${screenWidth}px`);
+  
+      doc.style.setProperty('--screen-width-raw', `${screenWidth}`);
+      
+      return;
+    }
+  }
+  
+  if (window.innerWidth > window.innerHeight) {
+    doc.style.setProperty('--safe-area-top', `0px`);
+    doc.style.setProperty('--safe-area-bottom', `0px`);
+
+    doc.style.setProperty('--screen-height', `${screenHeight}px`);
+    doc.style.setProperty('--screen-width', `${screenWidth}px`);
+
+    doc.style.setProperty('--screen-width-raw', `${screenWidth}`);
+    return;
+  }
+
+  console.log(`safe area`, JSON.stringify(insets));
+  const safeTop = insets.top ?? 0;
+  const safeBottom = insets.bottom ?? 0;
+
+  // elegantly set the result somewhere in app state
+  doc.style.setProperty('--safe-area-top', `${safeTop}px`);
+  doc.style.setProperty('--safe-area-bottom', `${safeBottom}px`);
+
+  doc.style.setProperty('--screen-width', `${screenWidth}px`);
+  doc.style.setProperty('--screen-height', `${screenHeight}px`);
+};
+const triggerReload = async () => {
+  console.log('assessing reload?')
+  // check to see if the dimensions have changed
+  const doc = document.documentElement;
+  const currentScreenWidth = doc.style.getPropertyValue('--screen-width');
+  console.log(`sw: ${currentScreenWidth} vs ${window.innerWidth}px`);
+
+  if (currentScreenWidth == `${window.innerWidth}px`) return;
+
+  // check if we're loading
+  while (document.body.className == 'loading') {
+    await awaitFrame();
+  }
+
+  await awaitFrame();
+  window.location.reload();
+};
+
 // initialize the database.
 const init = async () => {
   await initStorage();
@@ -1189,85 +1538,6 @@ const init = async () => {
 
   }
 
-  const updateAppSize = async (event) => {
-    // check if it's landscape or portrait
-    const isLandscape = window.innerWidth > window.innerHeight;
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
-    try {
-      if (isLandscape) {
-        await Capacitor.Plugins.StatusBar.hide();
-        await Capacitor.Plugins.NavigationBar.hide();
-      } else {
-        await Capacitor.Plugins.StatusBar.show();
-        await Capacitor.Plugins.NavigationBar.show();
-      }
-    }
-    catch (e) {
-      console.error("Capacitor failed to initialize", e);
-    }
-
-    await awaitFrame();
-
-    const doc = document.documentElement;
-
-    const currentScreenWidth = doc.style.getPropertyValue('--screen-width');
-
-    try {
-      var {insets} = await Capacitor.Plugins.SafeArea.getSafeAreaInsets();
-    } finally {
-      if (!insets) {
-        doc.style.setProperty('--safe-area-top', `0px`);
-        doc.style.setProperty('--safe-area-bottom', `0px`);
-
-        doc.style.setProperty('--screen-height', `${screenHeight}px`);
-        doc.style.setProperty('--screen-width', `${screenWidth}px`);
-    
-        doc.style.setProperty('--screen-width-raw', `${screenWidth}`);
-        
-        return;
-      }
-    }
-    
-    if (window.innerWidth > window.innerHeight) {
-      doc.style.setProperty('--safe-area-top', `0px`);
-      doc.style.setProperty('--safe-area-bottom', `0px`);
-
-      doc.style.setProperty('--screen-height', `${screenHeight}px`);
-      doc.style.setProperty('--screen-width', `${screenWidth}px`);
-  
-      doc.style.setProperty('--screen-width-raw', `${screenWidth}`);
-      return;
-    }
-
-    console.log(`safe area`, JSON.stringify(insets));
-    const safeTop = insets.top ?? 0;
-    const safeBottom = insets.bottom ?? 0;
-
-    // elegantly set the result somewhere in app state
-    doc.style.setProperty('--safe-area-top', `${safeTop}px`);
-    doc.style.setProperty('--safe-area-bottom', `${safeBottom}px`);
-
-    doc.style.setProperty('--screen-width', `${screenWidth}px`);
-    doc.style.setProperty('--screen-height', `${screenHeight}px`);
-  }
-  const triggerReload = async () => {
-    console.log('assessing reload?')
-    // check to see if the dimensions have changed
-    const doc = document.documentElement;
-    const currentScreenWidth = doc.style.getPropertyValue('--screen-width');
-    console.log(`sw: ${currentScreenWidth} vs ${window.innerWidth}px`);
-
-    if (currentScreenWidth == `${window.innerWidth}px`) return;
-
-    // check if we're loading
-    while (document.body.className == 'loading') {
-      await awaitFrame();
-    }
-
-    await awaitFrame();
-    window.location.reload();
-  };
   document.addEventListener("resume", triggerReload);
   window.addEventListener('resize', triggerReload)
   updateAppSize();
@@ -1324,6 +1594,13 @@ const init = async () => {
       });
     });
 
+  // initialize other modules
+  initModal();
+
+  // TODO remove all event listener initialization to here.
+  // adding event listeners here.
+
+  // get the size of things
   [...document.querySelectorAll('label.imageUpload')].map((ele) => {
     const getDataImageDimensions = (dataURL) => {
       const image = new Image();
@@ -1447,7 +1724,6 @@ const init = async () => {
       }
     });
   });
-
   [...document.querySelectorAll('label.fileUpload')].map((ele) => {
     ele.addEventListener('click', async (event) => {
       document.body.className = 'loading';
@@ -1489,34 +1765,6 @@ const init = async () => {
       }
     });
   });
-  // get the size of things
-  const onShowLibrary = async (event) => {
-    if (event) {
-      attachCharacter = undefined;
-    }
-    
-    document.body.className = '';
-
-    if (document.body.getAttribute("showing") !== 'deck') return;
-    // get the top level element
-
-    // scroll to the last library focused' card
-    document.body.setAttribute("showing", "library");
-
-    applyCarousel();
-  };
-
-  const onShowDeck = async () => {
-    if (document.body.getAttribute("showing") !== 'library') return;
-
-    setSubFilter();
-
-    // scroll to the last library focused' card
-    document.body.setAttribute("showing", "deck");
-
-    await awaitScrollStop();
-  };
-
   showLibraryButton.addEventListener('click', onShowLibrary);
   searchButton.addEventListener('click', async () => {
     // check if we're already searching
@@ -1537,168 +1785,6 @@ const init = async () => {
     searchButton.classList.add("searched");
   });
   showDeckButton.addEventListener('click', onShowDeck);
-
-  const startAttachUpgrade = async () => {
-    if (document.body.getAttribute("showing") !== 'deck') return;
-
-    const deckCurrentCardEle = document.querySelector('card.highlight');
-    if (!deckCurrentCardEle) {
-      showToast("Can't attach upgrade to that");
-      return;
-    }
-
-    const uid = deckCurrentCardEle.getAttribute("uid");
-    const cardStore = cardsStore[uid];
-    if (!cardStore) return;
-
-    const currentCardIndex = getDeckIndexOfCardEle(deckCurrentCardEle);
-
-    setDeckFocusCard(deckCurrentCardEle);
-    attachCharacter = deck[currentCardIndex];
-
-    setSubFilter('upgrade', { classes: cardStore.classes, upgradeType: cardStore.upgradeTypes});
-
-    onShowLibrary();
-  };
-  const finishAttachUpgrade = async () => {
-    if (!attachCharacter) return;
-
-    const currentCardEle = document.querySelector('card.highlight');
-    if (!currentCardEle) return;
-
-    const uid = currentCardEle.getAttribute("uid");
-    if (!uid) return;
-
-    // check if the character can use the card
-    const isAcceptable = canCharacterEquipUpgrade(attachCharacter, uid);
-    const upgradeType = getUpgradeType(cardsStore[uid]);
-    const dontAdd = !isAcceptable && !(await showConfirm(`This character already has too many, ${upgradeType}s. Do you want to still add this?`));
-
-    if (!isAcceptable) {
-      await awaitTime(200);
-    }
-    
-    hideInteractCard(dontAdd);
-    currentCardEle.classList.toggle("highlight", false);
-
-    if (dontAdd) {
-      // prompt the user saying the character can't ususally use this
-      return;
-    }
-
-    const cardEleClone = addUpgradeToCharacter(uid, deckFocusCard, attachCharacter, true);
-
-    if (!cardEleClone) return;
-    updateDeck();
-
-    showToast(`Upgrade Attached`);
-
-    scrollDeckToCard(deckFocusCard);
-    onShowDeck();
-
-    cardEleClone.classList.add("highlight");
-
-    await awaitTime(500);
-    cardEleClone.classList.remove("highlight");
-  };
-  const attachRandomRelic = async () => {
-    // get all the relics
-    const relicEles = [...cardLibraryListEle.children].filter(ele => {
-      const uid = ele.getAttribute("uid")
-      const cardStore = cardsStore[uid];
-
-      return cardStore && cardStore.types.match(/relic/i);
-    });
-
-    // get the attach character
-    const selectedCardEle = document.querySelector('card.highlight');
-    if (!selectedCardEle) return;
-
-    const randomRelicEle = relicEles[Math.floor(Math.random() * relicEles.length)];
-    if (!randomRelicEle) return;
-
-    const upgradeUId = randomRelicEle.getAttribute("uid");
-
-    const currentCardIndex = getDeckIndexOfCardEle(selectedCardEle);
-    const deckAttachCharacter = deck[currentCardIndex];
-
-    const cardEleClone = addUpgradeToCharacter(upgradeUId, selectedCardEle, deckAttachCharacter, true);
-    if (!cardEleClone) return;
-
-    updateDeck();
-
-    await awaitTime(200);
-
-    // scroll to the newly created card
-    showToast(`Random Relic Added`);
-
-    // highlight the card
-    cardEleClone.classList.add("highlight");
-
-    await awaitTime(500);
-    cardEleClone.classList.remove("highlight");
-  };
-  const addCharacter = async () => {
-    const currentCardEle = document.querySelector('card.highlight');
-    if (!currentCardEle) return;
-
-    const uid = currentCardEle.getAttribute("uid");
-
-    const cardEleClone = addCharacterToDeck({uid});
-    if (!cardEleClone) return;
-
-    updateDeck();
-    setDeckFocusCard(cardEleClone);
-    showToast(`Card added to deck`);
-    scrollDeckToCard(cardEleClone);
-    currentCardEle.classList.toggle("highlight", false);
-    await onShowDeck();
-  };
-  const removeCharacter = async () => {
-    // check if there's a selected card
-    const selectedCardEle = document.querySelector('card.highlight');
-    const parentCardEle = getParentCardEleFromAny(selectedCardEle);
-    const containerCardEle = parentCardEle.parentElement;
-
-    if (!parentCardEle) {
-      showToast('Can\'t remove that');
-      return;
-    }
-
-    const currentCardIndex = getDeckIndexOfCardEle(selectedCardEle);
-
-    if (currentCardIndex == -1) {
-      showToast('Can\'t remove that');
-      return;
-    };
-
-    const currentFocusSubIndex = parentCardEle 
-      ? [...parentCardEle.querySelectorAll("card")].indexOf(selectedCardEle) + 1
-      : parentCardEle.currentRangeScalar || 0;
-
-    if (!currentFocusSubIndex) {
-      const confirmValue = await showConfirm('Are you sure you want to remove this card, and all it\'s upgrades from this deck?');
-      await awaitTime(200);
-
-      if (!confirmValue) return;
-
-      deck.splice(currentCardIndex, 1);
-      containerCardEle.remove();
-    } else {
-      const upgradeIndex = currentFocusSubIndex - 1;
-
-      deck[currentCardIndex].upgrades.splice(upgradeIndex, 1);
-      const upgradeCardEle = [...parentCardEle.querySelectorAll("card")][upgradeIndex];
-
-      upgradeCardEle.remove();
-
-      applyDeckCardTopScroll(parentCardEle, 0);
-    }
-    updateDeck();
-
-    showToast(`Card removed from deck`);
-  };
-
   addCharacterButton.addEventListener('click', () => {
     if (document.body.getAttribute("showing") !== 'deck') return;
     attachCharacter = undefined;
@@ -2192,17 +2278,6 @@ const init = async () => {
     });
   });
 
-  const onCarouselInteraction = event => {
-    if (!event.touches) return;
-
-    const touch = event.touches[0];
-    const touchX = touch.clientX - carouselCanvasEle.offsetLeft;
-    const scrollRatio = touchX / carouselCanvasEle.clientWidth;
-    const newScroll = cardLibraryListEle.clientWidth * scrollRatio;
-
-    scrollLibraryScroller(newScroll);
-  }
-
   carouselEle.addEventListener("touchstart", onCarouselInteraction);
   carouselEle.addEventListener("touchmove", onCarouselInteraction);
 
@@ -2212,82 +2287,6 @@ const init = async () => {
     
     storage.setStoredDeck(deckName, deck);
   });
-
-  const handleSave = async (saveSlotIdx) => {
-    var storedDecks = storage.getStoredDecks();
-    
-    // check if a save is already up there
-    if (storedDecks[saveSlotIdx]) {
-      const confirmValue = await showConfirm(`Are you sure you want to override ${storedDecks[saveSlotIdx].deckName || 'Untitled Deck'}?`);
-
-      await awaitTime(200);
-
-      if (!confirmValue) {
-        return;
-      }
-    }
-    // save to that slot
-    storedDecks[saveSlotIdx] = {deck, deckName};
-
-    try {
-      const deckString = JSON.stringify({deck: JSON.stringify(deck), deckName});
-
-      console.log(`Saving deck for anonymous deck data pool`);
-
-      fetch(`${API_URL}/storeDeck`, {
-        method: 'POST',
-        contentType: 'text/plain',
-        body: deckString
-      });
-    } catch (e) {
-      console.error(`Failure saving deck to deckpool, ${e}`);
-    }
-
-    storage.setStoredDecks(storedDecks);
-
-    loadDeckFromLocal();
-    // hide the menu
-    overlayMenuEle.classList.add("hidden");
-
-    showToast(`Deck, ${deckName} saved to slot ${saveSlotIdx}`);
-  };
-
-  const handleLoad = async (loadSlotIdx) => {
-    var localJsonDecks = storage.getStoredDecks();
-    
-    // check if a save is already up there
-    if (!localJsonDecks[loadSlotIdx]) {
-      showToast(`Deck slot, ${loadSlotIdx} is empty`);
-      return;
-    }
-
-    if (deck.length) {
-      const confirmValue = await showConfirm("If your current deck is unsaved, it will be lost. Are you sure you want to load a new deck?");
-
-      await awaitTime(200);
-
-      if (!confirmValue) {
-        return;
-      }
-    }
-    // save to that slot
-    deck = localJsonDecks[loadSlotIdx].deck || {};
-    deckName = localJsonDecks[loadSlotIdx].deckName || "";
-
-    storage.setStoredDeck(deckName, deck);
-
-    loadDeckFromLocal();
-    // hide the menu
-    overlayMenuEle.classList.add("hidden");
-
-    // show deck
-    onShowDeck();
-
-    // scroll to the front
-    scrollLibraryScroller(0);
-
-    showToast(`Deck, ${deckName || "Untitled Deck"} loaded!`);
-  };
 
   [...document.querySelectorAll("menuControl.saveSlot")].forEach((saveSlotEle) => {
     // add event listeners to each to save 

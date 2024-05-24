@@ -2,6 +2,7 @@ import { awaitFrame, awaitTime } from './utils.js';
 
 var CARD_WIDTH = 250;
 var CARD_HEIGHT = 350;
+var CARD_RATIO = 367 / 269;
 
 const modalCardEle = document.querySelector('modalOverlay card');
 
@@ -13,10 +14,7 @@ const modalOverlayAcceptButtonEle = modalOverlayEle.querySelector("modalButton#m
 
 const interactCardOptions = {};
 
-const _cardEleBoundingRect = modalCardEle.getBoundingClientRect();
-CARD_WIDTH = _cardEleBoundingRect.width / 1.5;
-CARD_HEIGHT = _cardEleBoundingRect.height / 1.5;
-
+const templateCardEle = document.querySelector("templates card");
 
 const reinitializeModal = async ({acceptText, returnText} = {}) => {
   modalOverlayAcceptButtonEle.innerHTML = acceptText || "Accept";
@@ -219,3 +217,8 @@ export const showOption = async (content, options) => {
 
   return returnValue;
 }
+export const init = () => {  
+  const _cardEleBoundingRect = templateCardEle.getBoundingClientRect();
+  CARD_WIDTH = _cardEleBoundingRect.width;
+  CARD_HEIGHT = _cardEleBoundingRect.width * CARD_RATIO;
+};

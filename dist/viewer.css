@@ -82,6 +82,11 @@ body {
   -webkit-touch-callout: none !important; 
 }
 
+templates {
+  opacity: 0;
+  pointer-events: none;
+}
+
 cardScroller {
   display: block !important;
   height: 100%;
