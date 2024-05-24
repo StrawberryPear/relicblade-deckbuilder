@@ -1,4 +1,6 @@
 var database;
+// we'll maintain a close approximation of all the cards that we can.
+var localData = [];
 
 export const hasLoadedBase = () => {
   return localStorage.getItem('baseLoaded') === 'true';
@@ -47,13 +49,38 @@ export const setStoredDecks = async (decks) => {
 };
 
 export const writeCardToDatabase = async (uid, image) => {
+  // check if the card exists in localData
+  const cardIndex = localData.findIndex(card => card.uid === uid);
+
+  if (cardIndex !== -1) {
+    // we need to put the image into the database
+    const card = localData[cardIndex];
+
+    card.image = image;
+
+    const transaction = database.transaction('cards', 'readwrite');
+    const objectStore = transaction.objectStore('cards');
+
+    try {
+      await objectStore.put({uid, image, index: card.index});
+    } catch(err) {
+      console.error(err);
+    }
+    return false;
+  }
+
+  // write a new card
   const transaction = database.transaction('cards', 'readwrite');
 
   try {
+    // check if the card is in there.
     const objectStore = transaction.objectStore('cards');
     const storeId = await objectStore.add({uid, image});
 
     const result = await objectStore.get(storeId);
+
+    // write the card to localData
+    localData.push({uid, image, index: storeId});
 
     return result;
   } catch(err) {
@@ -63,15 +90,36 @@ export const writeCardToDatabase = async (uid, image) => {
 };
 
 export const removeCardFromDatabase = async (uid) => {
-  const transaction = database.transaction(['cards'], 'readwrite');
+  // remove the card from the database + local data
+  const transaction = database.transaction('cards', 'readwrite');
   const objectStore = transaction.objectStore('cards');
 
-  const index = parseInt(uid, 10);
+  const cardIndex = localData.findIndex(card => card.uid === uid);
 
-  await objectStore.delete(index);
+  if (cardIndex === -1) {
+    return false;
+  }
+
+  const card = localData[cardIndex];
+
+  try {
+    await objectStore.delete(card.index);
+
+    // remove the card from localData
+    localData.splice(cardIndex, 1);
+
+    return true;
+  } catch(err) {
+    console.error(err);
+    return false;
+  }
 };
 
 export const getAllCards = async () => {
+  return localData;
+};
+
+const getAllCardsFromDatabase = async () => {
   const baseTransaction = database.transaction('cards', 'readwrite');
   const baseObjectStore = baseTransaction.objectStore('cards');
 
@@ -109,4 +157,6 @@ export const init = async () => {
 
     setBaseLoaded(true);
   }
+
+  localData = await getAllCardsFromDatabase();
 };

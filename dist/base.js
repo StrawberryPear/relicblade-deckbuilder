@@ -1,24 +1,25 @@
 import { PDF_SCALE, PDF_CARD_WIDTH, PDF_CARD_HEIGHT, PDF_CARD_OFFSET_X, PDF_CARD_OFFSET_Y, PDF_CARD_ROW_OFFSET, CARD_SLIDE_DURATION, API_URL, SHARE_URL } from './constants.js';
 import { storage, init as initStorage } from './storage.js';
+import { getCardFromPoint, getPointerCardEle, getCenterCardEle } from './dom.js';
 
+import { awaitFrame, awaitTime, getSId, clamp, getAllCardsIdsInDeck } from './utils.js';
 import cardsStore from './store.js';
+
+import { showInteractCard, hideInteractCard, showConfirm, showInput, showOption, isModalShowing } from './dom.modal.js';
 
 var deckName = "";
 var deck = [];
 
-var libraryFocusCard;
 var deckFocusCard;
 
 var attachCharacter;
-var dragToken;
 
-var CARD_WIDTH = 250;
-var CARD_HEIGHT = 350;
+var hasRelicInLibrary = false;
 
-const cardScrollerLibraryEle = document.querySelector('cardScroller.library');
 const cardScrollerDeckEle = document.querySelector('cardScroller.deck');
-const cardLibraryListEle = cardScrollerLibraryEle.querySelector('cardList');
 const cardDeckListEle = cardScrollerDeckEle.querySelector('cardList');
+const cardScrollerLibraryEle = document.querySelector('cardScroller.library');
+const cardLibraryListEle = cardScrollerLibraryEle.querySelector('cardList');
 const cardTopControlsEle = document.querySelector('cardTopControls');
 
 const searchInputEles = document.querySelectorAll('searchContainer input');
@@ -45,78 +46,7 @@ const saveDeckEle = document.querySelector('menuControl.saveDeck');
 const loadDeckEle = document.querySelector('menuControl.loadDeck');
 const overlayMenuEle = document.querySelector('overlayMenu');
 
-const tokenOverlayEle = document.querySelector('tokenOverlay');
-const tokenContainerEle = document.querySelector('tokenContainer');
-const tokenButtonEle = document.querySelector('tokenButton');
-
-const baseTokens = document.querySelectorAll('token');
 const descriptionEle = document.querySelector('description');
-
-const modalCardEle = document.querySelector('modalOverlay card');
-
-const modalEle = document.querySelector('modal');
-const modalOverlayEle = document.querySelector("modalOverlay");
-const modalOverlayTextEle = modalOverlayEle.querySelector("modalText");
-const modalOverlayReturnButtonEle = modalOverlayEle.querySelector("modalButton#modalReturn");
-const modalOverlayAcceptButtonEle = modalOverlayEle.querySelector("modalButton#modalAccept");
-
-const getSId = (() => {
-  var uid = 0;
-
-  return () => {
-    return uid++;
-  }
-})();
-
-let hasRelicInLibrary = false;
-
-const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-
-const getDataImageDimensions = (dataURL) => {
-  const image = new Image();
-  image.src = dataURL;
-
-  return new Promise((resolve, reject) => {
-    image.onload = () => {
-      resolve([image.width, image.height]);
-    }
-  });
-}
-
-const resizeDataImage = (dataURL, width, height) => {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-
-  canvas.width = width;
-  canvas.height = height;
-
-  const image = new Image();
-  image.src = dataURL;
-
-  context.drawImage(image, 0, 0, width, height);
-
-  return canvas.toDataURL('image/jpeg', 0.94);
-};
-
-const awaitFrame = () => new Promise(resolve => {
-  window.requestAnimationFrame(resolve);
-});
-
-const awaitTime = (time) => new Promise(resolve => {
-  setTimeout(resolve, time);
-});
-
-const getAllCardsIdsInDeck = (deck) => {
-  return deck
-    .map(card => {
-      const upgrades = card.upgrades || [];
-
-      return [{uid: card.uid}, ...upgrades];
-    })
-    .flat()
-    .map(card => card.uid);
-};
-
 
 const updateDeck = () => {
   // work out total points in deck :D
@@ -137,7 +67,7 @@ const getCurrentCardScrollerEle = () => {
 }
 
 const scrollDeckScroller = async (left) => {
-  cardScrollerDeckEle.scrollTo({left, top: 0, behavior: 'smooth'});
+  cardScrollerDeckEle.scrollTo({left, top: 0, behavior: 'instant'});
 
   await awaitFrame();
 
@@ -158,15 +88,14 @@ const scrollLibraryScroller = async (left) => {
   if (document.body.getAttribute("displayType") == "grid") {
     left = Math.max(left, window.innerWidth * 0.4);
   }
-  cardScrollerLibraryEle.scrollTo({left, top: 0, behavior: 'smooth'});
+  cardScrollerLibraryEle.scrollTo({left, top: 0, behavior: 'instant'});
 
   applyCarousel();
 
   await awaitFrame();
 
   await awaitScrollStop();
-}
-
+};
 
 const setDeckFocusCard = (newDeckFocusCard) => {
   // check if they're different
@@ -184,251 +113,6 @@ const getParentCardEleFromAny = (ele) => {
   return ele;
 };
 
-const getCardFromPoint = (x, y, {canBePurchase, canBeChild} = {}) => {
-  const pointEles = document.elementsFromPoint(x, y);
-  const isLibrary = document.body.getAttribute("showing") == "library";
-
-  const cardEles = pointEles
-    // get the card that's in the right bucket, ie library when viewing library, deck when viewing deck
-    .filter(ele => ele.parentElement && ["CARD", "PURCHASE", "IMPORT"].includes(ele.tagName))
-    // sort by the closest to the top
-    .sort((a, b) => {
-      const aRect = a.getBoundingClientRect();
-      const bRect = b.getBoundingClientRect();
-
-      return aRect.top - bRect.top;
-    })
-    .map(ele => {
-      if (canBeChild) return ele;
-      if (ele.parentElement.tagName == "CARD") {
-        return ele.parentElement;
-      }
-      return ele;
-    })
-    .filter(ele => {
-      const closestCardList = ele.closest("cardList");
-
-      if (!closestCardList) return false;
-
-      return closestCardList.isSameNode(cardLibraryListEle) == isLibrary;
-    });
-    const cardEle = cardEles[0];
-
-  if (cardEle?.tagName == 'CARD' || (canBePurchase && ["PURCHASE", "IMPORT"].includes(cardEle?.tagName))) {
-    return cardEle;
-  }
-}
-
-const getPointerCardEle = (touch, options) => {
-  const x = touch.pageX;
-  const y = touch.pageY;
-
-  return getCardFromPoint(x, y, options);
-};
-
-const getCenterCardEle = (options) => {
-  return getCardFromPoint(window.innerWidth * 0.5, window.innerHeight * 0.5, options);
-};
-
-const reinitializeModal = async ({acceptText, returnText} = {}) => {
-  modalOverlayAcceptButtonEle.innerHTML = acceptText || "Accept";
-  modalOverlayReturnButtonEle.innerHTML = returnText || "Return";
-
-  // flash the modal
-  modalEle.style.setProperty("opacity", "0");
-
-  const timeStart = Date.now();
-
-  const fadeInDuration = 400;
-
-  while (Date.now() - timeStart < fadeInDuration) {
-    const delta = (Date.now() - timeStart) / fadeInDuration;
-
-    modalEle.style.setProperty("opacity", `${delta}`);
-
-    await awaitFrame();
-  }
-
-  modalEle.style.setProperty("opacity", "1");
-};
-const interactCardOptions = {};
-const showInteractCard = async (cardEle, options = {}) => {
-  // we don't clone the card element, we have an element sitting around just for this
-  // we do move it to be exactly where the card element would be.
-  
-  const currentCardBounds = cardEle.getBoundingClientRect();
-
-  const cx = currentCardBounds.left + currentCardBounds.width * 0.5;
-  const cy = currentCardBounds.top + currentCardBounds.height * 0.5;
-
-  const cw = currentCardBounds.width;
-  const ch = currentCardBounds.height;
-
-  const csx = cw / CARD_WIDTH;
-  const csy = ch / CARD_HEIGHT;
-
-  interactCardOptions.cx = cx;
-  interactCardOptions.cy = cy;
-  interactCardOptions.csx = csx;
-  interactCardOptions.csy = csy;
-
-  modalCardEle.style.setProperty("transition", "none");
-  modalCardEle.style.setProperty("transform", `translate(-50%, -50%) translate(${cx}px, ${cy}px) scale(${csx}, ${csy})`);
-  
-  modalCardEle.style.setProperty("opacity", "0");
-  modalCardEle.style.setProperty("background-image", cardEle.style.getPropertyValue("background-image"));
-
-  await awaitFrame();
-
-  modalCardEle.style.setProperty("opacity", "1");
-  modalCardEle.style.setProperty("transition", `opacity 200ms, transform 300ms ease-in-out`);
-
-  await awaitFrame();
-
-  modalCardEle.style.setProperty("transform", ``);
-};
-const hideInteractCard = async (doReturn) => {
-  if (doReturn) {
-    modalCardEle.style.setProperty("transition", `opacity 200ms 100ms, transform 300ms ease-in-out`);
-    modalCardEle.style.setProperty("transform", `translate(-50%, -50%) translate(${interactCardOptions.cx}px, ${interactCardOptions.cy}px) scale(${interactCardOptions.csx}, ${interactCardOptions.csy})`);
-  }
-  modalCardEle.style.setProperty("opacity", "0");
-}
-const showConfirm = async (content, options = {}) => {
-  reinitializeModal(options);
-  // hide the background 
-  modalOverlayEle.classList.remove("hidden");
-
-  // change the text, return true if they hit true/false false. 
-  modalOverlayTextEle.innerHTML = content;
-
-  const returnValue = await new Promise((resolve, reject) => {
-    const onFinished = (event) => {
-      // remove the button binds.
-      // unbind the buttons.
-      const id = event.target.getAttribute("id");
-
-      modalOverlayAcceptButtonEle.removeEventListener("click", onFinished);
-      modalOverlayReturnButtonEle.removeEventListener("click", onFinished);
-
-      resolve(id == "modalAccept");
-    };
-  
-    modalOverlayAcceptButtonEle.addEventListener("click", onFinished);
-    modalOverlayReturnButtonEle.addEventListener("click", onFinished);
-  });
-
-  // hide the overlay
-  modalOverlayEle.classList.add("hidden");
-
-  return returnValue;
-};
-const showInput = async (content, options = {}) => {
-  reinitializeModal(options);
-  // hide the background 
-  modalOverlayEle.classList.remove("hidden");
-
-  // change the text, return true if they hit true/false false. 
-  modalOverlayTextEle.innerHTML = content;
-
-  // attach events to the text input
-
-  const input = document.createElement("input");
-  input.type = "text";
-  input.id = "modalInput";
-
-  input.addEventListener("keyup", (event) => {
-    if (event.keyCode === 13) {
-      modalOverlayAcceptButtonEle.click();
-
-      return;
-    }
-  });
-
-  modalOverlayTextEle.append(input);
-
-  if (options.dataList) {
-    const datalistEle = document.createElement("datalist");
-    datalistEle.id = "modalDatalist";
-
-    for (const data of options.dataList) {
-      const optionEle = document.createElement("option");
-      optionEle.value = data;
-
-      datalistEle.append(optionEle);
-    }
-
-    input.setAttribute("list", "modalDatalist");
-    modalOverlayTextEle.append(datalistEle);
-  }
-
-  input.focus();
-
-  const returnValue = await new Promise((resolve, reject) => {
-    const onFinished = (event) => {
-      // remove the button binds.
-      // unbind the buttons.
-      const id = event.target.getAttribute("id");
-
-      modalOverlayAcceptButtonEle.removeEventListener("click", onFinished);
-      modalOverlayReturnButtonEle.removeEventListener("click", onFinished);
-
-      resolve(id == "modalAccept" && document.getElementById("modalInput").value);
-    };
-  
-    modalOverlayAcceptButtonEle.addEventListener("click", onFinished);
-    modalOverlayReturnButtonEle.addEventListener("click", onFinished);
-  });
-
-  // hide the overlay
-  modalOverlayEle.classList.add("hidden");
-
-  return returnValue;
-};
-const showOption = async (content, options) => {
-  reinitializeModal(options);
-  // hide the background 
-  modalOverlayEle.classList.remove("hidden");
-  modalOverlayEle.classList.add("option");
-
-  // change the text, return true if they hit true/false false. 
-  modalOverlayTextEle.innerHTML = content;
-
-  // attach events to the text input
-
-  const returnValue = await new Promise((resolve, reject) => {
-    const onFinished = (event) => {
-      // remove the button binds.
-      // unbind the buttons.
-      const id = event.target.getAttribute("id");
-
-      modalOverlayReturnButtonEle.removeEventListener("click", onFinished);
-
-      resolve(id == "modalReturn" ? false : event.target.innerHTML);
-    };
-  
-    for (const option of options) {
-      const optionButton = document.createElement("modalButton");
-      optionButton.innerHTML = option;
-      optionButton.classList.add("fullwidth");
-
-      optionButton.addEventListener("click", onFinished);
-  
-      modalOverlayTextEle.append(optionButton);
-    }
-    
-    modalOverlayReturnButtonEle.addEventListener("click", onFinished);
-  });
-
-  // hide the overlay
-  modalOverlayEle.classList.add("hidden");
-
-  awaitTime(350).then(() => {
-    modalOverlayEle.classList.remove("option");
-  });
-
-  return returnValue;
-}
 const showToast = (() => {
   var currentToastTimeout;
 
@@ -481,7 +165,7 @@ const getDeckUpgradeRangeScalar = (containerCardEle, _scrollY) => {
   const rangeScalar = (-upgradeOffsetY) / cardHeight;
 
   return rangeScalar;
-}
+};
 
 // initially as you scroll down, only the container moves down
 // then after that hits the bottom, the next card starts to go towards the bototm
@@ -564,7 +248,7 @@ const applyDeckCardTopScroll = (containerCardEle, rangeScalar, setScalar = true)
       continue;
     }
   }
-}
+};
 
 const getDeckIndexOfCardEle = (cardEle) => {
   const cardWrapperEle = cardEle.closest("cardDeckWrapper");
@@ -572,7 +256,7 @@ const getDeckIndexOfCardEle = (cardEle) => {
 
   return [...cardDeckListEle.children].filter(ele => ele.tagName == "CARDDECKWRAPPER").indexOf(cardWrapperEle);
 
-}
+};
 
 const addCharacterToDeck = (data, updateDeckStore = true) => {
   const uid = data.uid;
@@ -1352,9 +1036,17 @@ const loadShareDeckFromCode = async (code) => {
     try {
       const result = await storage.writeCardToDatabase(uid, image);
 
+      if (!result) {
+        return false;
+      }
+
       loadCard(result);
+
+      return true;
     } catch (e) {
       showToast(`Failed to add card ${uid}`);
+      
+      return false;
     }
   };
 /* #END FILTER */
@@ -1429,6 +1121,8 @@ const loadShareDeckFromCode = async (code) => {
 const init = async () => {
   await initStorage();
 
+  document.body.setAttribute("displayType", storage.getStoredDisplayType() || "");
+
   // constantly measure the scrolling
   document.addEventListener("contextmenu", (event) => {
     event.preventDefault();
@@ -1460,7 +1154,7 @@ const init = async () => {
         return;
       }
       
-      if (!modalOverlayEle.classList.contains("hidden")) {
+      if (isModalShowing()) {
         // no idea what to do...
         return;
       }
@@ -1578,12 +1272,6 @@ const init = async () => {
   window.addEventListener('resize', triggerReload)
   updateAppSize();
 
-  await awaitFrame();
-  await awaitFrame();
-  await awaitFrame();
-  await awaitFrame();
-  await awaitFrame();
-
   await storage.init();
   
   const cards = await storage.getAllCards();
@@ -1592,28 +1280,76 @@ const init = async () => {
     loadCard(card);
   }
 
-  awaitTime(300)
-    .then(() => {
+  // check if we have an id in our query params
+  const urlParams = new URLSearchParams(window.location.search);
+
+  if (urlParams.has("id")) {
+    try {
+      await loadShareDeckFromCode(urlParams.get("id"));
+    } catch (e) {
       loadDeckFromLocal();
-      
-      document.body.setAttribute("displayType", storage.getStoredDisplayType() || "");
+    }
+
+    // remove the id params
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else {
+    loadDeckFromLocal();
+  }
+
+  const deckCardContainerEles = [...cardScrollerDeckEle.querySelectorAll("cardDeckWrapper")];
+  const deckCardOffsetSum = deckCardContainerEles.map(ele => ele.offsetLeft).reduce((s, v) => s + v, 0);
+  const deckCardCenter = deckCardOffsetSum / (deckCardContainerEles.length || 1);
+  const halfScreenWidth = window.innerWidth * 0.5;
+
+  scrollLibraryScroller(0)
+  scrollDeckScroller(deckCardCenter - halfScreenWidth);
+
+  applyFilters();
+  applyCarousel();
+
+  document.body.className = '';
+
+  Object.keys(filters)
+    .forEach(key => {
+      const object = filters[key];
+      object.ele.addEventListener('click', () => {
+        const startsInactive = object.ele.classList.contains('inactive');
+        object.ele.classList.toggle('inactive');
     
-      // now lets center the deck
-      const deckCardContainerEles = [...cardScrollerDeckEle.querySelectorAll("cardDeckWrapper")];
-      const deckCardOffsetSum = deckCardContainerEles.map(ele => ele.offsetLeft).reduce((s, v) => s + v, 0);
-      const deckCardCenter = deckCardOffsetSum / (deckCardContainerEles.length || 1);
-      const halfScreenWidth = window.innerWidth * 0.5;
-
-      scrollDeckScroller(deckCardCenter - halfScreenWidth);
-      scrollLibraryScroller(0)
-
-      applyFilters();
-      applyCarousel();
-
-      document.body.className = '';
+        const isActive = !!startsInactive;
+        object.active = isActive;
+        
+        applyFilters();
+        applyCarousel();
+      });
     });
 
   [...document.querySelectorAll('label.imageUpload')].map((ele) => {
+    const getDataImageDimensions = (dataURL) => {
+      const image = new Image();
+      image.src = dataURL;
+    
+      return new Promise((resolve, reject) => {
+        image.onload = () => {
+          resolve([image.width, image.height]);
+        }
+      });
+    };
+    const resizeDataImage = (dataURL, width, height) => {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+    
+      canvas.width = width;
+      canvas.height = height;
+    
+      const image = new Image();
+      image.src = dataURL;
+    
+      context.drawImage(image, 0, 0, width, height);
+    
+      return canvas.toDataURL('image/jpeg', 0.94);
+    };
+    
     ele.addEventListener('click', async (event) => {
       document.body.className = 'loading';
       overlayMenuEle.className = 'hidden';
@@ -1753,46 +1489,7 @@ const init = async () => {
       }
     });
   });
-
-  // check if we have an id in our query params
-  const urlParams = new URLSearchParams(window.location.search);
-
-  if (urlParams.has("id")) {
-    try {
-      await loadShareDeckFromCode(urlParams.get("id"));
-    } catch (e) {
-      loadDeckFromLocal();
-    }
-
-    // remove the id params
-    window.history.replaceState({}, document.title, window.location.pathname);
-  } else {
-    loadDeckFromLocal();
-  }
-
-  Object.keys(filters)
-    .forEach(key => {
-      const object = filters[key];
-      object.ele.addEventListener('click', () => {
-        const startsInactive = object.ele.classList.contains('inactive');
-        object.ele.classList.toggle('inactive');
-    
-        const isActive = !!startsInactive;
-        object.active = isActive;
-        
-        applyFilters();
-        applyCarousel();
-      });
-    });
-
-  applyFilters();
-  applyCarousel();
-
   // get the size of things
-  const _cardEleBoundingRect = modalCardEle.getBoundingClientRect();
-  CARD_WIDTH = _cardEleBoundingRect.width / 1.5;
-  CARD_HEIGHT = _cardEleBoundingRect.height / 1.5;
-
   const onShowLibrary = async (event) => {
     if (event) {
       attachCharacter = undefined;
@@ -2130,7 +1827,7 @@ const init = async () => {
     // check if we need to upload any cards.
     // show the share link using the share navigator, otherwise fallback to a modal
 
-    const shareUrl = `${SHARE_URL}/decks?id=${shareCode}`;
+    const shareUrl = `${SHARE_URL}/decks/index.html?id=${shareCode}`;
 
     const shareData = {
       title: `Relicblade Deck - ${deckName || "Untitled"}`,
@@ -2206,7 +1903,7 @@ const init = async () => {
   }, {passive: false});
   cardScrollerDeckEle.addEventListener("touchmove", event => {
     // check if a modal is active
-    if (!modalOverlayEle.classList.contains("hidden")) return;
+    if (isModalShowing()) return;
 
     // check if we're in the deck
     if (document.body.getAttribute("showing") != "deck") return;
@@ -2642,144 +2339,6 @@ const init = async () => {
   
   returnEle.addEventListener("click", event => {
     overlayMenuEle.classList.add("hidden");
-  });
-
-  const toggleTokenOverlay = (isShown) => {
-    tokenOverlayEle.classList.toggle("hidden", !isShown);
-    tokenButtonEle.classList.toggle("active", isShown);
-
-    // if we're opening, make sure the tokens aren't hidden
-    if (isShown) {
-      [...tokenOverlayEle.querySelectorAll("token")]
-        .forEach(tokenEle => {
-          const tokenOpacity = tokenEle.style.getPropertyValue("opacity");
-
-          if (!tokenOpacity) {
-            tokenEle.style.setProperty("opacity", "");
-          }
-        });
-    }
-  }
-  // token handling
-  tokenButtonEle.addEventListener("click", async (event) => {
-    const isTokenOverlayHidden = tokenOverlayEle.classList.contains("hidden");
-
-    toggleTokenOverlay(isTokenOverlayHidden);
-  });
-
-  tokenOverlayEle.addEventListener("click", (event) => {
-    if (event.target !== tokenOverlayEle) return;
-
-    toggleTokenOverlay(false);
-  });
-
-  // on each token, enable them to be click and dragged kinda stuff
-
-  const onTokenTouchStart = (event) => {
-    // check if we're in the overlay
-    var targetEle = event.target;
-
-    if (targetEle.closest("tokenOverlay")) {
-      toggleTokenOverlay(false);
-
-      // spawn a new token
-      const newTokenEle = document.createElement("token");
-      const tokenType = targetEle.getAttribute("type");
-
-      newTokenEle.setAttribute("type", tokenType);
-
-      // add the token to the token container
-
-      // add events to it
-      newTokenEle.addEventListener("touchstart", onTokenTouchStart);
-      newTokenEle.addEventListener("touchmove", onTokenTouchMove);
-      newTokenEle.addEventListener("touchend", onTokenTouchEnd);
-
-      targetEle = newTokenEle;
-    }
-    // remove the token from it's parent
-    targetEle.remove();
-
-    tokenContainerEle.appendChild(targetEle);
-
-    dragToken = targetEle;
-
-    // do a dragMove with this stuff.
-
-    dragToken.touchStart = Date.now();
-
-    onTokenTouchMove({...event, touches: [{ clientX: event.touches[0].clientX, clientY: event.touches[0].clientY}]});
-
-    // make the tokenButton show bad stuff
-    tokenButtonEle.classList.toggle("active", true);
-
-    event.preventDefault();
-    return false;
-  };
-
-  const onTokenTouchMove = (event) => {
-    // move to token to this x, y coordinate
-    if (!dragToken) return;
-
-    const touch = event.touches[0];
-
-    dragToken.style.setProperty("transform", `translate(-50%, -50%) translate(${touch.clientX}px, ${touch.clientY}px)`);
-
-    // todo: check if we're ontop of a card?
-
-    event.preventDefault && event.preventDefault();
-  };
-
-  const onTokenTouchEnd = async (event) => {
-    tokenButtonEle.classList.toggle("active", false);
-    // if we're over a card, pop it there
-    if (!dragToken) return;
-
-    // get the x and y coordinate
-    const touch = event.changedTouches[0];
-    const x = touch.clientX;
-    const y = touch.clientY;
-
-    var cardEle = getCardFromPoint(x, y, {canBePurchase: false, canBeChild: true});
-
-    // check if the card is a child
-    if (cardEle && cardEle.parentElement.tagName == "CARD") {
-      cardEle = undefined;
-    }
-
-    if (cardEle) {
-      // add it to the card ele, and adjust position
-      const cardBounds = cardEle.getBoundingClientRect();
-
-      const tokenX = x - cardBounds.left;
-      const tokenY = y - cardBounds.top;
-
-      // remove the token from it's parent
-      dragToken.remove();
-
-      // add it to the card
-      cardEle.appendChild(dragToken);
-
-      dragToken.style.setProperty("transform", `translate(-50%, -50%) translate(${tokenX}px, ${tokenY}px)`);
-
-      return;
-    }
-
-    const destroyToken = dragToken;
-    
-    dragToken = undefined;
-
-    destroyToken.classList.add("destroy");
-
-    await awaitTime(500);
-
-    destroyToken.remove();
-  };
-
-  [...tokenOverlayEle.querySelectorAll("token")].forEach(tokenEle => {
-    tokenEle.addEventListener("touchstart", onTokenTouchStart);
-    tokenEle.addEventListener("touchmove", onTokenTouchMove);
-    tokenEle.addEventListener("touchend", onTokenTouchEnd);
   });
 };
 

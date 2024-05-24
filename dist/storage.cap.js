@@ -2,7 +2,6 @@ const Filesystem = Capacitor.Plugins.Filesystem;
 const directory = 'DOCUMENTS';
 const encoding = 'utf8';
 
-
 const FILE_SYSTEM_PREFRENCES_PATH = `relicblade-preferences.json`;
 const FILE_SYSTEM_DATA_PATH = `relicblade-data.json`;
 
@@ -125,16 +124,20 @@ export const writeCardToDatabase = async (uid, image) => {
 
   if (cardIndex != -1) {
     localData[cardIndex].image = image;
-  } else {
-    localData.push({ uid, image });
+
+    queueWriteLocalData();
+
+    return false;
   }
+
+  localData.push({ uid, image });
 
   queueWriteLocalData();
 
   return { uid, image };
 };
 
-export const writeLocalDataToDatabase = async () => {
+const writeLocalDataToDatabase = async () => {
   console.log('Attempting write local data to file');
   try {
     await Filesystem.writeFile({
