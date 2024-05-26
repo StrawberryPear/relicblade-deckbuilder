@@ -2,6 +2,8 @@ import { PDF_SCALE, PDF_CARD_WIDTH, PDF_CARD_HEIGHT, PDF_CARD_OFFSET_X, PDF_CARD
 import { storage, init as initStorage } from './storage.js';
 import { getCardFromPoint, getPointerCardEle, getCenterCardEle } from './dom.js';
 
+import { initTokens } from './tokens.js';
+
 import { awaitFrame, awaitTime, getSId, clamp, getAllCardsIdsInDeck } from './utils.js';
 import cardsStore from './store.js';
 
@@ -746,8 +748,26 @@ const loadShareDeckFromCode = async (code) => {
     showToast(`${cardsAdded} cards added to library`);
   };
 
+  const addMissingCardFromStore = (cardStoreData) => {
+    const cardEle = document.createElement('card');
+
+    cardEle.setAttribute('uid', cardStoreData.uid);
+    cardEle.setAttribute('name', cardStoreData.name);
+
+    cardEle.setAttribute('not-owned', true);
+
+    cardLibraryListEle.append(cardEle);
+  }
+  
   const loadCard = (card) => {
     if (!card) return;
+
+    // check if the card is already in the library
+    const existingCardEle = cardLibraryListEle.querySelector(`card[uid="${card.uid}"]`);
+
+    if (existingCardEle) {
+      existingCardEle.remove();
+    }
 
     const cardEle = document.createElement('card');
 
@@ -1062,10 +1082,15 @@ const loadShareDeckFromCode = async (code) => {
     const scrollPadding = cardScrollerLibraryEle.clientWidth * 0.5;
     const scrollScalar = (cardScrollerLibraryEle.scrollLeft) / (cardLibraryListEle.clientWidth - scrollPadding * 2);
 
-    const libraryCardEles = [...cardLibraryListEle.children].filter(e => !e.classList.contains('inactive'));
+    const rawLibraryCardEles = [...cardLibraryListEle.children];
+    const libraryCardEles = rawLibraryCardEles.filter(e => !e.classList.contains('inactive'));
+    const notInLibraryCardEles = rawLibraryCardEles.filter(e => e.getAttribute('not-owned'));
     const count = libraryCardEles.length;
 
+    const blueLineCount = count - notInLibraryCardEles.length;
+
     const cardDrawWidth = (PDF_CARD_WIDTH / PDF_CARD_HEIGHT) * carouselCanvasEle.height;
+
     const drawWidth = carouselCanvasEle.width - cardDrawWidth;
     const drawOffsetX = cardDrawWidth * 0.5;
 
@@ -1085,6 +1110,8 @@ const loadShareDeckFromCode = async (code) => {
 
     // render lines at each width;
     for (var i = 0; i < count; i++) {
+      context.strokeStyle = i < blueLineCount ? `#2b8c9abb` : `#2b8c9a44`;
+
       const x = drawOffsetX + intervalWidth * (i + 1);
 
       context.beginPath();
@@ -1210,6 +1237,8 @@ const attachRandomRelic = async () => {
   const relicEles = [...cardLibraryListEle.children].filter(ele => {
     const uid = ele.getAttribute("uid")
     const cardStore = cardsStore[uid];
+
+    if (ele.getAttribute("not-owned")) return false;
 
     return cardStore && cardStore.types.match(/relic/i);
   });
@@ -1536,11 +1565,13 @@ const init = async () => {
     });
   } catch (e) {
 
-  }
+  };
 
   document.addEventListener("resume", triggerReload);
   window.addEventListener('resize', triggerReload)
   updateAppSize();
+
+  // load cards from cardstore
 
   await storage.init();
   
@@ -1548,6 +1579,24 @@ const init = async () => {
 
   for (const card of cards) {
     loadCard(card);
+  }
+
+  const cardStoreKeys = Object.keys(cardsStore);
+
+  for (const key of cardStoreKeys) {
+    const cardStoreData = cardsStore[key];
+    const cardStoreUid = cardStoreData.uid;
+
+    if (cards.some(card => card.uid == cardStoreUid)) continue;
+    if (cardStoreData.types.match(/purchase/i)) continue;
+    if (cardStoreData.name == 'delete') continue;
+
+    if (cardStoreData.keywords.includes("legends")) continue;
+    if (cardStoreData.types.includes("campaign")) continue;
+    if (cardStoreData.keywords.includes("monster")) continue;
+    if (cardStoreData.keywords.includes("patreon")) continue;
+
+    addMissingCardFromStore(cardStoreData);
   }
 
   // check if we have an id in our query params
@@ -1596,6 +1645,7 @@ const init = async () => {
 
   // initialize other modules
   initModal();
+  initTokens();
 
   // TODO remove all event listener initialization to here.
   // adding event listeners here.
@@ -2096,7 +2146,15 @@ const init = async () => {
 
       if (!selectedCardEle) return;
       if (selectedCardEle.tagName != "CARD") return;
-      
+
+      // check if it's owned?
+      if (selectedCardEle.getAttribute("not-owned")) {
+        // prompt the user to add it.
+        await showOption(`${selectedCardEle.getAttribute("name")} is not in your library, you can add it via 'Add cards from PDF' in the menu.`,[]);
+
+        return;
+      }
+
       // add selected to the card
       awaitTime(100).then(() => {
         selectedCardEle.classList.toggle("highlight", true);

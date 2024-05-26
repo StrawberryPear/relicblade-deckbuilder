@@ -138,7 +138,7 @@ random {
   background-size: 100%;
   background-repeat: no-repeat;
   background-position: center top;
-  background-color: #000;
+  background-image: linear-gradient(0deg, black, #030303);
   border-radius: 3.8%;
   margin: 0 min(2vw, 20px);
   scroll-snap-align: center;
@@ -667,7 +667,7 @@ label input {
 menuControl,
 .menuControl {
   display: block;
-  font-size: min(5vh, 24px);
+  font-size: min(5vh, 18px);
   font-family: 'tradeWinds';
   margin-top: min(4vh, 24px);
   text-decoration: underline;
@@ -1330,4 +1330,23 @@ modalOverlay card::before {
 
 a {
     color: #59d4e5;
+}
+
+card[not-owned]::after {
+    content: attr(name) " not in library";
+    font-family: 'tradeWinds';
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    padding: 20px;
+    text-align: center;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-size: calc(var(--card-width) * 0.1);
+}
+body[displaytype="grid"] card[not-owned]::after {
+    font-size: calc(var(--card-width-grid) * 0.1);
+}
+card[not-owned] {
+  /*pointer-events: none;*/
 }
