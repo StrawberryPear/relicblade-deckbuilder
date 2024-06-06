@@ -36,6 +36,7 @@
     color: black;
     height: 38px;
     filter: drop-shadow(2px 4px 6px black);
+    flex-shrink: 0;
   }
   call edit {
     filter: brightness(0);
@@ -206,15 +207,16 @@
 
   description {
     font-family: 'tradeWinds';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -35%);
+    /* position: absolute; */
+    /* top: 50%; */
+    /* left: 50%; */
+    /* transform: translate(-50%, -35%); */
     transition: transform 0.3s;
-    font-size: 1.35rem;
-    width: 50%;
+    font-size: min(5vh, 1.35rem);
     line-height: 100%;
     text-align: center;
+    display: inline;
+    padding: 0px 6px;
   }
   body[showing="deck"] description {
     transform: translate(-50%, calc(-50% - 25vh));

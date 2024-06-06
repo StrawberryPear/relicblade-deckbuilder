@@ -244,7 +244,7 @@ call {
   display: flex;
   position: relative;
   margin-left: 4px;
-  font-size: 20px;
+  font-size: min(4vw, 1.35rem);
   font-family: tradeWinds;
   flex-wrap: nowrap;
   flex-direction: row;
@@ -255,8 +255,8 @@ call {
 hamContainer {
   display: inline-block;
   position: relative;
-  width: auto;
   height: 100%;
+  flex-shrink: 0;
 }
 ham {
   display: inline-block;
@@ -960,9 +960,9 @@ input#title {
   left: 0px;
   width: 100%;
   height: 100%;
-  font-size: 20px;
-  font-family: tradeWinds;
+  font-family: 'tradeWinds';
   color: #fff;
+  font-size: min(4vw, 1.35rem);
 }
 
 deckTitleContainer {
@@ -973,7 +973,12 @@ deckTitleContainer {
 deckTitleMirror {
   opacity: 0;
   pointer-events: none;
-  padding-right: 8px;
+  font-family: 'tradeWinds';
+  padding-right: 4px;
+}
+deckTitlePoints {
+  display: inline-block;
+  padding-top: 2px;
 }
 
 edit {
@@ -1205,7 +1210,6 @@ token[type="poison"] {
 token[type="shieldwall"] {
   background-image: url(./assets/token/shieldwall.png);
 }
-
 
 @media (orientation: portrait) {
   cardButtons.library_ {
