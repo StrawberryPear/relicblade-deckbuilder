@@ -100,7 +100,7 @@
     position:fixed;
     width: 156px;
     height: 48px;
-    bottom: calc(64px);
+    bottom: calc(64px + var(--safe-area-bottom));
     left: calc(50% + var(--card-width-deck) / 2);
   }
   cardButton.addUpgrade {
@@ -115,7 +115,7 @@
     position: fixed;
     width: 40%;
     right: 2vh;
-    bottom: 2vh;
+    bottom: calc(2vh + var(--safe-area-bottom));
     padding: 18px;
   }
   modal modalButtons {

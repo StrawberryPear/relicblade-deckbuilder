@@ -1470,12 +1470,14 @@ const updateAppSize = async (event) => {
   const safeTop = insets.top ?? 0;
   const safeBottom = insets.bottom ?? 0;
 
+  const safeAreaHeight = screenHeight - safeTop - safeBottom;
+
   // elegantly set the result somewhere in app state
   doc.style.setProperty('--safe-area-top', `${safeTop}px`);
   doc.style.setProperty('--safe-area-bottom', `${safeBottom}px`);
 
   doc.style.setProperty('--screen-width', `${screenWidth}px`);
-  doc.style.setProperty('--screen-height', `${screenHeight}px`);
+  doc.style.setProperty('--screen-height', `${safeAreaHeight}px`);
 };
 const triggerReload = async () => {
   console.log('assessing reload?')

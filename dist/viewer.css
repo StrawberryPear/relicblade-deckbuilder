@@ -63,6 +63,21 @@ body {
   overscroll-behavior: none;
 }
 
+html {
+  background:#000;
+  height: 100%;
+}
+html::before {
+  position: fixed;
+  content: '';
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: var(--safe-area-top);
+  background: #000;
+  z-index: 100;
+}
+
 body {
   margin: 0;
   height: 100%;
@@ -71,9 +86,11 @@ body {
   font-family: "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #fff;
   box-sizing: border-box;
-  position: fixed;
+  position: absolute;
   height: calc(var(--screen-height));
   max-height: calc(var(--screen-height));
+  top: var(--safe-area-top);
+  overflow:hidden;
 }
 
 * {
@@ -978,7 +995,9 @@ deckTitleMirror {
 }
 deckTitlePoints {
   display: inline-block;
-  padding-top: 2px;
+  padding-top: 6px;
+  padding-left: 4px;
+  vertical-align: middle;
 }
 
 edit {
@@ -1155,7 +1174,7 @@ tokenContainer {
 
 tokenExpander {
   position: fixed;
-  bottom: min(42px, 6vh);
+  bottom: calc(min(42px, 6vh) + var(--safe-area-bottom));
   left: calc(0.5 * var(--screen-width));
   width: 0px;
   height: 0px;
@@ -1217,7 +1236,7 @@ token[type="shieldwall"] {
   }
   tokenButton {
       position: fixed;
-      bottom: 36px;
+      bottom: calc(36px + var(--safe-area-bottom));
       left: calc(0.5 * var(--screen-width));
       width: 64px;
       height: 64px;
