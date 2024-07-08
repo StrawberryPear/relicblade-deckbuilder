@@ -75,6 +75,9 @@
   body[displayType="grid"] cardScroller.library cardlist card {
     margin: 0 1px;
   }
+  body[showing="deck"] cardScroller.deck cardlist {
+    padding-top: max(0px, calc(var(--card-height) * 1.65 - var(--screen-height)));
+  }
 
   cardButtons {
     position: absolute;
@@ -83,6 +86,7 @@
     width: calc(var(--screen-width) * 1.025);
     left: calc(var(--screen-width) * -0.0125);
   }
+
   body[showing="deck"] cardButtons {
     bottom: -6px;
   }
@@ -174,7 +178,9 @@
   tokenExpander {
     display: inline-block;
     white-space: nowrap;
-    left: 14vw;
+    bottom: auto;
+    top: calc(var(--token-size)* 0.7);
+    left: calc(50% - var(--token-size)* 3);
   }
   tokenExpander token {
     position: relative;
@@ -198,7 +204,7 @@
     position: absolute;
     z-index: 11;
     opacity: 0;
-    transform: translate(-50%, -50%) translate(25vw, 50vh) rotate(3deg) scale(1.5);
+    transform: translate(-50%, -50%) translate(25vw, 50vh) rotate(3deg) scale(1.25);
   }
 
   snappoint {

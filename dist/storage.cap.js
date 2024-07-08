@@ -76,6 +76,8 @@ export const setBaseLoaded = (value) => {
 };
 
 export const setStoredDeck = (deckName, deck) => {
+  console.log(`Write, ${deckName}, ${JSON.stringify(deck)}`);
+
   localPreferences.deck = JSON.stringify(deck);
   localPreferences.deckName = deckName;
 
@@ -99,6 +101,8 @@ export const getStoredDeck = () => {
     storedDeck = JSON.parse(localPreferences.deck || '[]');
     storedDeckName = localPreferences.deckName || '';
   } catch (e) { }
+  
+  console.log(`Read, ${storedDeckName}, ${JSON.stringify(storedDeck)}`);
 
   return { deck: storedDeck, deckName: storedDeckName };
 };

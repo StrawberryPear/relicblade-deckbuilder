@@ -66,6 +66,7 @@ body {
 html {
   background:#000;
   height: 100%;
+  overflow: hidden;
 }
 html::before {
   position: fixed;
@@ -947,7 +948,7 @@ body[displayType="grid"] cardScrollerContainer {
 }
 
 body[showing="deck"] cardScroller.deck cardlist {
-  padding-top: calc(var(--screen-height) * 0.115);
+  padding-top: calc(var(--screen-height) * 0.05);
 }
 
 cardcontrol:not(.inactive) {
@@ -1163,7 +1164,7 @@ modalOverlay.option modalbutton#modalAccept {
 
 
 tokenContainer {
-  position:fixed;
+  position: absolute;
   top:0px;
   left:0px;
   pointer-events: none;
@@ -1192,6 +1193,7 @@ tokenOverlay {
   background: linear-gradient(0deg, #000 0%, #0000 20%);
   pointer-events: all;
   transition: opacity 0.5s;
+  z-index: 10;
 }
 
 token {

@@ -13,6 +13,8 @@
     "@capacitor/app": "^5.0.7",
     "@capacitor/assets": "^3",
     "@capacitor/camera": "^5",
+    "@capacitor/keyboard": "^5",
+    "@capacitor/clipboard": "^5",
     "@capacitor/cli": "^5",
     "@capacitor/core": "^5",
     "@capacitor/filesystem": "^5",
