@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     namespace "relicblade.deckbuilder"
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "relicblade.deckbuilder"
         minSdkVersion rootProject.ext.minSdkVersion
