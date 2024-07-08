@@ -1480,7 +1480,7 @@ const onAppFocus = async (event) => {
     // try and find a sharedDeck
 
     console.log(`got text: ${text}`);
-    
+
     if (text) {
       if (lastClipboardFind == text) {
         return;
@@ -1674,7 +1674,7 @@ const init = async () => {
   }
 
   try {
-    Capacitor.Plugins.App.addListener("appUrlOpen", async (event) => {
+    const handleURLLoadAttempt = async (event) => {
       console.log(`hit here?, ${JSON.stringify(event)}`);
       // check the url
       const url = event.url;
@@ -1682,12 +1682,34 @@ const init = async () => {
       const searchParams = urlParams.searchParams;
 
       if (searchParams.has("id")) {
+        // check if it's a deck
+        const code = searchParams.get('id');
         
-        await loadShareDeckFromCode(searchParams.get("id"));
+        if (!isShareCodeFormat(code)) return;
+
+        const deckValue = getDeckFromShareCode(code);
+
+        if (!deckValue) return;
+        
+        const doLoad = await showConfirm(`Load, ${deckName || "shared deck"}? This will override any unsaved progress`);
+
+        if (!doLoad) return;
+
+        await placeDeckFromShareCodeIntoLocal(deckData);
+
+        showToast(`${deckName || "Shared deck"} loaded`);
       }
+    }
+    Capacitor.Plugins.App.addListener("appUrlOpen", async (event) => {
+      document.body.className = 'loading';
+      try {
+        await handleURLLoadAttempt(event);
+      } catch (e) {
+
+      }
+      document.body.className = '';
     });
   } catch (e) {
-
   };
 
   document.addEventListener("resume", triggerReload);
