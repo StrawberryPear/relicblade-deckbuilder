@@ -1687,11 +1687,11 @@ const init = async () => {
         
         if (!isShareCodeFormat(code)) return;
 
-        const deckValue = getDeckFromShareCode(code);
+        const deckData = await getDeckFromShareCode(code);
 
-        if (!deckValue) return;
+        if (!deckData) return;
         
-        const doLoad = await showConfirm(`Load, ${deckName || "shared deck"}? This will override any unsaved progress`);
+        const doLoad = await showConfirm(`Load, ${deckData.deckName || "shared deck"}? This will override any unsaved progress`);
 
         if (!doLoad) return;
 
