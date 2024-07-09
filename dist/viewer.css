@@ -1350,6 +1350,7 @@ modalOverlay cardContainer {
   left: 0px;
   width: 100vw;
   height: 100vh;
+  pointer-events: none;
 }
 modalOverlay card::before {
   opacity: 1;
@@ -1380,4 +1381,9 @@ body[showing="library"][displaytype="grid"] card[not-owned]::after {
 }
 card[not-owned] {
   /*pointer-events: none;*/
+}
+
+modal.input {
+    bottom: auto;
+    top: calc(2vh + var(--safe-area-top));
 }

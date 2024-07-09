@@ -159,4 +159,10 @@ export const init = async () => {
   }
 
   localData = await getAllCardsFromDatabase();
+
+  if (localData.length < 50) {
+    setBaseLoaded(false);
+
+    await init();
+  }
 };

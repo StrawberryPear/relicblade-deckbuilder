@@ -21,6 +21,7 @@ const reinitializeModal = async ({acceptText, returnText} = {}) => {
   modalOverlayReturnButtonEle.innerHTML = returnText || "Return";
 
   // flash the modal
+  modalEle.className = "";
   modalEle.style.setProperty("opacity", "0");
 
   const timeStart = Date.now();
@@ -115,6 +116,8 @@ export const showInput = async (content, options = {}) => {
   reinitializeModal(options);
   // hide the background 
   modalOverlayEle.classList.remove("hidden");
+
+  modalEle.className = "input";
 
   // change the text, return true if they hit true/false false. 
   modalOverlayTextEle.innerHTML = content;

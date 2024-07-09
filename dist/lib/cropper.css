@@ -176,9 +176,9 @@
 
 .cropper-point {
   background-color: #39f;
-  height: 5px;
+  height: 10px;
   opacity: 0.75;
-  width: 5px;
+  width: 10px;
 }
 
 .cropper-point.point-e {
