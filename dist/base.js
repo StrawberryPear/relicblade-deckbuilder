@@ -4,10 +4,13 @@ import { getCardFromPoint, getPointerCardEle, getCenterCardEle } from './dom.js'
 
 import { initTokens } from './tokens.js';
 
-import { awaitFrame, awaitTime, getSId, clamp, getAllCardsIdsInDeck } from './utils.js';
-import cardsStore from './store.js';
+import { awaitFrame, awaitTime, getSId, clamp, getAllCardsIdsInDeck, readFile } from './utils.js';
 
 import { showInteractCard, hideInteractCard, showConfirm, showInput, showOption, isModalShowing, init as initModal } from './dom.modal.js';
+
+import { loadCardsFromUrl, loadCardDataFromUrl } from './dom.pdf.js';
+
+import { getCardStore } from './store.web.js';
 
 var deckName = "";
 var deck = [];
@@ -23,6 +26,8 @@ var scrolledLibraryCard;
 
 var lastClipboardFind;
 var lastLoadedSharedDeck;
+
+const cardsStore = await getCardStore();
 
 const cardScrollerDeckEle = document.querySelector('cardScroller.deck');
 const cardDeckListEle = cardScrollerDeckEle.querySelector('cardList');
@@ -641,140 +646,6 @@ const loadShareDeckFromCode = async (code) => {
       }
     }
     return undefined;
-  };
-
-  const loadCardDataFromUrl = (() => {
-    const loadingCanvas = document.createElement('canvas');
-
-    const CARD_ROWS = 3;
-    const CARD_COLS = 3;
-    const CARD_PER_PAGE = CARD_ROWS * CARD_COLS;
-
-    const CARD_ROW_OFFSET = 10;
-
-    return async (url) => {
-      var { pdfjsLib } = globalThis;
-      pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf/pdf.worker.mjs';
-      
-      const cardImages = [];
-
-      const loadingTask = pdfjsLib.getDocument(url);
-
-      const getCanvasDataURL = (() => {
-        const saveCanvas = document.createElement('canvas');
-
-        return async (originCanvas, x, y, w, h) => {
-          saveCanvas.width = w;
-          saveCanvas.height = h;
-
-          const saveContext = saveCanvas.getContext('2d');
-
-          saveContext.drawImage(originCanvas, x, y, w, h, 0, 0, w, h);
-
-          // check if it has a border most of the way around, at least 90%.
-          const imageData = saveContext.getImageData(0, 0, w, h);
-          const pixelData = imageData.data;
-
-          var blackCount = 0;
-
-          const bottomOffset = (h - 1) * w * 4;
-          const rightOffset = (w - 1) * 4;
-
-          for (var xi = 0; xi < w; xi++) {
-            const ri = xi * 4;
-            const gi = xi * 4 + 1;
-            const bi = xi * 4 + 2;
-
-            const topPixel = pixelData[ri] + pixelData[gi] + pixelData[bi];
-            const bottomPixel = pixelData[bottomOffset + ri] + pixelData[bottomOffset + gi] + pixelData[bottomOffset + bi];
-            
-            blackCount += topPixel + bottomPixel;
-          }
-          
-          for (var yi = 0; yi < h; yi++) {
-            const oi = yi * 4 * w;
-
-            const ri = oi;
-            const gi = oi + 1;
-            const bi = oi + 2;
-
-            const leftPixel = pixelData[ri] + pixelData[gi] + pixelData[bi];
-            const rightPixel = pixelData[rightOffset + ri] + pixelData[rightOffset + gi] + pixelData[rightOffset + bi];
-
-            blackCount += leftPixel + rightPixel;
-          }
-          
-          const MAX_PIXEL_VALUE = (w * 2 + h * 2) * 3 * 255;
-
-          if (blackCount > MAX_PIXEL_VALUE * 0.05) {
-            return '';
-          }
-
-          return saveCanvas.toDataURL('image/jpeg', 0.86);
-        }
-      })();
-
-      const pdf = await loadingTask.promise;
-      const metaData = await pdf.getMetadata();
-
-      var totalPages = pdf.numPages
-      var data = [];
-
-      for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
-        const page = await pdf.getPage(pageNumber);
-        
-        const text = await page.getTextContent();
-
-        var viewport = page.getViewport({ scale: PDF_SCALE });
-
-        // Prepare canvas using PDF page dimensions
-        var context = loadingCanvas.getContext('2d');
-        loadingCanvas.height = viewport.height;
-        loadingCanvas.width = viewport.width;
-
-        // Render PDF page into canvas context
-        var renderContext = { canvasContext: context, viewport: viewport };
-
-        const render = await page.render(renderContext).promise;
-        
-        for (let i = 0; i < CARD_PER_PAGE; i++) {
-          const r = Math.floor(i / CARD_COLS);
-          const c = i % CARD_COLS;
-
-          const x = PDF_CARD_OFFSET_X + PDF_CARD_WIDTH * c;
-          const y = PDF_CARD_OFFSET_Y + PDF_CARD_HEIGHT * r + CARD_ROW_OFFSET * r;
-
-          const imageUrl = await getCanvasDataURL(loadingCanvas, x, y, PDF_CARD_WIDTH, PDF_CARD_HEIGHT);
-
-          await new Promise(resolve => window.requestAnimationFrame(resolve));
-
-          cardImages.push(imageUrl);
-        }
-      }
-
-      return [cardImages, metaData.info.Title];
-    }
-  })();
-
-  const loadCardsFromUrl = async (url) => {
-    const [images, title] = await loadCardDataFromUrl(url);
-
-    var cardsLoaded = 0;
-    var cardsAdded = 0;
-
-    for (const imageIndex in images) {
-      const image = images[imageIndex];
-
-      if (image.length < 8064) continue;
-
-      const cardAdded = await addCardToDatabase(image, `${title} - ${cardsLoaded}`);
-      
-      cardsLoaded++;
-
-      if (cardAdded) cardsAdded++;
-    }
-    
-    showToast(`${cardsAdded} cards added to library`);
   };
 
   const addMissingCardFromStore = (cardStoreData) => {
@@ -1930,36 +1801,53 @@ const init = async () => {
 
       // accept a pdf
       try {
-        let pickedFile = false;
+        let foundFile = false;
 
         awaitTime(2000).then(() => {
-          if (pickedFile) return;
+          if (foundFile) return;
 
           document.body.className = '';
         });
 
-        const [fileHandle] = await window.showOpenFilePicker({types: [{accept: {'application/pdf': ['.pdf']}}]});
-        if (fileHandle) {
-          pickedFile = true;
+        const fileHandles = await window.showOpenFilePicker({multiple: true, types: [{accept: {'application/pdf': ['.pdf']}}]});
+        
+        if (fileHandles.length) {
+          foundFile = true;
           document.body.className = 'loading';
         }
 
-        const file = await fileHandle.getFile();
+        const loadedCards = [];
 
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          try {
-            await loadCardsFromUrl(reader.result);
+        for (const fileHandle of fileHandles) {
+          const file = await fileHandle.getFile();
+  
+          const fileData = await readFile(file);
 
-            applyFilters();
-            applyCarousel();
-          } finally {
-            document.body.className = '';
+          const fileCards = await loadCardsFromUrl(fileData);
+
+          loadedCards.push(...fileCards);
+        }
+
+        var cardsAdded = [];
+        // now go through all the cards
+
+        for (const card of loadedCards) {
+          const addCardSuccess = await addCardToDatabase(card.image, card.id);
+          
+          if (addCardSuccess) {
+            cardsAdded.push(card);
           }
         }
-        reader.readAsDataURL(file)
+
+        showToast(`${cardsAdded.length} cards added to library`);
+
+        applyFilters();
+        applyCarousel();
+        
+        document.body.className = '';
       } catch (err) {
-        console.log(err);
+        showToast(`File Upload Failed: ${err}`);
+        console.error(err);
         document.body.className = '';
       }
     });
