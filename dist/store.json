@@ -5551,5 +5551,104 @@
     "keywords": "area range vertical touch move hit",
     "types": "upgrade spell",
     "factions": ""
+  },
+  "Severed Hand Cards - 0": {
+    "uid": "Severed Hand Cards - 0",
+    "cost": "26",
+    "name": "Sea Mistress",
+    "classes": "wizard nature",
+    "keywords": "range stun place",
+    "types": "character",
+    "upgradeTypes": "item spell spell potion",
+    "factions": "neutral",
+    "markBoxes": [
+    ]
+  },
+  "Severed Hand Cards - 1": {
+    "uid": "Severed Hand Cards - 1",
+    "cost": "22",
+    "name": "Tiger Claws",
+    "classes": "rogue",
+    "keywords": "range dagger damage bonus team",
+    "types": "character",
+    "upgradeTypes": "tactic weapon item potion",
+    "factions": "neutral",
+    "markBoxes": [
+    ]
+  },
+  "Severed Hand Cards - 2": {
+    "uid": "Severed Hand Cards - 2",
+    "cost": "23",
+    "name": "Saber Wolf",
+    "classes": "fighter barbarian",
+    "keywords": "stun range",
+    "types": "character",
+    "upgradeTypes": "tactic weapon item potion",
+    "factions": "neutral",
+    "markBoxes": [
+    ]
+  },
+  "Severed Hand Cards - 3": {
+    "uid": "Severed Hand Cards - 3",
+    "cost": "2",
+    "name": "Feint Strike",
+    "classes": "fighter rogue",
+    "keywords": "",
+    "types": "upgrade tactic",
+    "factions": ""
+  },
+  "Severed Hand Cards - 4": {
+    "uid": "Severed Hand Cards - 4",
+    "cost": "2",
+    "name": "Great Wave",
+    "classes": "wizard",
+    "keywords": "area vertical line of sight speed focus range",
+    "types": "upgrade spell",
+    "factions": ""
+  },
+  "Severed Hand Cards - 5": {
+    "uid": "Severed Hand Cards - 5",
+    "cost": "1",
+    "name": "Pepper Bombs",
+    "classes": "",
+    "keywords": "three uses stun",
+    "types": "upgrade potion",
+    "factions": ""
+  },
+  "Severed Hand Cards - 6": {
+    "uid": "Severed Hand Cards - 6",
+    "cost": "2",
+    "name": "Darts",
+    "classes": "rogue",
+    "keywords": "range stun",
+    "types": "upgrade weapon",
+    "factions": ""
+  },
+  "Severed Hand Cards - 7": {
+    "uid": "Severed Hand Cards - 7",
+    "cost": "2",
+    "name": "Turning Tide",
+    "classes": "wizard",
+    "keywords": "modify die",
+    "types": "upgrade spell",
+    "factions": ""
+  },
+  "Severed Hand Cards - 8": {
+    "uid": "Severed Hand Cards - 8",
+    "cost": "2",
+    "name": "Acrobat",
+    "classes": "",
+    "keywords": "climb jump disengage break bonus die",
+    "types": "upgrade tactic",
+    "factions": ""
+  },
+  "Severed Hand Cards - 9": {
+    "uid": "Severed Hand Cards - 9",
+    "cost": "0",
+    "name": "Stone Tiger",
+    "classes": "",
+    "keywords": "range fail",
+    "types": "relic",
+    "factions": ""
   }
 }
