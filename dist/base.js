@@ -1328,69 +1328,9 @@ const handleLoad = async (loadSlotIdx) => {
 
   showToast(`Deck, ${deckName || "Untitled Deck"} loaded!`);
 };
-const readClipboard = async () => {
-  try {
-    const value = await navigator.clipboard.readText();
-
-    return value;
-  } catch (e) {
-
-  }
-
-  try {
-    const { type, value } = await Capacitor.Plugins.Clipboard.read();
-
-    return value;
-  } catch (e) {
-
-  }
-}
 const onAppFocus = async (event) => {
   try {
-    const text = await readClipboard();
-    // try and find a sharedDeck
-
-    console.log(`got text: ${text}`);
-
-    if (text) {
-      if (lastClipboardFind == text) {
-        return;
-      }
-
-      lastClipboardFind = text;
-
-      const codeSeparated = text.split("=");
-      const code = codeSeparated[codeSeparated.length - 1];
-
-      if (isShareCodeFormat(code)) {
-        if (lastLoadedSharedDeck == code) {
-          return;
-        }
-        // check if we can load it
-        const deckData = await getDeckFromShareCode(code);
-
-        if (deckData) {
-          lastLoadedSharedDeck = code;
-
-          const loadedSharedDeckName = deckData.deckName;
-
-          // check if the current deckname equals the deckname
-          if (loadedSharedDeckName && loadedSharedDeckName == deckName) return;
-
-          document.body.className = 'loading';
-          // show a modal
-          const doLoadDeck = await showConfirm(`Found shared deck${loadedSharedDeckName ? `, ${loadedSharedDeckName},` : ''} code in clipboard. Do you want to load it?`);
-
-          if (doLoadDeck) {
-            await placeDeckFromShareCodeIntoLocal(deckData);
-          };
-
-          document.body.className = '';
-        }
-      }
-    }
-  } catch (e) { 
-    console.error(`failed to read clipboard`);
+  } catch (e) {
   }
 }
 

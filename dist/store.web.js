@@ -16,6 +16,6 @@ export const getCardStore = async () => {
 
     return value;
   } finally {
-    return (await import("./store.json", { with: { type: "json" } })).default;
+    return (await import("./store.js")).default;
   }
 }
