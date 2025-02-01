@@ -5,17 +5,28 @@ export const getCardStore = async () => {
   const url = "https://gungob.com/decks/store.json";
 
   try {
-    const response = await fetch(url);
+    console.log("Attempting to get online store");
 
-    if (!response.ok) {
+    const storeRequestOptions = { url };
+    const response = await Capacitor.Plugins.CapacitorHttp.get(storeRequestOptions);
+
+    if (response.status != 200) {
       // get the local
       throw "Failed to load from Host";
     }
 
-    const value = response.json();
+    if (typeof(response.data) == "string") {
+      const value = JSON.parse(response.data);
 
-    return value;
-  } finally {
+      return value;
+    }
+
+    return response.data;
+  } catch (e) {
+    console.log("error getting online store");
+    console.log(e);
+
+    console.log("using fallback store");
     return (await import("./store.js")).default;
-  }
+  } 
 }

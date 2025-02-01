@@ -2467,12 +2467,11 @@
   },
   "Storms of Kural cards - 22": {
     "uid": "Storms of Kural cards - 22",
-    "base": "inner mastery difficulty 1 upgrade tactoc",
     "cost": "1",
     "name": "inner mastery",
     "classes": "",
     "keywords": "difficulty ad",
-    "types": "upgrade tactoc",
+    "types": "upgrade tactic",
     "factions": ""
   },
   "Storms of Kural cards - 23": {

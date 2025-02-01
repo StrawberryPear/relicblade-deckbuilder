@@ -9,7 +9,7 @@ export var deckFocusCard;
 export var attachCharacter;
 export var dragToken;
 
-export const init = async () => {  
+export const init = async () => {
   if (!Capacitor?.getPlatform || Capacitor?.getPlatform() == "web") {
     console.log('loading web storage');
     storage = await import('./storage.web.js');

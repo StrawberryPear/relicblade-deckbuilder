@@ -59,18 +59,18 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capawesome/capacitor-file-picker"
 
 SPEC CHECKSUMS:
-  Capacitor: 187bd7847b6f71467015a20200a1a071be3e5f14
-  CapacitorApp: 9d53aec7101f7b030a950c5bdc4df8612576b279
-  CapacitorCamera: 3b77b3e8311b98220de65e63445c0e4d0b30ce3a
-  CapacitorClipboard: 80282f684154124b9019ebf401235b70b0cf4994
+  Capacitor: 3aff4dee0552f6badcd04f47ab3174387d71f47d
+  CapacitorApp: 30145f2ea2311e4f3744472119ec87d2ddf4c0a7
+  CapacitorCamera: 4792443e91e3cf83c36d72f16500f4bcd3a8e20a
+  CapacitorClipboard: c1cb27fea166aab5c99bda605d3bc768cf00eabe
   CapacitorCordova: be703980ca797f847c3356f78fa175d21c8330c2
-  CapacitorFilesystem: 60e59ba274c234a979e7a3be2552feaadcee4263
-  CapacitorKeyboard: 5f32a712adf41e07a61caafb82cf29fb6d8ba123
-  CapacitorPluginSafeArea: b99681e1d9986ae1c059ca0e1b5e7025916e5e04
-  CapacitorSplashScreen: 61645214e8f955ff2b80f16a6a3648960fe4c89f
-  CapacitorStatusBar: 2e4369f99166125435641b1908d05f561eaba6f6
-  CapawesomeCapacitorFilePicker: 983e8d272d200897cf1c12cf9a62439fa2fb2c35
+  CapacitorFilesystem: 9c2cc1e89d3b8b91503b316e9f6c2915c9bf9419
+  CapacitorKeyboard: f38d730356be5569d72eb87ad9c8166947728c36
+  CapacitorPluginSafeArea: 8aef11f038728ea5d52f9f419ee3f52c2e323400
+  CapacitorSplashScreen: d2d8fe9541d7bebdf735839b89edf6e762cea969
+  CapacitorStatusBar: 129c68650d3f950e080e8e7e03d69c3b361dbe52
+  CapawesomeCapacitorFilePicker: 9f81333cae7945e4f54c51489145d60fbef7d724
 
 PODFILE CHECKSUM: 60ca2d075a2cef2118e4e1573ecf00ead282f9de
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
