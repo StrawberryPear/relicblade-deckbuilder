@@ -1,34 +1,4 @@
 export default {
-  "addOwn": {
-    "uid": "addOwn",
-    "base": "purchase",
-    "cost": "0",
-    "name": "",
-    "classes": "",
-    "keywords": "",
-    "types": "purchase",
-    "factions": ""
-  },
-  "addFromPicture": {
-    "uid": "addFromPicture",
-    "base": "purchase",
-    "cost": "0",
-    "name": "",
-    "classes": "",
-    "keywords": "",
-    "types": "purchase",
-    "factions": ""
-  },
-  "visitRelicblade": {
-    "uid": "visitRelicblade",
-    "base": "purchase",
-    "cost": "0",
-    "name": "",
-    "classes": "",
-    "keywords": "",
-    "types": "purchase",
-    "factions": ""
-  },
   "Adventure Gear - 0": {
     "uid": "Adventure Gear - 0",
     "base": "alchemist's fire single use range 3 upgrade potion",

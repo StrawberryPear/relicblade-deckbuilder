@@ -106,7 +106,7 @@ export const initTokens = () => {
     const x = touch.clientX;
     const y = touch.clientY;
 
-    var cardEle = getCardFromPoint(x, y, {canBePurchase: false, canBeChild: true});
+    var cardEle = getCardFromPoint(x, y, {canBeChild: true});
 
     // check if the card is a child
     if (cardEle && cardEle.parentElement.tagName == "CARD") {

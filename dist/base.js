@@ -1,4 +1,4 @@
-import { PDF_SCALE, PDF_CARD_WIDTH, PDF_CARD_HEIGHT, PDF_CARD_OFFSET_X, PDF_CARD_OFFSET_Y, PDF_CARD_ROW_OFFSET, CARD_SLIDE_DURATION, API_URL, SHARE_URL } from './constants.js';
+import { PDF_CARD_WIDTH, PDF_CARD_HEIGHT, CARD_SLIDE_DURATION, API_URL, SHARE_URL } from './constants.js';
 import { storage, init as initStorage } from './storage.js';
 import { getCardFromPoint, getPointerCardEle, getCenterCardEle } from './dom.js';
 
@@ -7,8 +7,6 @@ import { initTokens } from './tokens.js';
 import { awaitFrame, awaitTime, getSId, clamp, getAllCardsIdsInDeck, readFile } from './utils.js';
 
 import { showInteractCard, hideInteractCard, showConfirm, showInput, showOption, isModalShowing, init as initModal } from './dom.modal.js';
-
-import { loadCardsFromUrl, loadCardDataFromUrl } from './dom.pdf.js';
 
 import { getCardStore } from './store.web.js';
 
@@ -41,7 +39,6 @@ const gridButtonEle = document.querySelector('.grid');
 const legalButtonEle = document.querySelector('.legal');
 
 const previewEle = document.querySelector('preview');
-const cropperEle = document.querySelector('cropper');
 
 const showLibraryButton = document.querySelector("cardButton.showLibrary");
 const searchButton = document.querySelector("cardButton.search");
@@ -648,17 +645,6 @@ const loadShareDeckFromCode = async (code) => {
     return undefined;
   };
 
-  const addMissingCardFromStore = (cardStoreData) => {
-    const cardEle = document.createElement('card');
-
-    cardEle.setAttribute('uid', cardStoreData.uid);
-    cardEle.setAttribute('name', cardStoreData.name);
-
-    cardEle.setAttribute('not-owned', true);
-
-    cardLibraryListEle.append(cardEle);
-  }
-  
   const loadCard = (card) => {
     if (!card) return;
 
@@ -909,75 +895,6 @@ const loadShareDeckFromCode = async (code) => {
     descriptionEle.innerHTML = descriptor;
   }
 
-  const addCardToDatabase = async (image, uid) => {
-    // check if the card uid is in the card store
-    if (!cardsStore[uid]) {
-      // alert the user that the card is not in the store.
-      // open up a resolver modal
-
-      const cardStoreNames = Object.keys(cardsStore)
-        .filter(key => !cardsStore[key].types.match(/purchase/i))
-        .filter(key => cardsStore[key].name != 'delete')
-        .map(key => cardsStore[key].name)
-        .sort();
-
-      // show the card on the screen.6
-      previewEle.style.setProperty('background-image', `url('${image}')`);
-      previewEle.style.setProperty('opacity', `1`);
-
-      const cardStoreName = await showInput(`Card could not be automatically resolved, please enter the card name`, {
-        dataList: cardStoreNames,
-        acceptText: "Add Card",
-        returnText: "Skip Card"
-      });
-
-      if (!cardStoreName) {
-        previewEle.style.setProperty('opacity', `0`);
-        await awaitTime(400);
-        previewEle.style.setProperty('background-image', `none`);
-        await awaitTime(400);
-        return false;
-      }
-      // check if it's a custom card.
-      const cardStoreKey = Object.keys(cardsStore).find(key => cardsStore[key].name.toLowerCase() == cardStoreName.toLowerCase());
-
-      if (!cardStoreKey) {
-        showToast(`Card not found, custom cards not supported.`);
-        await awaitTime(500);
-        previewEle.style.setProperty('opacity', `0`);
-        await awaitTime(1000);
-        previewEle.style.setProperty('background-image', `none`);
-        return false;
-      }
-      showToast(`Adding ${cardStoreName}`);
-      
-      await awaitTime(1000);
-      previewEle.style.setProperty('opacity', `0`);
-      await awaitTime(1000);
-      previewEle.style.setProperty('background-image', `none`);
-
-      // hide the preview
-      
-      // update the uid.
-      uid = Object.keys(cardsStore).find(key => cardsStore[key].name.toLowerCase() == cardStoreName.toLowerCase());
-    }
-
-    try {
-      const result = await storage.writeCardToDatabase(uid, image);
-
-      if (!result) {
-        return false;
-      }
-
-      loadCard(result);
-
-      return true;
-    } catch (e) {
-      showToast(`Failed to add card ${uid}`);
-      
-      return false;
-    }
-  };
 /* #END FILTER */
 
 /* #REGION CAROUSEL SCRIPTS */
@@ -993,10 +910,9 @@ const loadShareDeckFromCode = async (code) => {
 
     const rawLibraryCardEles = [...cardLibraryListEle.children];
     const libraryCardEles = rawLibraryCardEles.filter(e => !e.classList.contains('inactive'));
-    const notInLibraryCardEles = rawLibraryCardEles.filter(e => e.getAttribute('not-owned'));
     const count = libraryCardEles.length;
 
-    const blueLineCount = count - notInLibraryCardEles.length;
+    const blueLineCount = count;
 
     const cardDrawWidth = (PDF_CARD_WIDTH / PDF_CARD_HEIGHT) * carouselCanvasEle.height;
 
@@ -1140,45 +1056,6 @@ const finishAttachUpgrade = async () => {
   scrollDeckToCard(deckFocusCard);
   onShowDeck();
 
-  cardEleClone.classList.add("highlight");
-
-  await awaitTime(500);
-  cardEleClone.classList.remove("highlight");
-};
-const attachRandomRelic = async () => {
-  // get all the relics
-  const relicEles = [...cardLibraryListEle.children].filter(ele => {
-    const uid = ele.getAttribute("uid")
-    const cardStore = cardsStore[uid];
-
-    if (ele.getAttribute("not-owned")) return false;
-
-    return cardStore && cardStore.types.match(/relic/i);
-  });
-
-  // get the attach character
-  const selectedCardEle = document.querySelector('card.highlight');
-  if (!selectedCardEle) return;
-
-  const randomRelicEle = relicEles[Math.floor(Math.random() * relicEles.length)];
-  if (!randomRelicEle) return;
-
-  const upgradeUId = randomRelicEle.getAttribute("uid");
-
-  const currentCardIndex = getDeckIndexOfCardEle(selectedCardEle);
-  const deckAttachCharacter = deck[currentCardIndex];
-
-  const cardEleClone = addUpgradeToCharacter(upgradeUId, selectedCardEle, deckAttachCharacter, true);
-  if (!cardEleClone) return;
-
-  updateDeck();
-
-  await awaitTime(200);
-
-  // scroll to the newly created card
-  showToast(`Random Relic Added`);
-
-  // highlight the card
   cardEleClone.classList.add("highlight");
 
   await awaitTime(500);
@@ -1548,15 +1425,12 @@ const init = async () => {
     const cardStoreUid = cardStoreData.uid;
 
     if (cards.some(card => card.uid == cardStoreUid)) continue;
-    if (cardStoreData.types.match(/purchase/i)) continue;
     if (cardStoreData.name == 'delete') continue;
 
     if (cardStoreData.keywords.includes("legends")) continue;
     if (cardStoreData.types.includes("campaign")) continue;
     if (cardStoreData.keywords.includes("monster")) continue;
     if (cardStoreData.keywords.includes("patreon")) continue;
-
-    addMissingCardFromStore(cardStoreData);
   }
 
   // check if we have an id in our query params
@@ -1610,188 +1484,6 @@ const init = async () => {
   // TODO remove all event listener initialization to here.
   // adding event listeners here.
 
-  // get the size of things
-  [...document.querySelectorAll('label.imageUpload')].map((ele) => {
-    const getDataImageDimensions = (dataURL) => {
-      const image = new Image();
-      image.src = dataURL;
-    
-      return new Promise((resolve, reject) => {
-        image.onload = () => {
-          resolve([image.width, image.height]);
-        }
-      });
-    };
-    const resizeDataImage = (dataURL, width, height) => {
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-    
-      canvas.width = width;
-      canvas.height = height;
-    
-      const image = new Image();
-      image.src = dataURL;
-    
-      context.drawImage(image, 0, 0, width, height);
-    
-      return canvas.toDataURL('image/jpeg', 0.94);
-    };
-    
-    ele.addEventListener('click', async (event) => {
-      document.body.className = 'loading';
-      overlayMenuEle.className = 'hidden';
-
-      try {
-        let pickedFile = false;
-
-        awaitTime(2000).then(() => {
-          if (pickedFile) return;
-
-          document.body.className = '';
-        });
-
-        const [fileHandle] = await window.showOpenFilePicker({
-          types: [
-            {accept: {'image/*': ['.png', '.jpeg', '.jpg']}}
-          ]
-        });
-        if (fileHandle) {
-          pickedFile = true;
-          document.body.className = 'loading';
-        }
-
-        const file = await fileHandle.getFile();
-
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          try {
-            // start the clipper
-            const imageDom = document.getElementById('cropper');
-      
-            // get the reader image size.
-            const [imageWidth, imageHeight] = await getDataImageDimensions(reader.result);
-
-            // get an image with a dimension of the above.
-
-            const MAX_IMAGE_WIDTH = 2048;
-            const dimension = imageWidth / imageHeight;
-
-            const newWidth = Math.min(MAX_IMAGE_WIDTH, imageWidth);
-            const newHeight = parseInt(newWidth / dimension);
-
-            const smallerImageUrl = resizeDataImage(reader.result, newWidth, newHeight);
-
-            // lets crop down the reader result size
-
-            imageDom.src = smallerImageUrl;
-
-            cropperEle.style.setProperty('opacity', 1);
-
-            const cropper = new Cropper(imageDom, {
-              viewMode: 1,
-              guides: false,
-              crop(event) {
-              },
-            });
-
-            const confirmValue = await showConfirm("Crop the image to the correct size and press confirm", {
-              acceptText: "Add Card",
-              returnText: "Cancel"
-            });
-
-            const cropperCanvas = cropper.getCroppedCanvas();
-
-            const tempCanvas = document.createElement('canvas');
-            const tempContext = tempCanvas.getContext('2d');
-
-            tempCanvas.width = PDF_CARD_WIDTH * 4;
-            tempCanvas.height = PDF_CARD_HEIGHT * 4;
-
-            tempContext.drawImage(cropperCanvas, 0, 0, tempCanvas.width, tempCanvas.height);
-            
-            // get the tempCanvasUri
-            const tempUrl = tempCanvas.toDataURL('image/jpeg', 0.75);
-
-            cropper.destroy();
-            cropperEle.style.setProperty('opacity', 0);
-
-            if (!confirmValue) {
-              return;
-            }
-
-            await addCardToDatabase(tempUrl, '');
-
-            applyFilters();
-            applyCarousel();
-          } finally {
-            document.body.className = '';
-          }
-        }
-        reader.readAsDataURL(file)
-      } catch (err) {
-        console.log(err);
-        document.body.className = '';
-      }
-    });
-  });
-  [...document.querySelectorAll('label.fileUpload')].map((ele) => {
-    ele.addEventListener('click', async (event) => {
-      document.body.className = 'loading';
-      overlayMenuEle.className = 'hidden';
-
-      // accept a pdf
-      try {
-        let foundFile = false;
-
-        awaitTime(2000).then(() => {
-          if (foundFile) return;
-
-          document.body.className = '';
-        });
-
-        const fileHandles = await window.showOpenFilePicker({multiple: true, types: [{accept: {'application/pdf': ['.pdf']}}]});
-        
-        if (fileHandles.length) {
-          foundFile = true;
-          document.body.className = 'loading';
-        }
-
-        const loadedCards = [];
-
-        for (const fileHandle of fileHandles) {
-          const file = await fileHandle.getFile();
-  
-          const fileData = await readFile(file);
-
-          const fileCards = await loadCardsFromUrl(fileData);
-
-          loadedCards.push(...fileCards);
-        }
-
-        var cardsAdded = [];
-        // now go through all the cards
-
-        for (const card of loadedCards) {
-          const addCardSuccess = await addCardToDatabase(card.image, card.id);
-          
-          if (addCardSuccess) {
-            cardsAdded.push(card);
-          }
-        }
-
-        showToast(`${cardsAdded.length} cards added to library`);
-
-        applyFilters();
-        applyCarousel();
-        
-        document.body.className = '';
-      } catch (err) {
-        showToast(`File Upload Failed: ${err}`);
-        console.error(err);
-        document.body.className = '';
-      }
-    });
-  });
   showLibraryButton.addEventListener('click', onShowLibrary);
   searchButton.addEventListener('click', async () => {
     // check if we're already searching
@@ -1914,28 +1606,6 @@ const init = async () => {
 
     const responseJson = await response.json();
     const shareCode = responseJson.id;
-    const uploadCards = responseJson.uploadCards;
-
-    if (uploadCards) {
-      // do the upload cards
-      for (const cardUid of uploadCards) {
-        const cardImage = cardStore[cardUid].image;
-
-        try {
-          await fetch(`${API_URL}/uploadCard`, {
-            method: 'POST',
-            contentType: 'text/plain',
-            body: JSON.stringify({uid: cardUid, image: cardImage})
-          });
-        } catch (uploadCardError) {
-          showToast("Failed to generate a share link -- Related to using photo-uploaded cards");
-
-          document.body.className = "";
-          return;
-        }
-      }
-    } 
-    document.body.className = "";
 
     // check if we need to upload any cards.
     // show the share link using the share navigator, otherwise fallback to a modal
@@ -2124,14 +1794,6 @@ const init = async () => {
       if (!selectedCardEle) return;
       if (selectedCardEle.tagName != "CARD") return;
 
-      // check if it's owned?
-      if (selectedCardEle.getAttribute("not-owned")) {
-        // prompt the user to add it.
-        await showOption(`${selectedCardEle.getAttribute("name")} is not in your library, you can add it via 'Add cards from PDF' in the menu.`,[]);
-
-        return;
-      }
-
       // add selected to the card
       awaitTime(100).then(() => {
         selectedCardEle.classList.toggle("highlight", true);
@@ -2157,10 +1819,6 @@ const init = async () => {
         // check if we're selecting a character
         if (currentFocusCard.types == "character") {
           options.push("Add Upgrade");
-          // check if we have a relic in our library
-          if (hasRelicInLibrary) {
-            options.unshift("Add Random Relic");
-          }
           options.unshift("Remove Character");
           
         }
@@ -2175,8 +1833,6 @@ const init = async () => {
           // center the card
         } else if (optionResult == "Remove Character" || optionResult == "Remove Upgrade") {
           await removeCharacter();
-        } else if (optionResult == "Add Random Relic") {
-          await attachRandomRelic();
         }
         // remove the highlight
         hideInteractCard(!optionResult);
@@ -2264,23 +1920,6 @@ const init = async () => {
           
           return;
         }
-
-        // do the weird cards
-        switch (clickedCardEle.tagName) {
-          case "PURCHASE":
-            try {
-              // open a browser window.
-              window.open("https://relicblade.com", "_blank");
-            } catch (error) {
-              showToast(error.message);
-            }
-            return;
-          case "IMPORT":
-            document.querySelector("#fileUpload").click();
-            return;
-        }
-
-        // do the cool cards.
       }
     
       if (document.body.getAttribute("displayType") == "grid") {

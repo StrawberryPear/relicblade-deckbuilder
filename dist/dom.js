@@ -1,10 +1,10 @@
-export const getCardFromPoint = (x, y, {canBePurchase, canBeChild} = {}) => {
+export const getCardFromPoint = (x, y, {canBeChild} = {}) => {
   const pointEles = document.elementsFromPoint(x, y);
   const isLibrary = document.body.getAttribute("showing") == "library";
 
   const cardEles = pointEles
     // get the card that's in the right bucket, ie library when viewing library, deck when viewing deck
-    .filter(ele => ele.parentElement && ["CARD", "PURCHASE", "IMPORT"].includes(ele.tagName))
+    .filter(ele => ele.parentElement && ["CARD"].includes(ele.tagName))
     // sort by the closest to the top
     .sort((a, b) => {
       const aRect = a.getBoundingClientRect();
@@ -28,7 +28,7 @@ export const getCardFromPoint = (x, y, {canBePurchase, canBeChild} = {}) => {
     });
     const cardEle = cardEles[0];
 
-  if (cardEle?.tagName == 'CARD' || (canBePurchase && ["PURCHASE", "IMPORT"].includes(cardEle?.tagName))) {
+  if (cardEle?.tagName == 'CARD') {
     return cardEle;
   }
 }

@@ -13,8 +13,6 @@
 
     <link rel="stylesheet" type="text/css" href="./viewer.css">
     <link rel="stylesheet" type="text/css" href="./viewerHorizontal.css">
-
-    <link rel="stylesheet" type="text/css" href="./lib/cropper.css">
   </head>
 
   <body class="loading" showing="deck" subfilter="">
@@ -51,17 +49,6 @@
       <cardScrollerContainer>
         <cardScroller class="library">
           <cardList>
-            <import uid="addOwn">
-              <label>Add Cards from PDF</label>
-              <label class="fileUpload"></label>
-            </import>
-            <import uid="addFromPicture">
-              <label>Add Cards from Picture</label>
-              <label class="imageUpload"></label>
-            </import>
-            <purchase uid="visitRelicblade">
-              <label>PDF cardsets available</label>
-            </purchase>
           </cardList>
         </cardScroller>
         <cardScroller class="deck">
@@ -109,11 +96,6 @@
       </tokenExpander>
     </tokenOverlay>
 
-    <helpOverlay class="hidden">
-      <helpMedalion></helpMedalion>
-      <helpText>To use this app, you have to hit the add cardset button, and import a relicblade card pdf. You can find these pdfs for sale at <a href="https://relicblade.com">Relicblade.com</a>.</helpText>
-    </helpOverlay>
-
     <loadingOverlay>
       <loading>
       </loading>
@@ -127,7 +109,6 @@
         <menuControl class="saveDeck">Save Deck</menuControl>
         <menuControl class="loadDeck">Load Deck</menuControl>
         <menuControl class="newShare">Load Deck from Share Code</menuControl>
-        <label class="menuControl fileUpload">Add Cards from PDF</label>
         <label class="menuControl contact">Contact</label>
         <menuControl class="return">Return</menuControl>
       </mainMenu>
@@ -143,9 +124,6 @@
 
     <modalOverlay class="hidden">
       <cardContainer><card></card></cardContainer>
-      <cropper>
-        <img id="cropper" />
-      </cropper>
       <modal>
         <modalText></modalText>
         <modalButtons>
@@ -168,12 +146,9 @@
     <script type="module" src="./lib/statusBar.plugin.js"></script>
     <script type="module" src="./lib/safeArea.plugin.js"></script>
 
-    <script src="./lib/showOpenFilePicker.polyfill.js"></script>
     <script src="./lib/long-press-event.js"></script>
-    <script src="./lib/cropper.js"></script>
     
     <script type="module" src="./base.js"></script>
     <script src="./umd.js"></script>
-    <script src="./pdf/pdf.mjs" type="module"></script>
   </body>
 </html>

@@ -164,13 +164,6 @@
     opacity: 1;
   }
 
-  cropper {
-    left: 64px;
-    transform: translate(0px, 0px);
-    width: 50%;
-    height: 90%;
-  }
-
   tokenOverlay {
     background: none;
     pointer-events: none;
