@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="./viewerHorizontal.css">
   </head>
 
-  <body class="loading" showing="deck" subfilter="">
+  <body class="loading" showing="menu" subfilter="">
     <main>
       <nav>
         <call><edit></edit><deckTitleContainer><input type="text" id="title" contentEditable="true" maxlength="24" placeholder="Untitled Deck" /><deckTitleMirror id="titleMirror">Untitled Deck</deckTitleMirror></deckTitleContainer><deckTitlePoints id="points"></deckTitlePoints></call>
@@ -64,7 +64,6 @@
       </cardCarousel>
 
       <cardButtons class="library_">
-        <cardButton class="vertical horizontal removeLibraryCard">Remove Library Card</cardButton>
         <cardButton class="showDeck">Return</cardButton>
         <cardButton class="grid"></cardButton>
         <cardButton class="legal"></cardButton>
@@ -96,6 +95,14 @@
       </tokenExpander>
     </tokenOverlay>
 
+    <mainMenu>
+      <menuLogo></menuLogo>
+      <menuButton>Learn to Play</menuButton>
+      <menuButton>My Lists</menuButton>
+      <menuButton>Enter Share Code</menuButton>
+      <menuButton>Browse</menuButton>
+    </mainMenu>
+
     <loadingOverlay>
       <loading>
       </loading>
@@ -103,15 +110,16 @@
       </preview>
     </loadingOverlay>
 
-    <overlayMenu class="hidden" showing="mainMenu">
-      <mainMenu>
-        <menuControl class="newDeck">Create New Deck</menuControl>
-        <menuControl class="saveDeck">Save Deck</menuControl>
-        <menuControl class="loadDeck">Load Deck</menuControl>
-        <menuControl class="newShare">Load Deck from Share Code</menuControl>
+    <overlayMenu class="hidden" showing="hamMenu">
+      <hamMenu>
+        <menuControl class="returnToMenu">Return To Main Menu</menuControl>
+        <menuControl class="showList">Show Deck as List</menuControl>
+        <menuControl class="showCards">Show Deck as Cards</menuControl>
+        <menuControl class="showLegal">Hide Illegal Options</menuControl>
+        <menuControl class="showIllegal">Show Illegal Options</menuControl>
         <label class="menuControl contact">Contact</label>
         <menuControl class="return">Return</menuControl>
-      </mainMenu>
+      </hamMenu>
       <savesMenu>
         <menuControl class="saveSlot" idx="0"></menuControl>
         <menuControl class="saveSlot" idx="1"></menuControl>

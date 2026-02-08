@@ -11,12 +11,7 @@ export const overlayMenuEle = document.querySelector('overlayMenu');
 export const descriptionEle = document.querySelector('description');
 
 // Menu Element Selectors
-export const removeLibraryCardEle = document.querySelector('.removeLibraryCard');
 export const returnEle = document.querySelector('menuControl.return');
-export const saveReturnEle = document.querySelector('menuControl.saveReturn');
-export const newDeckEle = document.querySelector('menuControl.newDeck');
-export const saveDeckEle = document.querySelector('menuControl.saveDeck');
-export const loadDeckEle = document.querySelector('menuControl.loadDeck');
 
 // Helpers
 export const isShareCodeFormat = (code) => {
@@ -138,31 +133,6 @@ export const initMenuEvents = () => {
     });
   });
 
-  saveReturnEle.addEventListener("click", event => {
-    overlayMenuEle.setAttribute("showing", "mainMenu");
-  });
-
-  saveDeckEle.addEventListener("click", event => {
-    overlayMenuEle.setAttribute("showing", "savesMenu");
-    overlayMenuEle.setAttribute("saveMode", "save");
-  });
-
-  loadDeckEle.addEventListener("click", event => {
-    overlayMenuEle.setAttribute("showing", "savesMenu");
-    overlayMenuEle.setAttribute("saveMode", "load");
-  });
-
-  newDeckEle.addEventListener("click", async (event) => {
-    document.body.className = 'loading';
-    const value = await showConfirm("If your current deck is unsaved, it will be lost. Are you sure you want to create a new deck?");
-    await awaitTime(200);
-    if (!value) return;
-    overlayMenuEle.classList.add("hidden");
-    storage.setStoredDeck("", []);
-    loadDeckFromLocal();
-    document.body.className = '';
-  });
-
   returnEle.addEventListener("click", event => {
     overlayMenuEle.classList.add("hidden");
   });
@@ -174,16 +144,7 @@ export const initMenuEvents = () => {
 
   document.querySelector('ham').addEventListener('click', () => {
     overlayMenuEle.className = '';
-    overlayMenuEle.setAttribute("showing", "mainMenu");
-  });
-
-  document.querySelector('.newShare').addEventListener('click', async () => {
-    overlayMenuEle.classList.add("hidden");
-    const rawCode = await showInput("Enter the share code", { acceptText: "Enter Code" });
-    if (!rawCode) return;
-    const codeSeparated = rawCode.split("=");
-    const code = codeSeparated[codeSeparated.length - 1];
-    await loadShareDeckFromCode(code);
+    overlayMenuEle.setAttribute("showing", "hamMenu");
   });
 
   document.querySelector('share').addEventListener('click', async () => {

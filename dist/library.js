@@ -35,7 +35,6 @@ const searchInputEles = document.querySelectorAll('searchContainer input');
 const searchInputClearEle = document.querySelector('searchContainer searchicon[type="clear"]');
 const gridButtonEle = document.querySelector('.grid');
 const legalButtonEle = document.querySelector('.legal');
-const removeLibraryCardEle = document.querySelector('.removeLibraryCard');
 
 var searchText = '';
 var subFilter;
@@ -315,17 +314,6 @@ export const onShowLibrary = async (event) => {
 };
 
 export const initLibraryEvents = () => {
-  Object.keys(filters).forEach(key => {
-    const object = filters[key];
-    object.ele.addEventListener('click', () => {
-      const startsInactive = object.ele.classList.contains('inactive');
-      object.ele.classList.toggle('inactive');
-      object.active = !!startsInactive;
-      applyFilters();
-      applyCarousel();
-    });
-  });
-
   showLibraryButton.addEventListener('click', onShowLibrary);
 
   searchButton.addEventListener('click', async () => {
@@ -455,26 +443,5 @@ export const initLibraryEvents = () => {
       scrollLibraryScroller(cardScrollX - offsetCenterLeft);
       return;
     }
-  });
-
-  removeLibraryCardEle.addEventListener('click', async (event) => {
-    const overlayMenuEle = document.querySelector('overlayMenu');
-    overlayMenuEle.className = 'hidden';
-
-    if (event.cancelable) event.preventDefault();
-
-    setTimeout(async () => {
-      const currentCardEle = document.querySelector('card.highlight');
-      if (!currentCardEle) return;
-
-      const confirmValue = await showConfirm('Are you sure you want to remove this card from your library?');
-      await awaitTime(200);
-
-      if (!confirmValue) return;
-
-      await storage.removeCardFromDatabase(currentCardEle.getAttribute('uid'));
-      showToast('Card Removed');
-      currentCardEle.remove();
-    }, 200);
   });
 };

@@ -143,8 +143,8 @@ const init = async () => {
   try {
     Capacitor.Plugins.App.addListener("backButton", (event) => {
       if (overlayMenuEle.className != "hidden") {
-        if (overlayMenuEle.getAttribute("showing") != "mainMenu") {
-          overlayMenuEle.setAttribute("showing", "mainMenu");
+        if (overlayMenuEle.getAttribute("showing") != "hamMenu") {
+          overlayMenuEle.setAttribute("showing", "hamMenu");
           return;
         }
         overlayMenuEle.className = 'hidden';

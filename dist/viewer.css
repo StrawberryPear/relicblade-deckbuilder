@@ -322,101 +322,6 @@ cardTopControls {
   min-height: 30.5px;
 }
 
-cardControl {
-  position: relative;
-  width: min(calc(0.06 * var(--screen-height)), 80px);
-  height: 100%;
-  background: #0d2426;
-  pointer-events: all;
-  transform: scale(1.15);
-  color: white;
-}
-
-cardControl::before {
-  content: '';
-  display: block;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  bottom: 0px;
-  right: 0px;
-  background-size: 80%;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-cardControl::before {
-  content: 'U';
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: 'tradeWinds';
-  font-size: 20px;
-  /* padding-top: 4px; */
-  height: 100%;
-  background-size: auto 58%;
-  background-position: center;
-  background-repeat: no-repeat;
-  right: 4px;
-  background-size: auto 80%;
-}
-
-cardControl.filterCharacter::before {
-  content: '';
-  background-image: url('./assets/character.png');
-  background-size: auto 80%;
-}
-
-cardControl.filterAdvocate::before {
-  content: '';
-  background-image: url('./assets/advocate.png');
-  background-size: auto 90%;
-}
-
-cardControl.filterAdversary::before {
-  content: '';
-  background-image: url('./assets/adversary.png');
-  background-size: auto 70%;
-}
-
-cardControl.filterNeutral::before {
-  content: 'N';
-}
-
-cardControl.filterTactic::before {
-  content: '';
-  background-image: url('./assets/tactic.png');
-  background-size: auto 90%;
-}
-
-cardControl.filterPotion::before {
-  content: '';
-  background-image: url('./assets/potion.png');
-}
-
-cardControl.filterWeapon::before {
-  content: '';
-  background-image: url('./assets/weapon.png');
-}
-
-cardControl.filterItem::before,
-cardControl.filterUpgrade::before {
-  content: '';
-  background-image: url('./assets/item.png');
-  background-size: auto 80%;
-}
-
-cardControl.filterSpell::before {
-  content: '';
-  background-image: url('./assets/spell.png');
-}
-
-cardControl.filterRelic::before,
-cardControl.filterRelicUpgrade::before {
-  content: '';
-  background-image: url('./assets/relic.png');
-}
-
 cardButtons {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -990,13 +895,13 @@ random::after {
   font-size: calc(80px + (var(--card-width) - 300px) / 2);
 }
 
-overlayMenu:not([showing="mainMenu"]) mainMenu,
+overlayMenu:not([showing="hamMenu"]) hamMenu,
 overlayMenu:not([showing="savesMenu"]) savesMenu {
   display: none;
 }
 
 savesMenu,
-mainMenu {
+hamMenu {
   top: 0px;
   left: 0px;
   width: 100%;
@@ -1117,7 +1022,7 @@ tokenOverlay {
   background: linear-gradient(0deg, #000 0%, #0000 20%);
   pointer-events: all;
   transition: opacity 0.5s;
-  z-index: 10;
+  z-index: 8;
 }
 
 token {

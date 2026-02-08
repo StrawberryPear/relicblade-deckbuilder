@@ -145,7 +145,7 @@
     margin-left: -1px;
   }
     
-  mainMenu, savesMenu {
+  hamMenu, savesMenu {
     align-items: flex-end;
     padding-right: 48px;
     box-sizing: border-box;
