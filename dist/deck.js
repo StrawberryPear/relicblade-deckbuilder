@@ -310,7 +310,7 @@ export const removeCharacter = async () => {
 };
 
 export const onShowDeck = async () => {
-  if (document.body.getAttribute("showing") !== 'library') return;
+  if (document.body.getAttribute("showing") == 'deck') return;
 
   setScrolledLibraryCard(getCenterCardEle());
 

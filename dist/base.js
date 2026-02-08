@@ -32,6 +32,7 @@ import {
   placeDeckFromShareCodeIntoLocal,
   loadShareDeckFromCode
 } from './menu.js';
+import { initMainMenuEvents } from './mainMenu.js';
 
 const triggerReload = async () => {
   console.log('assessing reload?')
@@ -241,6 +242,7 @@ const init = async () => {
   initDeckEvents();
   initLibraryEvents();
   initMenuEvents();
+  initMainMenuEvents();
 
   setTimeout(() => {
     onAppFocus();

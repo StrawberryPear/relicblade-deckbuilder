@@ -97,10 +97,21 @@
 
     <mainMenu>
       <menuLogo></menuLogo>
-      <menuButton>Learn to Play</menuButton>
-      <menuButton>My Lists</menuButton>
-      <menuButton>Enter Share Code</menuButton>
-      <menuButton>Browse</menuButton>
+      <menuButtons>
+        <menuButton>Learn to Play</menuButton>
+        <menuButton>My Lists</menuButton>
+        <menuButton>Enter Share Code</menuButton>
+        <menuButton>Browse</menuButton>
+      </menuButtons>
+
+      <savesMenu class="hidden">
+        <menuControl class="saveSlot" idx="0"></menuControl>
+        <menuControl class="saveSlot" idx="1"></menuControl>
+        <menuControl class="saveSlot" idx="2"></menuControl>
+        <menuControl class="saveSlot" idx="3"></menuControl>
+        <menuControl class="saveSlot" idx="4"></menuControl>
+        <menuControl class="saveReturn">Back</menuControl>
+      </savesMenu>
     </mainMenu>
 
     <loadingOverlay>
@@ -119,15 +130,7 @@
         <menuControl class="showIllegal">Show Illegal Options</menuControl>
         <label class="menuControl contact">Contact</label>
         <menuControl class="return">Return</menuControl>
-      </hamMenu>
-      <savesMenu>
-        <menuControl class="saveSlot" idx="0"></menuControl>
-        <menuControl class="saveSlot" idx="1"></menuControl>
-        <menuControl class="saveSlot" idx="2"></menuControl>
-        <menuControl class="saveSlot" idx="3"></menuControl>
-        <menuControl class="saveSlot" idx="4"></menuControl>
-        <menuControl class="saveReturn">Back to Menu</menuControl>
-      </savesMenu>
+      </hamMenu>  
     </overlayMenu>
 
     <modalOverlay class="hidden">

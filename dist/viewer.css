@@ -1191,3 +1191,121 @@ modal.input {
     bottom: auto;
     top: calc(2vh + var(--safe-area-top));
 }
+
+/* Main Menu Styles */
+mainMenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0d2426 0%, #000 100%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease-in-out;
+}
+
+body[showing="menu"] mainMenu {
+  opacity: 1;
+  pointer-events: all;
+}
+
+menuLogo {
+  display: block;
+  width: 80%;
+  max-width: 400px;
+  height: min(20vh, 150px);
+  background-image: url('./assets/relicbladeLogo.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 10px rgba(88, 213, 230, 0.3));
+}
+
+mainMenu menuButton {
+  display: flex;
+  width: 80%;
+  max-width: 320px;
+  height: 64px;
+  background: rgba(17, 62, 64, 0.8);
+  color: #fff;
+  font-family: 'tradeWinds';
+  font-size: min(24px, 5vw);
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #58d5e6;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
+  text-align: center;
+  padding: 0 10px;
+  user-select: none;
+}
+
+mainMenu menuButton:active {
+  transform: scale(0.98);
+  background: rgba(17, 62, 64, 1);
+}
+
+/* Hide other main UI elements when showing menu */
+body[showing="menu"] nav,
+body[showing="menu"] cardTopControls,
+body[showing="menu"] cardScrollerContainer,
+body[showing="menu"] tokenContainer,
+body[showing="menu"] cardCarousel,
+body[showing="menu"] cardButtons,
+body[showing="menu"] toast, 
+body[showing="menu"] deckTitleContainer {
+  display: none !important;
+}
+
+mainMenu menuButton.hidden {
+  display: none;
+}
+
+mainMenu savesMenu {
+  display: flex !important;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  gap: 16px;
+}
+
+mainMenu savesMenu.hidden {
+  display: none !important;
+}
+
+mainMenu savesMenu .menuControl.saveSlot {
+  width: 80%;
+  max-width: 320px;
+  height: 54px;
+  background: rgba(17, 62, 64, 0.4);
+  color: #fff;
+  border: 1px solid #58d5e6;
+  border-radius: 6px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  margin: 0;
+  cursor: pointer;
+}
+
+mainMenu savesMenu .menuControl.saveReturn {
+  margin-top: 24px;
+  color: #58d5e6;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  display: block;
+  text-decoration: underline;
+}

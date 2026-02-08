@@ -307,7 +307,7 @@ export const onShowLibrary = async (event) => {
 
   document.body.className = '';
   setScrolledDeckCard(getCenterCardEle());
-  if (document.body.getAttribute("showing") !== 'deck') return;
+  if (document.body.getAttribute("showing") == 'library') return;
 
   document.body.setAttribute("showing", "library");
   applyCarousel();

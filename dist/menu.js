@@ -95,6 +95,15 @@ export const handleSave = async (saveSlotIdx) => {
   storage.setStoredDecks(storedDecks);
   loadDeckFromLocal();
   overlayMenuEle.classList.add("hidden");
+  
+  // reset main menu state if we loaded from there
+  const mainMenuSaves = document.querySelector('mainMenu > savesMenu');
+  if (mainMenuSaves) {
+     mainMenuSaves.classList.add('hidden');
+     document.querySelectorAll('mainMenu menuButton').forEach(b => b.classList.remove('hidden'));
+  }
+
+  onShowDeck();
   showToast(`Deck, ${deckName} saved to slot ${saveSlotIdx}`);
 };
 
@@ -114,9 +123,24 @@ export const handleLoad = async (loadSlotIdx) => {
   storage.setStoredDeck(deckName, deck);
   loadDeckFromLocal();
   overlayMenuEle.classList.add("hidden");
+  
+  // reset main menu state if we loaded from there
+  const mainMenuSaves = document.querySelector('mainMenu > savesMenu');
+  if (mainMenuSaves) {
+     mainMenuSaves.classList.add('hidden');
+     document.querySelectorAll('mainMenu menuButton').forEach(b => b.classList.remove('hidden'));
+  }
+
   onShowDeck();
   scrollLibraryScroller(0);
   showToast(`Deck, ${deckName || "Untitled Deck"} loaded!`);
+};
+
+
+export const onShowMenu = () => {
+  if (document.body.getAttribute("showing") == "menu") return;
+  document.body.setAttribute("showing", "menu");
+  overlayMenuEle.classList.add("hidden");
 };
 
 export const initMenuEvents = () => {
@@ -146,6 +170,9 @@ export const initMenuEvents = () => {
     overlayMenuEle.className = '';
     overlayMenuEle.setAttribute("showing", "hamMenu");
   });
+
+  document.querySelector('.returnToMenu').addEventListener('click', onShowMenu);
+
 
   document.querySelector('share').addEventListener('click', async () => {
     const confirmValue = await showConfirm(`Would you like to generate a link to share ${deckName || "this deck"}?`);
