@@ -1,165 +1,198 @@
 <!DOCTYPE html>
 <html dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Relicblade Deck Builder">
-    <link rel="apple-touch-icon" href="./assets/icon512.png">
-    <link rel="manifest" href="./manifest.json">
 
-    <title>Relicblade Deck Builder</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Relicblade Deck Builder">
+  <link rel="apple-touch-icon" href="./assets/icon512.png">
+  <link rel="manifest" href="./manifest.json">
 
-    <link rel="stylesheet" type="text/css" href="./viewer.css">
-    <link rel="stylesheet" type="text/css" href="./viewerHorizontal.css">
-  </head>
+  <title>Relicblade Deck Builder</title>
 
-  <body class="loading" showing="menu" subfilter="">
-    <main>
-      <nav>
-        <call><edit></edit><deckTitleContainer><input type="text" id="title" contentEditable="true" maxlength="24" placeholder="Untitled Deck" /><deckTitleMirror id="titleMirror">Untitled Deck</deckTitleMirror></deckTitleContainer><deckTitlePoints id="points"></deckTitlePoints></call>
-        <description class="horizontal"></description>
-        <hamContainer>
-          <share></share>
-          <ham></ham>
-        </hamContainer>
-      </nav>
+  <link rel="stylesheet" type="text/css" href="./viewer.css">
+  <link rel="stylesheet" type="text/css" href="./viewerHorizontal.css">
+</head>
 
-      <cardTopControls class="library vertical">
-        <searchContainer>
-          <input type="text" placeholder="Search text" />
-          <searchIcon type="view"></searchIcon>
-          <searchIcon type="clear"></searchIcon>
-        </searchContainer>
-        <cardControl class="library filterCharacter inactive"></cardControl>
-        <cardControl type="character" class="library filterAdvocate inactive"></cardControl>
-        <cardControl type="character" class="library filterAdversary inactive"></cardControl>
-        <cardControl type="character" class="library filterNeutral inactive"></cardControl>
-        <cardControl type="" class="library filterUpgrade inactive"></cardControl>
-        <cardControl type="upgrade" class="library filterTactic inactive"></cardControl>
-        <cardControl type="upgrade" class="library filterPotion inactive"></cardControl>
-        <cardControl type="upgrade" class="library filterWeapon inactive"></cardControl>
-        <cardControl type="upgrade" class="library filterItem inactive"></cardControl>
-        <cardControl type="upgrade" class="library filterSpell inactive"></cardControl>
-        <cardControl type="upgrade" class="library filterRelicUpgrade inactive"></cardControl>
-        <cardControl type="" class="library filterRelic inactive"></cardControl>
-      </cardTopControls>
+<body class="loading" showing="menu" subfilter="">
+  <main>
+    <nav>
+      <call>
+        <edit></edit>
+        <deckTitleContainer><input type="text" id="title" contentEditable="true" maxlength="24"
+            placeholder="Untitled Deck" />
+          <deckTitleMirror id="titleMirror">Untitled Deck</deckTitleMirror>
+        </deckTitleContainer>
+        <deckTitlePoints id="points"></deckTitlePoints>
+      </call>
+      <description class="horizontal"></description>
+      <hamContainer>
+        <share></share>
+        <ham></ham>
+      </hamContainer>
+    </nav>
 
-      <cardScrollerContainer>
-        <cardScroller class="library">
-          <cardList>
-          </cardList>
-        </cardScroller>
-        <cardScroller class="deck">
-          <cardList><add><label>Add Character</label></add></cardList>
-        </cardScroller>
-      </cardScrollerContainer>
+    <cardTopControls class="library vertical">
+      <searchContainer>
+        <input type="text" placeholder="Search text" />
+        <searchIcon type="view"></searchIcon>
+        <searchIcon type="clear"></searchIcon>
+      </searchContainer>
+      <cardControl class="library filterCharacter inactive"></cardControl>
+      <cardControl type="character" class="library filterAdvocate inactive"></cardControl>
+      <cardControl type="character" class="library filterAdversary inactive"></cardControl>
+      <cardControl type="character" class="library filterNeutral inactive"></cardControl>
+      <cardControl type="" class="library filterUpgrade inactive"></cardControl>
+      <cardControl type="upgrade" class="library filterTactic inactive"></cardControl>
+      <cardControl type="upgrade" class="library filterPotion inactive"></cardControl>
+      <cardControl type="upgrade" class="library filterWeapon inactive"></cardControl>
+      <cardControl type="upgrade" class="library filterItem inactive"></cardControl>
+      <cardControl type="upgrade" class="library filterSpell inactive"></cardControl>
+      <cardControl type="upgrade" class="library filterRelicUpgrade inactive"></cardControl>
+      <cardControl type="" class="library filterRelic inactive"></cardControl>
+    </cardTopControls>
 
-      <tokenContainer class="deck">
-      </tokenContainer>
+    <cardScrollerContainer>
+      <cardScroller class="library">
+        <cardList>
+        </cardList>
+      </cardScroller>
+      <cardScroller class="deck">
+        <cardList>
+          <add><label>Add Character</label></add>
+        </cardList>
+      </cardScroller>
+    </cardScrollerContainer>
 
-      <cardCarousel class="vertical_">
-        <canvas></canvas>
-      </cardCarousel>
+    <tokenContainer class="deck">
+    </tokenContainer>
 
-      <cardButtons class="library_">
-        <cardButton class="showDeck">Return</cardButton>
-        <cardButton class="grid"></cardButton>
-        <cardButton class="legal"></cardButton>
-        <cardButton class="horizontal search"></cardButton>
-        <cardButton class="vertical horizontal addToDeck">Add to<br>Deck</cardButton>
-        <cardButton class="vertical horizontal attachUpgrade">Attach<br>Upgrade</cardButton>
-      </cardButtons>
-      
-      <cardButtons class="deck_">
-        <cardButton class="vertical horizontal removeFromDeck">Remove</cardButton>
-        <cardButton class="vertical horizontal addUpgrade">Add<br>Upgrade</cardButton>
-        <cardButton class="vertical horizontal randomRelic">Random Relic</cardButton>
-        <cardButton class="showLibrary">Show<br>Library</cardButton>
-        <tokenButton>
-        </tokenButton>
-      </cardButtons>
+    <cardCarousel class="vertical_">
+      <canvas></canvas>
+    </cardCarousel>
 
-      <toast></toast>
-    </main>
-    
-    <tokenOverlay class="hidden">
-      <tokenExpander class="deck_">
-        <token type="stun"></token>
-        <token type="unconscious"></token>
-        <token type="dodge"></token>
-        <token type="bind"></token>
-        <token type="poison"></token>
-        <token type="shieldwall"></token>
-      </tokenExpander>
-    </tokenOverlay>
+    <cardButtons class="library_">
+      <cardButton class="showDeck">Return</cardButton>
+      <cardButton class="grid"></cardButton>
+      <cardButton class="legal"></cardButton>
+      <cardButton class="horizontal search"></cardButton>
+      <cardButton class="vertical horizontal addToDeck">Add to<br>Deck</cardButton>
+      <cardButton class="vertical horizontal attachUpgrade">Attach<br>Upgrade</cardButton>
+    </cardButtons>
 
-    <mainMenu>
-      <menuLogo></menuLogo>
-      <menuButtons>
-        <menuButton>Learn to Play</menuButton>
-        <menuButton>My Lists</menuButton>
-        <menuButton>Enter Share Code</menuButton>
-        <menuButton>Browse</menuButton>
-      </menuButtons>
+    <cardButtons class="deck_">
+      <cardButton class="vertical horizontal removeFromDeck">Remove</cardButton>
+      <cardButton class="vertical horizontal addUpgrade">Add<br>Upgrade</cardButton>
+      <cardButton class="vertical horizontal randomRelic">Random Relic</cardButton>
+      <cardButton class="showLibrary">Show<br>Library</cardButton>
+      <tokenButton>
+      </tokenButton>
+    </cardButtons>
+  </main>
 
-      <savesMenu class="hidden">
-        <menuControl class="saveSlot" idx="0"></menuControl>
-        <menuControl class="saveSlot" idx="1"></menuControl>
-        <menuControl class="saveSlot" idx="2"></menuControl>
-        <menuControl class="saveSlot" idx="3"></menuControl>
-        <menuControl class="saveSlot" idx="4"></menuControl>
-        <menuControl class="saveReturn">Back</menuControl>
-      </savesMenu>
-    </mainMenu>
+  <tokenOverlay class="hidden">
+    <tokenExpander class="deck_">
+      <token type="stun"></token>
+      <token type="unconscious"></token>
+      <token type="dodge"></token>
+      <token type="bind"></token>
+      <token type="poison"></token>
+      <token type="shieldwall"></token>
+    </tokenExpander>
+  </tokenOverlay>
 
-    <loadingOverlay>
-      <loading>
-      </loading>
-      <preview>
-      </preview>
-    </loadingOverlay>
+  <mainMenu>
+    <menuLogo></menuLogo>
+    <menuButtons>
+      <menuButton class="learnToPlay">Learn to Play</menuButton>
+      <menuButton class="myLists">My Lists</menuButton>
+      <menuButton class="shareCodeInput">Enter Share Code</menuButton>
+      <menuButton class="libraryMode">Browse</menuButton>
+    </menuButtons>
 
-    <overlayMenu class="hidden" showing="hamMenu">
-      <hamMenu>
-        <menuControl class="returnToMenu">Return To Main Menu</menuControl>
-        <menuControl class="showList">Show Deck as List</menuControl>
-        <menuControl class="showCards">Show Deck as Cards</menuControl>
-        <menuControl class="showLegal">Hide Illegal Options</menuControl>
-        <menuControl class="showIllegal">Show Illegal Options</menuControl>
-        <label class="menuControl contact">Contact</label>
-        <menuControl class="return">Return</menuControl>
-      </hamMenu>  
-    </overlayMenu>
+    <savesMenu class="hidden">
+      <menuControl class="saveSlot" idx="0">
+        <saveSlotLabel></saveSlotLabel>
+        <saveSlotRename></saveSlotRename>
+        <saveSlotDelete></saveSlotDelete>
+      </menuControl>
+      <menuControl class="saveSlot" idx="1">
+        <saveSlotLabel></saveSlotLabel>
+        <saveSlotRename></saveSlotRename>
+        <saveSlotDelete></saveSlotDelete>
+      </menuControl>
+      <menuControl class="saveSlot" idx="2">
+        <saveSlotLabel></saveSlotLabel>
+        <saveSlotRename></saveSlotRename>
+        <saveSlotDelete></saveSlotDelete>
+      </menuControl>
+      <menuControl class="saveSlot" idx="3">
+        <saveSlotLabel></saveSlotLabel>
+        <saveSlotRename></saveSlotRename>
+        <saveSlotDelete></saveSlotDelete>
+      </menuControl>
+      <menuControl class="saveSlot" idx="4">
+        <saveSlotLabel></saveSlotLabel>
+        <saveSlotRename></saveSlotRename>
+        <saveSlotDelete></saveSlotDelete>
+      </menuControl>
+      <menuControl class="saveReturn">Back</menuControl>
+    </savesMenu>
+  </mainMenu>
 
-    <modalOverlay class="hidden">
-      <cardContainer><card></card></cardContainer>
-      <modal>
-        <modalText></modalText>
-        <modalButtons>
-          <modalButton id="modalReturn">
-            Return
-          </modalButton>
-          <modalButton id="modalAccept">
-            Accept
-          </modalButton>
-        </modalButtons>
-      </modal>
-    </modalOverlay>
+  <loadingOverlay>
+    <loading>
+    </loading>
+    <preview>
+    </preview>
+  </loadingOverlay>
 
-    <templates>
+  <overlayMenu class="hidden" showing="hamMenu">
+    <hamMenu>
+      <menuControl class="returnToMenu">Return To Main Menu</menuControl>
+      <menuControl class="showList">Show Deck as List</menuControl>
+      <menuControl class="showCards">Show Deck as Cards</menuControl>
+      <menuControl class="showLegal">Hide Illegal Options</menuControl>
+      <menuControl class="showIllegal">Show Illegal Options</menuControl>
+      <label class="menuControl contact">Contact</label>
+      <menuControl class="return">Return</menuControl>
+    </hamMenu>
+  </overlayMenu>
+
+  <modalOverlay class="hidden">
+    <cardContainer>
       <card></card>
-    </templates>
-    
-    <script src="./lib/capacitor.js"></script>
-    <script type="module" src="./lib/navBar.plugin.js"></script>
-    <script type="module" src="./lib/statusBar.plugin.js"></script>
-    <script type="module" src="./lib/safeArea.plugin.js"></script>
+    </cardContainer>
+    <modal>
+      <modalText></modalText>
+      <modalButtons>
+        <modalButton id="modalReturn">
+          Return
+        </modalButton>
+        <modalButton id="modalAccept">
+          Accept
+        </modalButton>
+      </modalButtons>
+    </modal>
+  </modalOverlay>
 
-    <script src="./lib/long-press-event.js"></script>
-    
-    <script type="module" src="./base.js"></script>
-    <script src="./umd.js"></script>
-  </body>
+  <toast></toast>
+
+  <templates>
+    <card></card>
+  </templates>
+
+  <script src="./lib/capacitor.js"></script>
+  <script type="module" src="./lib/navBar.plugin.js"></script>
+  <script type="module" src="./lib/statusBar.plugin.js"></script>
+  <script type="module" src="./lib/safeArea.plugin.js"></script>
+
+  <script src="./lib/long-press-event.js"></script>
+
+  <script type="module" src="./base.js"></script>
+  <script src="./umd.js"></script>
+</body>
+
 </html>

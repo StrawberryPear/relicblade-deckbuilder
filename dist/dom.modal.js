@@ -16,7 +16,7 @@ const interactCardOptions = {};
 
 const templateCardEle = document.querySelector("templates card");
 
-const reinitializeModal = async ({acceptText, returnText} = {}) => {
+const reinitializeModal = async ({ acceptText, returnText } = {}) => {
   modalOverlayAcceptButtonEle.innerHTML = acceptText || "Accept";
   modalOverlayReturnButtonEle.innerHTML = returnText || "Return";
 
@@ -25,7 +25,6 @@ const reinitializeModal = async ({acceptText, returnText} = {}) => {
   modalEle.style.setProperty("opacity", "0");
 
   const timeStart = Date.now();
-
   const fadeInDuration = 400;
 
   while (Date.now() - timeStart < fadeInDuration) {
@@ -38,13 +37,13 @@ const reinitializeModal = async ({acceptText, returnText} = {}) => {
 
   modalEle.style.setProperty("opacity", "1");
 };
-export const isModalShowing = () =>{ 
+export const isModalShowing = () => {
   return !modalOverlayEle.classList.contains("hidden");
 }
 export const showInteractCard = async (cardEle, options = {}) => {
   // we don't clone the card element, we have an element sitting around just for this
   // we do move it to be exactly where the card element would be.
-  
+
   const currentCardBounds = cardEle.getBoundingClientRect();
 
   const cx = currentCardBounds.left + currentCardBounds.width * 0.5;
@@ -63,7 +62,7 @@ export const showInteractCard = async (cardEle, options = {}) => {
 
   modalCardEle.style.setProperty("transition", "none");
   modalCardEle.style.setProperty("transform", `translate(-50%, -50%) translate(${cx}px, ${cy}px) scale(${csx}, ${csy})`);
-  
+
   modalCardEle.style.setProperty("opacity", "0");
   modalCardEle.style.setProperty("background-image", cardEle.style.getPropertyValue("background-image"));
 
@@ -102,7 +101,7 @@ export const showConfirm = async (content, options = {}) => {
 
       resolve(id == "modalAccept");
     };
-  
+
     modalOverlayAcceptButtonEle.addEventListener("click", onFinished);
     modalOverlayReturnButtonEle.addEventListener("click", onFinished);
   });
@@ -120,7 +119,7 @@ export const showInput = async (content, options = {}) => {
   modalEle.className = "input";
 
   // change the text, return true if they hit true/false false. 
-  modalOverlayTextEle.innerHTML = content;
+  modalOverlayTextEle.innerHTML = `<div>${content}</div>`;
 
   // attach events to the text input
 
@@ -166,7 +165,7 @@ export const showInput = async (content, options = {}) => {
 
       resolve(id == "modalAccept" && document.getElementById("modalInput").value);
     };
-  
+
     modalOverlayAcceptButtonEle.addEventListener("click", onFinished);
     modalOverlayReturnButtonEle.addEventListener("click", onFinished);
   });
@@ -197,17 +196,17 @@ export const showOption = async (content, options) => {
 
       resolve(id == "modalReturn" ? false : event.target.innerHTML);
     };
-  
+
     for (const option of options) {
       const optionButton = document.createElement("modalButton");
       optionButton.innerHTML = option;
       optionButton.classList.add("fullwidth");
 
       optionButton.addEventListener("click", onFinished);
-  
+
       modalOverlayTextEle.append(optionButton);
     }
-    
+
     modalOverlayReturnButtonEle.addEventListener("click", onFinished);
   });
 
@@ -220,7 +219,7 @@ export const showOption = async (content, options) => {
 
   return returnValue;
 }
-export const init = () => {  
+export const init = () => {
   const _cardEleBoundingRect = templateCardEle.getBoundingClientRect();
   CARD_WIDTH = _cardEleBoundingRect.width;
   CARD_HEIGHT = _cardEleBoundingRect.width * CARD_RATIO;

@@ -6,6 +6,7 @@ import { getAllCardsIdsInDeck, awaitTime } from './utils.js';
 import { cardLibraryListEle, scrollLibraryScroller } from './library.js';
 import { deck, deckName, setDeck, setDeckName, loadDeckFromLocal, onShowDeck } from './deck.js';
 import { showConfirm, showOption, showInput, init as initModal } from './dom.modal.js';
+import { showMainMenu } from './mainMenu.js';
 
 export const overlayMenuEle = document.querySelector('overlayMenu');
 export const descriptionEle = document.querySelector('description');
@@ -95,68 +96,28 @@ export const handleSave = async (saveSlotIdx) => {
   storage.setStoredDecks(storedDecks);
   loadDeckFromLocal();
   overlayMenuEle.classList.add("hidden");
-  
+
   // reset main menu state if we loaded from there
   const mainMenuSaves = document.querySelector('mainMenu > savesMenu');
   if (mainMenuSaves) {
-     mainMenuSaves.classList.add('hidden');
-     document.querySelectorAll('mainMenu menuButton').forEach(b => b.classList.remove('hidden'));
+    mainMenuSaves.classList.add('hidden');
+    document.querySelectorAll('mainMenu menuButton').forEach(b => b.classList.remove('hidden'));
   }
 
   onShowDeck();
   showToast(`Deck, ${deckName} saved to slot ${saveSlotIdx}`);
 };
 
-export const handleLoad = async (loadSlotIdx) => {
-  var localJsonDecks = storage.getStoredDecks();
-  if (!localJsonDecks[loadSlotIdx]) {
-    showToast(`Deck slot, ${loadSlotIdx} is empty`);
-    return;
-  }
-  if (deck.length) {
-    const confirmValue = await showConfirm("If your current deck is unsaved, it will be lost. Are you sure you want to load a new deck?");
-    await awaitTime(200);
-    if (!confirmValue) return;
-  }
-  setDeck(localJsonDecks[loadSlotIdx].deck || {});
-  setDeckName(localJsonDecks[loadSlotIdx].deckName || "");
-  storage.setStoredDeck(deckName, deck);
-  loadDeckFromLocal();
-  overlayMenuEle.classList.add("hidden");
-  
-  // reset main menu state if we loaded from there
-  const mainMenuSaves = document.querySelector('mainMenu > savesMenu');
-  if (mainMenuSaves) {
-     mainMenuSaves.classList.add('hidden');
-     document.querySelectorAll('mainMenu menuButton').forEach(b => b.classList.remove('hidden'));
-  }
-
-  onShowDeck();
-  scrollLibraryScroller(0);
-  showToast(`Deck, ${deckName || "Untitled Deck"} loaded!`);
-};
-
-
 export const onShowMenu = () => {
-  if (document.body.getAttribute("showing") == "menu") return;
-  document.body.setAttribute("showing", "menu");
+  // force a save if we're in deck mode
+  if (document.body.getAttribute("showing") == "deck") {
+
+  }
   overlayMenuEle.classList.add("hidden");
+  showMainMenu();
 };
 
 export const initMenuEvents = () => {
-  [...document.querySelectorAll("menuControl.saveSlot")].forEach((saveSlotEle) => {
-    saveSlotEle.addEventListener("click", (event) => {
-      const isSaveState = overlayMenuEle.getAttribute("saveMode") == "save";
-      const saveIdx = saveSlotEle.getAttribute("idx"); // idx is attribute?
-      // Original: saveSlotEle.getAttribute("idx");
-      if (isSaveState) {
-        handleSave(saveIdx);
-      } else {
-        handleLoad(saveIdx);
-      }
-    });
-  });
-
   returnEle.addEventListener("click", event => {
     overlayMenuEle.classList.add("hidden");
   });

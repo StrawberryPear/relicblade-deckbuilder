@@ -1,29 +1,108 @@
 
-import { overlayMenuEle, loadShareDeckFromCode, handleLoad } from './menu.js';
+import { loadShareDeckFromCode } from './menu.js';
 import { onShowLibrary } from './library.js';
-import { onShowDeck } from './deck.js';
-import { showInput } from './dom.modal.js';
+import { onShowDeck, loadDeckFromLocalIndex, getValueFromDeckCards } from './deck.js';
+import { showInput, showConfirm, showOption } from './dom.modal.js';
+import { storage } from './storage.js';
 import { showToast } from './cards.shared.js';
 
+const buttonContainerEle = document.querySelector('mainMenu menuButtons');
+const saveSlotEles = document.querySelectorAll('mainMenu menuControl.saveSlot');
+const savesMenuEle = document.querySelector('mainMenu > savesMenu');
+
+const learnButtonEle = buttonContainerEle.querySelector('.learnToPlay');
+const myListsButtonEle = buttonContainerEle.querySelector('.myLists');
+const shareCodeButtonEle = buttonContainerEle.querySelector('.shareCodeInput');
+const browseButtonEle = buttonContainerEle.querySelector('.libraryMode');
+
+export const handleLoad = async (loadSlotIdx) => {
+  var localJsonDecks = storage.getStoredDecks();
+  if (!localJsonDecks[loadSlotIdx]) {
+    const newDeckName = await showInput("New Deck Name<br><br>");
+
+    const newDeckFaction = await showOption("Select Faction for Deck<br><br>", ["Advocate", "Adversary", "Wild"]);
+
+    if (!newDeckFaction) {
+      updateSaveSlots();
+
+      return;
+    }
+
+    // now write the new deck to this slot
+    const newDeck = {
+      deckName: newDeckName || `${newDeckFaction} Deck`,
+      deckFaction: newDeckFaction,
+      deck: []
+    };
+
+    const storedDecks = storage.getStoredDecks();
+    const rewroteDecks = { ...storedDecks };
+
+    rewroteDecks[loadSlotIdx] = newDeck;
+
+    storage.setStoredDecks(rewroteDecks);
+  }
+
+  loadDeckFromLocalIndex(loadSlotIdx);
+
+  onShowDeck();
+};
+
 export const initMainMenuEvents = () => {
-  const buttonContainerEle = document.querySelector('mainMenu menuButtons');
-  const buttonEles = [...document.querySelectorAll('mainMenu menuButtons menuButton')];
-  const saveSlots = document.querySelectorAll('mainMenu menuControl.saveSlot');
-  
-  saveSlots.forEach(slot => {
-    slot.addEventListener('click', (e) => {
+  saveSlotEles.forEach(saveSlotEle => {
+    const idx = saveSlotEle.getAttribute('idx');
+
+    saveSlotEle.addEventListener('click', (e) => {
       e.stopPropagation();
-      const idx = slot.getAttribute('idx');
       if (idx !== null) {
         handleLoad(idx);
       }
     });
-  });
 
-  const learnButtonEle = buttonEles.find(b => b.innerText.match(/Learn/i));
-  const myListsButtonEle = buttonEles.find(b => b.innerText.match(/My Lists/i));
-  const shareCodeButtonEle = buttonEles.find(b => b.innerText.match(/Share Code/i));
-  const browseButtonEle = buttonEles.find(b => b.innerText.match(/Browse/i));
+    const renameEle = saveSlotEle.querySelector("saveSlotRename");
+    if (renameEle) {
+      renameEle.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const storedDecks = storage.getStoredDecks();
+        const renameDeck = storedDecks[idx] || { deckName: "Empty Slot" };
+
+        const newName = await showInput("Rename Deck", renameDeck.deckName);
+
+        if (newName) {
+          const rewroteDecks = { ...storedDecks };
+
+          rewroteDecks[idx] = { deck: [], ...renameDeck, deckName: newName };
+
+          storage.setStoredDecks(rewroteDecks);
+
+          showMainMenu();
+        }
+      });
+    }
+
+    const deleteEle = saveSlotEle.querySelector("saveSlotDelete");
+    if (deleteEle) {
+      deleteEle.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const storedDecks = storage.getStoredDecks();
+
+        const deleteDeck = storedDecks[idx] || { deckName: "Empty Slot" };
+
+        // confirm delete
+        const confirmDelete = await showConfirm(`Are you sure you want to delete, ${deleteDeck.deckName}?`);
+
+        if (confirmDelete) {
+          const rewroteDecks = { ...storedDecks };
+
+          delete rewroteDecks[idx];
+
+          storage.setStoredDecks(rewroteDecks);
+
+          updateSaveSlots();
+        }
+      });
+    }
+  });
 
   if (learnButtonEle) {
     learnButtonEle.addEventListener('click', () => {
@@ -31,22 +110,18 @@ export const initMainMenuEvents = () => {
     });
   }
 
-
-
   if (myListsButtonEle) {
     myListsButtonEle.addEventListener('click', () => {
-      overlayMenuEle.setAttribute('saveMode', 'load');
-      const savesMenuEle = document.querySelector('mainMenu > savesMenu');
-      if (savesMenuEle) savesMenuEle.classList.remove('hidden');
-      buttonEles.forEach(b => b.classList.add('hidden'));
+      savesMenuEle.classList.remove('hidden');
+      buttonContainerEle.classList.add('hidden');
     });
   }
-  
+
   const saveReturnButton = document.querySelector('mainMenu > savesMenu > .saveReturn');
   if (saveReturnButton) {
     saveReturnButton.addEventListener('click', () => {
-      document.querySelector('mainMenu > savesMenu').classList.add('hidden');
-      buttonEles.forEach(b => b.classList.remove('hidden'));
+      savesMenuEle.classList.add('hidden');
+      buttonContainerEle.classList.remove('hidden');
     });
   }
 
@@ -64,3 +139,33 @@ export const initMainMenuEvents = () => {
     browseButtonEle.addEventListener('click', onShowLibrary);
   }
 };
+
+const updateSaveSlots = () => {
+  const storedDecks = storage.getStoredDecks();
+
+  [...document.querySelectorAll("menuControl.saveSlot")].forEach((saveSlotEle) => {
+    const saveSlotIdx = saveSlotEle.getAttribute("idx");
+
+    // update the save slots names
+    const localJsonDeckIdx = storedDecks[saveSlotIdx];
+
+    const labelEle = saveSlotEle.querySelector("saveSlotLabel");
+    if (!labelEle) return;
+
+    if (!localJsonDeckIdx) {
+      labelEle.innerText = `Empty Slot`;
+      return;
+    }
+
+    const deckValue = getValueFromDeckCards(localJsonDeckIdx.deck);
+    const deckFaction = localJsonDeckIdx.deckFaction ?? "Wild";
+    labelEle.innerText = `${localJsonDeckIdx.deckName} - (${deckValue})`;
+  });
+}
+
+export const showMainMenu = () => {
+  document.body.setAttribute("showing", "menu");
+  savesMenuEle.classList.add('hidden');
+  buttonContainerEle.classList.remove('hidden');
+  updateSaveSlots();
+}

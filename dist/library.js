@@ -112,7 +112,10 @@ export const applyFilters = () => {
       cardEle.classList.toggle('inactive', subFilter || !allFalse || !!getSearchText().trim());
       continue;
     }
-    const cardStoreValues = Object.values({ ...cardStore, uid: /[A-z ]*/.exec(cardStore.uid)[0] }).join(" ").toLowerCase();
+    const searchableCardStoreKeys = ["base", "cost", "name", "classes", "keywords", "types", "upgradeTypes", "factions"];
+    const searchableCardStoreValues = searchableCardStoreKeys.map(key => cardStore[key]).filter(v => v);
+    const cardStoreValues = Object.values({ ...searchableCardStoreValues, uid: /[A-z ]*/.exec(cardStore.uid)[0] }).join(" ").toLowerCase();
+
     const filterShow = Object.values(filters).find(o => o.active && cardStoreValues.match(o.filter));
     const searchShow = cardStoreValues.includes(getSearchText().toLowerCase());
     const subFilterShow = !subFilter || (() => {
@@ -158,6 +161,7 @@ export const applyFilters = () => {
 }
 
 export const performSearchForString = (newSearchText) => {
+  debugger;
   const currentFocusCard = getCenterCardEle();
   const libraryCardEles = [...cardLibraryListEle.children];
   const previousActiveLibraryCardEles = libraryCardEles.filter(e => !e.classList.contains('inactive'));

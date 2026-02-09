@@ -32,7 +32,7 @@ import {
   placeDeckFromShareCodeIntoLocal,
   loadShareDeckFromCode
 } from './menu.js';
-import { initMainMenuEvents } from './mainMenu.js';
+import { initMainMenuEvents, showMainMenu } from './mainMenu.js';
 
 const triggerReload = async () => {
   console.log('assessing reload?')
@@ -213,11 +213,8 @@ const init = async () => {
     try {
       await loadShareDeckFromCode(urlParams.get("id"));
     } catch (e) {
-      loadDeckFromLocal();
     }
     window.history.replaceState({}, document.title, window.location.pathname);
-  } else {
-    loadDeckFromLocal();
   }
 
   // Initial scrolling
@@ -243,6 +240,8 @@ const init = async () => {
   initLibraryEvents();
   initMenuEvents();
   initMainMenuEvents();
+
+  showMainMenu();
 
   setTimeout(() => {
     onAppFocus();
