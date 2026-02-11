@@ -554,6 +554,30 @@ menuControl,
   margin-top: min(4vh, 24px);
 }
 
+menuControl.showLegal {
+  display: none;
+}
+
+body[legal="false"] menuControl.showLegal {
+  display: block;
+}
+
+body[legal="false"] menuControl.showIllegal {
+  display: none;
+}
+
+menuControl.showCards {
+  display: none;
+}
+
+body[listType="list"] menuControl.showCards {
+  display: block;
+}
+
+body[listType="list"] menuControl.showList {
+  display: none;
+}
+
 searchContainer {
   flex-grow: 1;
   position: relative;

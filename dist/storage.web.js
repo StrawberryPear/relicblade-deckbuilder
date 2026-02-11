@@ -23,6 +23,14 @@ export const setStoredDisplayType = (displayType) => {
   return localStorage.setItem("displayType", displayType);
 };
 
+export const getStoredListType = () => {
+  return localStorage.getItem("listType") || "";
+};
+
+export const setStoredListType = (listType) => {
+  localStorage.setItem("listType", listType);
+};
+
 export const getStoredDeck = () => {
   var storedDeck = [];
   var storedDeckName = "";

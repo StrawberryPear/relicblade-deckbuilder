@@ -3,7 +3,7 @@ import { API_URL, SHARE_URL } from './constants.js';
 import { storage } from './storage.js';
 import { showToast } from './cards.shared.js';
 import { getAllCardsIdsInDeck, awaitTime } from './utils.js';
-import { cardLibraryListEle, scrollLibraryScroller } from './library.js';
+import { cardLibraryListEle, scrollLibraryScroller, applyFilters, applyCarousel } from './library.js';
 import { deck, deckName, setDeck, setDeckName, loadDeckFromLocal, onShowDeck } from './deck.js';
 import { showConfirm, showOption, showInput, init as initModal } from './dom.modal.js';
 import { showMainMenu } from './mainMenu.js';
@@ -13,6 +13,10 @@ export const descriptionEle = document.querySelector('description');
 
 // Menu Element Selectors
 export const returnEle = document.querySelector('menuControl.return');
+export const showLegalEle = document.querySelector('menuControl.showLegal');
+export const showIllegalEle = document.querySelector('menuControl.showIllegal');
+export const showListEle = document.querySelector('menuControl.showList');
+export const showCardsEle = document.querySelector('menuControl.showCards');
 
 // Helpers
 export const isShareCodeFormat = (code) => {
@@ -132,8 +136,32 @@ export const initMenuEvents = () => {
     overlayMenuEle.setAttribute("showing", "hamMenu");
   });
 
+
+
   document.querySelector('.returnToMenu').addEventListener('click', onShowMenu);
 
+  showLegalEle.addEventListener('click', () => {
+    document.body.setAttribute("legal", "");
+    applyFilters();
+    applyCarousel();
+  });
+
+  showIllegalEle.addEventListener('click', () => {
+    document.body.setAttribute("legal", "false");
+    applyFilters();
+    applyCarousel();
+  });
+
+  showListEle.addEventListener('click', () => {
+    document.body.setAttribute("listType", "list");
+    storage.setStoredListType("list");
+  });
+
+  showCardsEle.addEventListener('click', () => {
+    document.body.setAttribute("listType", "");
+    storage.setStoredListType("");
+    applyCarousel();
+  });
 
   document.querySelector('share').addEventListener('click', async () => {
     const confirmValue = await showConfirm(`Would you like to generate a link to share ${deckName || "this deck"}?`);

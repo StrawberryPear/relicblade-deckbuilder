@@ -33,8 +33,8 @@ const showLibraryButton = document.querySelector("cardButton.showLibrary");
 const searchButton = document.querySelector("cardButton.search");
 const searchInputEles = document.querySelectorAll('searchContainer input');
 const searchInputClearEle = document.querySelector('searchContainer searchicon[type="clear"]');
+
 const gridButtonEle = document.querySelector('.grid');
-const legalButtonEle = document.querySelector('.legal');
 
 var searchText = '';
 var subFilter;
@@ -347,14 +347,6 @@ export const initLibraryEvents = () => {
     setSearchText("");
     applyCarousel();
     cardTopControlsEle.classList.toggle('searched', !!getSearchText());
-  });
-
-  legalButtonEle.addEventListener('click', async () => {
-    const currentLegal = document.body.getAttribute("legal");
-    const newLegal = currentLegal == "false" ? "" : "false";
-    document.body.setAttribute("legal", newLegal);
-    applyFilters();
-    applyCarousel();
   });
 
   gridButtonEle.addEventListener('click', () => {

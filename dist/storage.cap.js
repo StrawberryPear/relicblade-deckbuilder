@@ -71,7 +71,7 @@ export const hasLoadedBase = () => {
 
 export const setBaseLoaded = (value) => {
   localPreferences.baseLoaded = !!value ? 'true' : 'false';
-  
+
   queueWritePreferences();
 };
 
@@ -94,6 +94,16 @@ export const setStoredDisplayType = (displayType) => {
   queueWritePreferences();
 };
 
+export const getStoredListType = () => {
+  return localPreferences.listType || "";
+};
+
+export const setStoredListType = (listType) => {
+  localPreferences.listType = listType;
+
+  queueWritePreferences();
+};
+
 export const getStoredDeck = () => {
   var storedDeck = [];
   var storedDeckName = "";
@@ -101,7 +111,7 @@ export const getStoredDeck = () => {
     storedDeck = JSON.parse(localPreferences.deck || '[]');
     storedDeckName = localPreferences.deckName || '';
   } catch (e) { }
-  
+
   console.log(`Read, ${storedDeckName}, ${JSON.stringify(storedDeck)}`);
 
   return { deck: storedDeck, deckName: storedDeckName };
@@ -150,7 +160,7 @@ const writeLocalDataToDatabase = async () => {
       directory,
       encoding
     });
-    
+
     console.log('Wrote local data to file');
   } catch (e) {
     console.error(e);
@@ -204,7 +214,7 @@ export const init = async () => {
       version: 2
     };
     await writePreferences();
-    
+
     var database = await idb.openDB('relicbladeCards', 3, {
       upgrade: (db, oldVersion) => {
         if (oldVersion < 2) {
@@ -217,20 +227,21 @@ export const init = async () => {
             // ignore error
           }
         }
-  
-        const cardObjectStore = db.createObjectStore('cards', { keyPath: 'index', autoIncrement: true }); 
-  
+
+        const cardObjectStore = db.createObjectStore('cards', { keyPath: 'index', autoIncrement: true });
+
         cardObjectStore.createIndex('uid', 'uid', { unique: true });
-      }});
-    
+      }
+    });
+
     console.log('gatheredCards from localdb');
     // lets get all the cards
     const dataBaseCards = await (async () => {
       const baseTransaction = database.transaction('cards', 'readwrite');
       const baseObjectStore = baseTransaction.objectStore('cards');
-  
+
       const allCards = await baseObjectStore.getAll();
-  
+
       return [...allCards].map(card => {
         return { uid: card.uid, image: card.image };
       })
@@ -259,7 +270,7 @@ export const init = async () => {
       directory,
       encoding
     });
-    
+
     console.log('Read local data from file');
     localData = (contents.data ? JSON.parse(contents.data) : []) || [];
 
