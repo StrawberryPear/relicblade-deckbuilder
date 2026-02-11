@@ -135,7 +135,7 @@ body[displayType="list"] cardScroller {
   scroll-behavior: smooth;
   overflow-x: auto;
   overflow-y: scroll;
-  max-height: calc(var(--screen-height) - var(--nav-height) - var(--foot-button-height) - var(--search-height) - 8px);
+  max-height: calc(var(--screen-height) - var(--nav-height) - var(--foot-button-height) - var(--search-height) - 16px);
 }
 
 body[displayType="list"] cardscrollercontainer::after {
@@ -145,7 +145,7 @@ body[displayType="list"] cardscrollercontainer::after {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(0deg, #0008 0%, transparent 4px, transparent calc(100% - 4px), #0008 100%);
+  background: linear-gradient(0deg, #1118 0%, transparent 4px, transparent calc(100% - 4px), #1118 100%);
   pointer-events: none;
 }
 
