@@ -133,15 +133,6 @@ const init = async () => {
     return false;
   });
 
-  document.body.setAttribute("data-long-press-delay", 450);
-  document.body.addEventListener("long-press", (event) => {
-    event.preventDefault();
-    awaitFrame().then(() => {
-      document.body.click();
-    });
-    return false;
-  });
-
   try {
     Capacitor.Plugins.App.addListener("backButton", (event) => {
       if (overlayMenuEle.className != "hidden") {

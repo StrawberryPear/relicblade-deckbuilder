@@ -513,22 +513,37 @@ export const initDeckEvents = () => {
     } while (delta < 1);
   });
 
-  cardScrollerDeckEle.setAttribute("data-long-press-delay", 200);
-  cardScrollerDeckEle.addEventListener("long-press", async (event) => {
-    var touchEndEvent = new Event("touchend");
-    cardScrollerDeckEle.dispatchEvent(touchEndEvent);
+  cardScrollerDeckEle.addEventListener("click", async (event) => {
+    if (document.body.getAttribute("showing") !== 'deck') {
+      return;
+    }
+
     event.preventDefault();
+
     const selectedCardEle = event.target;
     if (!selectedCardEle) return;
     if (selectedCardEle.tagName != "CARD") return;
+
+    // check if it's the focused card
+    const deckIndex = getDeckIndexOfCardEle(selectedCardEle);
+    if (deckIndex == -1) return;
+    const parentCardEle = getParentCardEleFromAny(selectedCardEle);
+
+    const upgradeIndex = [...parentCardEle.querySelectorAll("card")].indexOf(selectedCardEle);
+
+    // check the deckcardtop scroll
+
+    console.log(parentCardEle.currentRangeScalar, upgradeIndex + 1);
+    if (parentCardEle.currentRangeScalar !== (upgradeIndex + 1)) {
+      applyDeckCardTopScroll(parentCardEle, upgradeIndex + 1);
+      return;
+    }
+
     awaitTime(100).then(() => {
       selectedCardEle.classList.toggle("highlight", true);
     });
 
     // Deck specific logic
-    const parentCardEle = selectedCardEle.parentElement.tagName == "CARD" ? selectedCardEle.parentElement : selectedCardEle;
-    const upgradeIndex = [...parentCardEle.querySelectorAll("card")].indexOf(selectedCardEle);
-    applyDeckCardTopScroll(parentCardEle, upgradeIndex + 1);
     showInteractCard(selectedCardEle);
     const currentFocusCard = cardsStore[selectedCardEle.getAttribute("uid")];
     const options = [];
@@ -548,20 +563,6 @@ export const initDeckEvents = () => {
     hideInteractCard(!optionResult);
     selectedCardEle.classList.toggle("highlight", false);
     return;
-  });
-
-  cardScrollerDeckEle.addEventListener("click", async (event) => {
-    const clickedCardEle = event?.target;
-    if (!clickedCardEle) return;
-    if (clickedCardEle.tagName != "CARD") return;
-    if (document.body.getAttribute("showing") !== 'library') {
-      const deckIndex = getDeckIndexOfCardEle(clickedCardEle);
-      if (deckIndex == -1) return;
-      const parentCardEle = getParentCardEleFromAny(clickedCardEle);
-      const upgradeIndex = [...parentCardEle.querySelectorAll("card")].indexOf(clickedCardEle);
-      applyDeckCardTopScroll(parentCardEle, upgradeIndex + 1);
-      return;
-    }
   });
 
   deckTitleInput.addEventListener("input", event => {

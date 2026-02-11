@@ -54,6 +54,8 @@
     max(0px, 0.6 * var(--screen-height) - calc(var(--card-height)));
   --nav-height: 48px;
   --foot-height: 44px;
+  --foot-button-height: min(64px, calc(0.085 * var(--screen-height)));
+  --search-height: 30.5px;
   --token-fan: min(140px, calc(var(--screen-width) / 2.5));
   --token-size: min(10vh, 64px);
 }
@@ -111,6 +113,7 @@ templates {
 }
 
 cardScroller {
+  position: relative;
   display: block !important;
   height: 100%;
   width: 100%;
@@ -132,6 +135,18 @@ body[displayType="list"] cardScroller {
   scroll-behavior: smooth;
   overflow-x: auto;
   overflow-y: scroll;
+  max-height: calc(var(--screen-height) - var(--nav-height) - var(--foot-button-height) - var(--search-height) - 8px);
+}
+
+body[displayType="list"] cardscrollercontainer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(0deg, #0008 0%, transparent 4px, transparent calc(100% - 4px), #0008 100%);
+  pointer-events: none;
 }
 
 body.editing cardScroller {
@@ -347,6 +362,7 @@ cardButtons {
   padding-bottom: calc(var(--screen-height) * 0.01);
   align-items: end;
   /* background: linear-gradient(00deg, #1b6570, transparent); */
+  padding-top: 4px;
   pointer-events: none;
   position: absolute;
   bottom: 0px;
@@ -592,7 +608,7 @@ searchContainer {
 
 searchContainer input[type="text"] {
   width: 100%;
-  background: none;
+  background: #133a3c;
   box-sizing: border-box;
   border: none;
   position: relative;
@@ -728,7 +744,7 @@ body[displayType="grid"] cardScroller.library cardlist purchase label {
 }
 
 cardCarousel {
-  display: block;
+  display: none;
   width: 100%;
   height: min(calc(var(--screen-height) - var(--card-height) - 200px), 72px);
   margin-bottom: calc(var(--screen-height) * 0.01);
@@ -768,8 +784,8 @@ cardScrollerContainer {
   justify-items: start;
 }
 
-body[showing="library"][displayType="grid"] cardcarousel {
-  display: none;
+body[showing="library"][displayType=""] cardcarousel {
+  display: block;
 }
 
 cardbutton.addUpgrade {
@@ -1461,7 +1477,7 @@ nameCard {
   padding: 0 48px;
   padding-right: 24px;
   padding-top: 6px;
-  margin: 16px 0;
+  margin-bottom: 16px;
   box-sizing: border-box;
 }
 
@@ -1490,7 +1506,6 @@ nameCard upper::before {
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
-
 }
 
 nameCard upper activations {
@@ -1513,6 +1528,56 @@ nameCard upper activations {
   font-size: 13cqi;
   padding-top: 4px;
   box-sizing: border-box;
+}
+
+nameCard.upgrade upper activations {
+  background-image: url('./assets/itemRound.png');
+  height: 140%;
+}
+
+nameCard.upgrade upper activations::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(0%, 0%);
+  width: 100%;
+  height: 100%;
+  background: url('./assets/potion.png');
+  background-size: 40% 40%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+nameCard.upgrade.item upper activations::after {
+  background-image: url('./assets/item.png');
+  background-size: 45% 45%;
+}
+
+nameCard.upgrade.weapon upper activations::after {
+  background-image: url('./assets/weapon.png');
+  background-size: 50% 50%;
+  background-position: 55% 55%;
+}
+
+nameCard.upgrade.tactic upper activations::after {
+  background-image: url('./assets/tactic.png');
+  background-size: 50% 50%;
+  background-position: 55% 55%;
+}
+
+nameCard.upgrade.spell upper activations::after {
+  background-image: url('./assets/spell.png');
+  background-size: 45% 45%;
+}
+
+nameCard.upgrade.relic upper activations::after {
+  background-image: url('./assets/relic.png');
+  background-size: 45% 45%;
+}
+
+nameCard.upgrade upper points {
+  background-image: url('./assets/cost-square.png');
 }
 
 nameCard upper nameCardName {
@@ -1555,4 +1620,8 @@ nameCard upper points {
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+cardnamelist nameCard:first-child {
+  margin-top: 16px;
 }

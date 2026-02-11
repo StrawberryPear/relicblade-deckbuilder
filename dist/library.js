@@ -415,15 +415,31 @@ export const initLibraryEvents = () => {
   carouselEle.addEventListener("touchstart", onCarouselInteraction);
   carouselEle.addEventListener("touchmove", onCarouselInteraction);
 
-  // LONG PRESS and CLICK
-  cardScrollerLibraryEle.setAttribute("data-long-press-delay", 200);
-  cardScrollerLibraryEle.addEventListener("long-press", async (event) => {
-    var touchEndEvent = new Event("touchend");
-    cardScrollerLibraryEle.dispatchEvent(touchEndEvent);
+  // when a card is within focus, trigger it
+  cardScrollerLibraryEle.addEventListener("click", async (event) => {
     event.preventDefault();
 
     const selectedCardEle = event.target;
     if (!selectedCardEle || selectedCardEle.tagName != "CARD") return;
+
+    // check if it's in the middle
+    const centerCard = getCenterCardEle();
+
+    if (selectedCardEle.getAttribute("uid") !== centerCard.getAttribute("uid")) {
+      if (document.body.getAttribute("displayType") == "") {
+        if (centerCard.getAttribute("index") !== selectedCardEle.getAttribute("index")) {
+          const cardWidth = selectedCardEle.clientWidth;
+          const cardsPerScreen = Math.floor(window.innerWidth / cardWidth);
+          const offsetCenterLeft = cardsPerScreen * 0.5 * cardWidth;
+          const timeToStop = await awaitScrollStop();
+          if (timeToStop < 50) {
+            const cardScrollX = selectedCardEle.offsetLeft || 0;
+            scrollLibraryScroller(cardScrollX - offsetCenterLeft);
+          }
+          return;
+        }
+      }
+    }
 
     awaitTime(100).then(() => {
       selectedCardEle.classList.toggle("highlight", true);
@@ -456,36 +472,5 @@ export const initLibraryEvents = () => {
       await addCharacter();
     }
     selectedCardEle.classList.toggle("highlight", false);
-  });
-
-  cardScrollerLibraryEle.addEventListener("click", async (event) => {
-    const clickedCardEle = event?.target;
-    if (!clickedCardEle || clickedCardEle.tagName != "CARD") return;
-
-    if (document.body.getAttribute("showing") !== 'library') return;
-
-    if (document.body.getAttribute("displayType") !== "grid") {
-      const centerCard = getCenterCardEle();
-      if (centerCard.getAttribute("index") !== clickedCardEle.getAttribute("index")) {
-        const cardWidth = clickedCardEle.clientWidth;
-        const cardsPerScreen = Math.floor(window.innerWidth / cardWidth);
-        const offsetCenterLeft = cardsPerScreen * 0.5 * cardWidth;
-        const timeToStop = await awaitScrollStop();
-        if (timeToStop < 50) {
-          const cardScrollX = clickedCardEle.offsetLeft || 0;
-          scrollLibraryScroller(cardScrollX - offsetCenterLeft);
-        }
-        return;
-      }
-    }
-    if (document.body.getAttribute("displayType") == "grid") {
-      const timeToStop = await awaitScrollStop();
-      const cardWidth = clickedCardEle.clientWidth;
-      const cardsPerScreen = Math.floor(window.innerWidth / cardWidth);
-      const offsetCenterLeft = cardsPerScreen * 0.5 * cardWidth;
-      const cardScrollX = clickedCardEle.offsetLeft || 0;
-      scrollLibraryScroller(cardScrollX - offsetCenterLeft);
-      return;
-    }
   });
 };
