@@ -45,7 +45,7 @@ export const handleLoad = async (loadSlotIdx) => {
 
   loadDeckFromLocalIndex(loadSlotIdx);
 
-  onShowDeck();
+  onShowDeck(true);
 };
 
 export const initMainMenuEvents = () => {
@@ -130,7 +130,7 @@ export const initMainMenuEvents = () => {
       const code = await showInput("Enter Share Code");
       if (code) {
         await loadShareDeckFromCode(code);
-        onShowDeck();
+        onShowDeck(true);
       }
     });
   }

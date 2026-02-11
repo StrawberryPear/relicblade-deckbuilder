@@ -337,7 +337,7 @@ export const removeCharacter = async () => {
   showToast(`Card removed from deck`);
 };
 
-export const onShowDeck = async () => {
+export const onShowDeck = async (fromMainMenu) => {
   if (document.body.getAttribute("showing") == 'deck') return;
 
   setScrolledLibraryCard(getCenterCardEle());
@@ -346,6 +346,18 @@ export const onShowDeck = async () => {
 
   // scroll to the last library focused' card
   document.body.setAttribute("showing", "deck");
+
+  // if this is the first time showing the deck since we loaded, then we should minorly adjust the scrolls
+  if (fromMainMenu) {
+    await awaitFrame();
+    const topLevelCardEles = [...cardDeckListEle.querySelectorAll("cardDeckWrapper > card")];
+
+    for (const cardEle of topLevelCardEles) {
+      if (!cardEle) continue;
+
+      applyDeckCardTopScroll(cardEle, 0);
+    }
+  }
 
   await awaitScrollStop();
 };
