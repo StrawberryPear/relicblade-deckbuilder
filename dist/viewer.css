@@ -130,7 +130,7 @@ cardScroller {
   transition: transform 0.3s;
 }
 
-body[displayType="list"] cardScroller {
+body[displayType="list"] cardScroller.library {
   display: block !important;
   scroll-behavior: smooth;
   overflow-x: auto;
@@ -240,6 +240,7 @@ purchase[uid="visitRelicblade"] {
 }
 
 card.inactive,
+nameCard.inactive,
 purchase.inactive {
   display: none;
 }
@@ -1492,6 +1493,7 @@ nameCard upper {
   padding-right: 36px;
   container-type: inline-size;
   aspect-ratio: 520 / 101;
+  pointer-events: none;
 }
 
 nameCard upper::before {

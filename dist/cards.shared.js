@@ -6,7 +6,7 @@ import { awaitFrame, clamp } from './utils.js';
 
 export const getParentCardEleFromAny = (ele) => {
   // find the top level parent
-  while (ele.parentElement && ele.parentElement.tagName == "CARD") {
+  while (ele.parentElement && ["CARD", "NAMECARD"].includes(ele.parentElement.tagName)) {
     ele = ele.parentElement;
   }
 
@@ -47,11 +47,13 @@ export const awaitScrollStop = async () => {
   const startTime = Date.now();
 
   var lastScrollLeft = currentCardScrollerEle.scrollLeft;
+  var lastScrollTop = currentCardScrollerEle.scrollTop;
 
   await awaitFrame();
 
-  while (lastScrollLeft != currentCardScrollerEle.scrollLeft) {
+  while (lastScrollLeft != currentCardScrollerEle.scrollLeft || lastScrollTop != currentCardScrollerEle.scrollTop) {
     lastScrollLeft = currentCardScrollerEle.scrollLeft;
+    lastScrollTop = currentCardScrollerEle.scrollTop;
     await awaitFrame();
   }
   return startTime - Date.now();

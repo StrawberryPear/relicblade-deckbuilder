@@ -77,8 +77,9 @@ export const setSubFilter = (newFilter, newSpecifiedFilters) => {
   applyFilters();
 
   if (scrolledLibraryCard && !scrolledLibraryCard.classList.contains("inactive")) {
-    const scrollLibraryScrolledCard = scrolledLibraryCard.offsetLeft - window.innerWidth * 0.5;
-    scrollLibraryScroller(scrollLibraryScrolledCard)
+    const isList = document.body.getAttribute("displayType") == "list";
+    const pos = (isList ? scrolledLibraryCard.offsetTop : scrolledLibraryCard.offsetLeft) - window.innerWidth * 0.5;
+    scrollLibraryScroller(pos)
   } else {
     scrollLibraryScroller(0);
   }
@@ -90,11 +91,16 @@ export const setSearchText = (newSearchText) => {
 }
 export const getSearchText = () => searchText;
 
-export const scrollLibraryScroller = async (left) => {
+export const scrollLibraryScroller = async (pos) => {
+  const isList = document.body.getAttribute("displayType") == "list";
   if (document.body.getAttribute("displayType") == "grid") {
-    left = Math.max(left, window.innerWidth * 0.4);
+    pos = Math.max(pos, window.innerWidth * 0.4);
   }
-  cardScrollerLibraryEle.scrollTo({ left, top: 0, behavior: 'instant' });
+  cardScrollerLibraryEle.scrollTo({
+    left: isList ? 0 : pos,
+    top: isList ? pos : 0,
+    behavior: 'instant'
+  });
 
   applyCarousel();
   await awaitFrame();
@@ -110,7 +116,10 @@ export const applyFilters = () => {
     const uid = cardEle.getAttribute('uid');
     const cardStore = cardsStore[uid];
     if (!cardStore) {
-      cardEle.classList.toggle('inactive', subFilter || !allFalse || !!getSearchText().trim());
+      const isInactive = subFilter || !allFalse || !!getSearchText().trim();
+      cardEle.classList.toggle('inactive', isInactive);
+      const nameCardEle = cardLibraryNameListEle.querySelector(`nameCard[uid="${uid}"]`);
+      if (nameCardEle) nameCardEle.classList.toggle('inactive', isInactive);
       continue;
     }
     const searchableCardStoreKeys = ["base", "cost", "name", "classes", "keywords", "types", "upgradeTypes", "factions"];
@@ -144,7 +153,10 @@ export const applyFilters = () => {
       }, false);
     })();
 
-    cardEle.classList.toggle('inactive', (!allFalse && !filterShow) || !searchShow || !subFilterShow || specifiedFiltersShow);
+    const isInactive = (!allFalse && !filterShow) || !searchShow || !subFilterShow || specifiedFiltersShow;
+    cardEle.classList.toggle('inactive', isInactive);
+    const nameCardEle = cardLibraryNameListEle.querySelector(`nameCard[uid="${uid}"]`);
+    if (nameCardEle) nameCardEle.classList.toggle('inactive', isInactive);
   }
   const libraryText = (() => {
     if (attachCharacter && subFilter == "upgrade") {
@@ -420,36 +432,42 @@ export const initLibraryEvents = () => {
     event.preventDefault();
 
     const selectedCardEle = event.target;
-    if (!selectedCardEle || selectedCardEle.tagName != "CARD") return;
+    if (!selectedCardEle || !["CARD", "NAMECARD"].includes(selectedCardEle.tagName)) return;
 
     // check if it's in the middle
-    const centerCard = getCenterCardEle();
+    if (document.body.getAttribute("displayType") == "") {
+      const centerCard = getCenterCardEle();
 
-    if (selectedCardEle.getAttribute("uid") !== centerCard.getAttribute("uid")) {
-      if (document.body.getAttribute("displayType") == "") {
-        if (centerCard.getAttribute("index") !== selectedCardEle.getAttribute("index")) {
-          const cardWidth = selectedCardEle.clientWidth;
-          const cardsPerScreen = Math.floor(window.innerWidth / cardWidth);
-          const offsetCenterLeft = cardsPerScreen * 0.5 * cardWidth;
-          const timeToStop = await awaitScrollStop();
-          if (timeToStop < 50) {
-            const cardScrollX = selectedCardEle.offsetLeft || 0;
-            scrollLibraryScroller(cardScrollX - offsetCenterLeft);
+      if (selectedCardEle.getAttribute("uid") !== centerCard.getAttribute("uid")) {
+        if (document.body.getAttribute("displayType") == "") {
+          if (centerCard.getAttribute("index") !== selectedCardEle.getAttribute("index")) {
+            const cardWidth = selectedCardEle.clientWidth;
+            const cardsPerScreen = Math.floor(window.innerWidth / cardWidth);
+            const offsetCenterLeft = cardsPerScreen * 0.5 * cardWidth;
+            const timeToStop = await awaitScrollStop();
+            if (timeToStop < 50) {
+              const cardScrollX = selectedCardEle.offsetLeft || 0;
+              scrollLibraryScroller(cardScrollX - offsetCenterLeft);
+            }
+            return;
           }
-          return;
         }
       }
     }
 
+    const selectedCardUid = selectedCardEle.getAttribute("uid");
+    const interactCard = cardLibraryListEle.querySelector(`card[uid="${selectedCardUid}"]`);
+
     awaitTime(100).then(() => {
-      selectedCardEle.classList.toggle("highlight", true);
+      interactCard.classList.toggle("highlight", true);
     });
 
     if (document.body.getAttribute("showing") == "deck") return;
 
     // Library interactions
     if (attachCharacter && subFilter == "upgrade") {
-      showInteractCard(selectedCardEle);
+
+      showInteractCard(interactCard);
       const attachedCharacterStore = cardsStore[attachCharacter.uid];
       const confirmResult = await showConfirm(`Do you want to attach this card to ${attachedCharacterStore.name}?`);
 
@@ -462,7 +480,7 @@ export const initLibraryEvents = () => {
       return;
     }
 
-    showInteractCard(selectedCardEle);
+    showInteractCard(interactCard);
     const confirmResult = await showConfirm(`Do you want to add this character to your deck?`);
     hideInteractCard(!confirmResult);
     await awaitTime(200);
