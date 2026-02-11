@@ -9,6 +9,7 @@ import { storage } from './storage.js';
 
 export const cardScrollerLibraryEle = document.querySelector('cardScroller.library');
 export const cardLibraryListEle = cardScrollerLibraryEle.querySelector('cardList');
+export const cardLibraryNameListEle = cardScrollerLibraryEle.querySelector('cardNameList');
 export const cardTopControlsEle = document.querySelector('cardTopControls');
 export const descriptionEle = document.querySelector('description');
 
@@ -238,8 +239,8 @@ const onCarouselInteraction = event => {
   scrollLibraryScroller(newScroll);
 };
 
-const getCardLibraryPlacementBeforeEle = (placeCard) => {
-  const libraryCardEles = [...cardLibraryListEle.children];
+const getCardLibraryPlacementBeforeEle = (placeCard, nameList = false) => {
+  const libraryCardEles = [...(nameList ? cardLibraryNameListEle.children : cardLibraryListEle.children)];
   const getCardSortWeighting = (cardEle) => {
     const cardUID = cardEle.getAttribute('uid');
     const cardStore = cardsStore[cardUID];
@@ -293,15 +294,59 @@ export const loadCard = (card) => {
   if (!card) return;
   const existingCardEle = cardLibraryListEle.querySelector(`card[uid="${card.uid}"]`);
   if (existingCardEle) existingCardEle.remove();
+
+  const cardStoreData = cardsStore[card.uid];
+
+  // setup the card for the library(card)
   const cardEle = document.createElement('card');
   cardEle.setAttribute('uid', card.uid);
   cardEle.setAttribute('index', card.index);
-  const cardStoreData = cardsStore[card.uid];
-  if (cardStoreData?.types?.match(/relic/i)) hasRelicInLibrary = true;
   const beforeEle = getCardLibraryPlacementBeforeEle(cardEle);
   if (beforeEle) cardLibraryListEle.insertBefore(cardEle, beforeEle);
   else cardLibraryListEle.append(cardEle);
   cardEle.style.setProperty('background-image', `url('${card.image}')`);
+
+  // setup the name card for the library(list)
+  const nameCardEle = document.querySelector('templates nameCard').cloneNode(true);
+
+  nameCardEle.setAttribute('uid', card.uid);
+  nameCardEle.setAttribute('index', card.index);
+
+  // check the type of card it is,
+  const isCharacter = cardStoreData.types.match(/character/i);
+  const isUpgrade = cardStoreData.types.match(/upgrade/i);
+  const isRelic = cardStoreData.types.match(/relic/i);
+
+  if (isCharacter) {
+    nameCardEle.classList.add('character');
+    const activationEle = nameCardEle.querySelector('activations');
+
+    activationEle.innerText = cardStoreData?.activations ?? "2";
+  }
+  if (isUpgrade || isRelic) {
+    nameCardEle.classList.add('upgrade');
+
+    const upgradeType = cardStoreData.types.split(' ').filter(type => type !== 'upgrade')[0];
+    nameCardEle.classList.add(upgradeType);
+  }
+
+  const nameEle = nameCardEle.querySelector('nameCardName');
+  nameEle.innerText = cardStoreData.name;
+
+  if (cardStoreData.name.length > 16) {
+    nameEle.classList.add('long');
+  }
+  else if (cardStoreData.name.length < 7) {
+    nameEle.classList.add('short');
+  }
+
+  const pointsEle = nameCardEle.querySelector('points');
+  const adjustedName = cardStoreData?.cost === "0" ? '-' : cardStoreData?.cost ?? " ";
+  pointsEle.innerText = adjustedName;
+
+  const nameCardBeforeEle = getCardLibraryPlacementBeforeEle(nameCardEle, true);
+  if (nameCardBeforeEle) cardLibraryNameListEle.insertBefore(nameCardEle, nameCardBeforeEle);
+  else cardLibraryNameListEle.append(nameCardEle);
 };
 
 export const onShowLibrary = async (event) => {
@@ -351,11 +396,14 @@ export const initLibraryEvents = () => {
 
   gridButtonEle.addEventListener('click', () => {
     const currentDisplayType = document.body.getAttribute("displayType");
-    const nextDisplayType = currentDisplayType == 'grid' ? '' : 'grid';
+    const nextDisplayType = (() => {
+      if (currentDisplayType == 'grid') return 'list';
+      if (currentDisplayType == 'list') return '';
+      return 'grid';
+    })();
     document.body.setAttribute("displayType", nextDisplayType);
     storage.setStoredDisplayType(nextDisplayType);
-    if (currentDisplayType != "grid") return;
-    applyCarousel();
+    if (nextDisplayType == "") applyCarousel();
   });
 
   cardScrollerLibraryEle.addEventListener("scroll", event => {

@@ -127,6 +127,13 @@ cardScroller {
   transition: transform 0.3s;
 }
 
+body[displayType="list"] cardScroller {
+  display: block !important;
+  scroll-behavior: smooth;
+  overflow-x: auto;
+  overflow-y: scroll;
+}
+
 body.editing cardScroller {
   user-select: none;
   pointer-events: none;
@@ -648,7 +655,13 @@ body[displayType="grid"] cardButton.grid::after {
   background-image: url(./assets/grid.png);
 }
 
-body[displayType="grid"] cardButton.grid {
+body[displayType="list"] cardButton.grid::after {
+  background-image: url(./assets/list.png);
+  background-size: auto 60%;
+}
+
+body[displayType="grid"] cardButton.grid,
+body[displayType="list"] cardButton.grid {
   background-image: url(./assets/add-remove-white.png);
 }
 
@@ -668,6 +681,14 @@ cardbutton.addToDeck {
 
 cardbutton.removeFromDeck {
   grid-column: 2;
+}
+
+body[displayType="list"] cardScroller.library cardlist {
+  display: none;
+}
+
+body:not([displayType="list"]) cardScroller.library cardNameList {
+  display: none;
 }
 
 body[displayType="grid"] cardScroller.library cardlist {
@@ -1431,4 +1452,107 @@ saveSlotDelete {
 saveSlotRename:hover,
 saveSlotDelete:hover {
   opacity: 1;
+}
+
+nameCard {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0 48px;
+  padding-right: 24px;
+  padding-top: 6px;
+  margin: 16px 0;
+  box-sizing: border-box;
+}
+
+nameCard upper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0 0;
+  box-sizing: border-box;
+  padding-left: 28px;
+  padding-right: 36px;
+  container-type: inline-size;
+  aspect-ratio: 520 / 101;
+}
+
+nameCard upper::before {
+  content: '';
+  position: absolute;
+  top: 0%;
+  left: 0;
+  transform: translate(0%, 0%);
+  width: 100%;
+  height: 100%;
+  background: url('./assets/nameListBackground.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+
+}
+
+nameCard upper activations {
+  position: absolute;
+  background: url('./assets/activations.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  top: 50%;
+  left: 2%;
+  height: 128%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+  font-family: 'tradeWinds';
+  font-size: 13cqi;
+  padding-top: 4px;
+  box-sizing: border-box;
+}
+
+nameCard upper nameCardName {
+  position: relative;
+  color: #000;
+  font-family: 'tradeWinds';
+  padding-left: 10cqi;
+  font-stretch: condensed;
+  font-size: 9cqi;
+  text-transform: capitalize;
+  padding-top: 1cqi;
+}
+
+nameCard upper nameCardName.long {
+  font-size: 7cqi;
+}
+
+nameCard upper nameCardName.short {
+  font-size: 10cqi;
+  padding-left: 12cqi;
+}
+
+nameCard upper points {
+  position: absolute;
+  top: 50%;
+  right: 2%;
+  height: 80%;
+  aspect-ratio: 1;
+  transform: translate(50%, -50%);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+  font-family: 'tradeWinds';
+  font-size: 21px;
+  padding-top: 4px;
+  box-sizing: border-box;
+  background: url('./assets/cost-circle.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 }

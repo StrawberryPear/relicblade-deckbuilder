@@ -1,4 +1,34 @@
 export default {
+  "addOwn": {
+    "uid": "addOwn",
+    "base": "purchase",
+    "cost": "0",
+    "name": "",
+    "classes": "",
+    "keywords": "",
+    "types": "purchase",
+    "factions": ""
+  },
+  "addFromPicture": {
+    "uid": "addFromPicture",
+    "base": "purchase",
+    "cost": "0",
+    "name": "",
+    "classes": "",
+    "keywords": "",
+    "types": "purchase",
+    "factions": ""
+  },
+  "visitRelicblade": {
+    "uid": "visitRelicblade",
+    "base": "purchase",
+    "cost": "0",
+    "name": "",
+    "classes": "",
+    "keywords": "",
+    "types": "purchase",
+    "factions": ""
+  },
   "Adventure Gear - 0": {
     "uid": "Adventure Gear - 0",
     "base": "alchemist's fire single use range 3 upgrade potion",
@@ -949,7 +979,14 @@ export default {
     "classes": "",
     "keywords": "construct ad",
     "types": "upgrade item",
-    "factions": ""
+    "factions": "",
+    "markBoxes": [
+      [
+        0.6094773340182356,
+        0.9180403140640067,
+        0
+      ]
+    ]
   },
   "Kingdoms of Akadh - 6": {
     "uid": "Kingdoms of Akadh - 6",
@@ -1468,7 +1505,14 @@ export default {
     "classes": "",
     "keywords": "dodge ad",
     "types": "upgrade item",
-    "factions": ""
+    "factions": "",
+    "markBoxes": [
+      [
+        0.4974958263772955,
+        0.9268561458285505,
+        0
+      ]
+    ]
   },
   "Singular Champions 1 - 2": {
     "uid": "Singular Champions 1 - 2",
@@ -2437,7 +2481,6 @@ export default {
   },
   "Storms of Kural cards - 22": {
     "uid": "Storms of Kural cards - 22",
-    "base": "inner mastery difficulty 1 upgrade tactic",
     "cost": "1",
     "name": "inner mastery",
     "classes": "",
@@ -3128,28 +3171,33 @@ export default {
     "factions": "adversary",
     "markBoxes": [
       [
-        0.12825,
-        0.9116879169755374,
+        0.12739180685758314,
+        0.9092244822994627,
         0
       ],
       [
-        0.20925,
-        0.9140659747961453,
+        0.2095800693463465,
+        0.9092244822994627,
         0
       ],
       [
-        0.30374999999999996,
-        0.9140659747961453,
+        0.2999871580839861,
+        0.9033472611231003,
         0
       ],
       [
-        0.388125,
-        0.9140659747961453,
+        0.3780660074483113,
+        0.9062858717112815,
         0
       ],
       [
-        0.48262499999999997,
-        0.9093098591549296,
+        0.46436368306151277,
+        0.9033472611231003,
+        0
+      ],
+      [
+        0.5465519455502761,
+        0.9092244822994627,
         0
       ]
     ]
@@ -4121,7 +4169,7 @@ export default {
     "cost": "0",
     "name": "delete",
     "classes": "",
-    "keywords": "",  
+    "keywords": "",
     "types": "",
     "factions": ""
   },
@@ -4562,7 +4610,7 @@ export default {
     "cost": "0",
     "name": "lost pages of agog",
     "classes": "",
-    "keywords": "patreon",
+    "keywords": "",
     "types": "relic",
     "factions": ""
   },
@@ -4572,7 +4620,7 @@ export default {
     "cost": "0",
     "name": "the crowd source",
     "classes": "",
-    "keywords": "patreon",
+    "keywords": "",
     "types": "relic",
     "factions": ""
   },
@@ -4582,7 +4630,7 @@ export default {
     "cost": "0",
     "name": "The Piquod",
     "classes": "",
-    "keywords": "patreon",
+    "keywords": "",
     "types": "relic",
     "factions": ""
   },
@@ -4592,7 +4640,7 @@ export default {
     "cost": "0",
     "name": "Spear of Slaughter",
     "classes": "",
-    "keywords": "patreon",
+    "keywords": "",
     "types": "relic",
     "factions": ""
   },
@@ -4602,7 +4650,7 @@ export default {
     "cost": "23",
     "name": "Lady Aurelia",
     "classes": "knight",
-    "keywords": "armor patreon",
+    "keywords": "armor",
     "types": "character",
     "upgradeTypes": "tactic weapon item potion potion",
     "factions": "advocate",
@@ -4614,7 +4662,7 @@ export default {
     "cost": "23",
     "name": "Teklin Eldenfoord",
     "classes": "scout",
-    "keywords": "range patreon",
+    "keywords": "range",
     "types": "character",
     "upgradeTypes": "tactic weapon item potion",
     "factions": "advocate",
@@ -4626,7 +4674,7 @@ export default {
     "cost": "26",
     "name": "Neldia the Keeper",
     "classes": "druid nature",
-    "keywords": "range bind patreon",
+    "keywords": "range bind",
     "types": "character",
     "upgradeTypes": "tactic item spell spell potion",
     "factions": "advocate",
@@ -4638,7 +4686,7 @@ export default {
     "cost": "0",
     "name": "Neldia's Bear Form",
     "classes": "beast",
-    "keywords": "patreon",
+    "keywords": "",
     "types": "character",
     "upgradeTypes": "tactic item",
     "factions": "advocate",
@@ -4650,7 +4698,7 @@ export default {
     "cost": "23",
     "name": "Griksek Kreskek",
     "classes": "deep fighter",
-    "keywords": "dodge patreon",
+    "keywords": "dodge",
     "types": "character",
     "upgradeTypes": "tactic weapon item potion",
     "factions": "adversary",
@@ -4662,7 +4710,7 @@ export default {
     "cost": "23",
     "name": "Lady Blackstone",
     "classes": "bone darkness",
-    "keywords": "dodge patreon",
+    "keywords": "dodge",
     "types": "character",
     "upgradeTypes": "tactic weapon spell item",
     "factions": "adversary",
@@ -4674,7 +4722,7 @@ export default {
     "cost": "26",
     "name": "Illika the second sister",
     "classes": "deep witch",
-    "keywords": "dodge dire patreon",
+    "keywords": "dodge dire",
     "types": "character",
     "upgradeTypes": "item potion spell spell",
     "factions": "adversary",
@@ -4686,7 +4734,7 @@ export default {
     "cost": "23",
     "name": "Hellebore",
     "classes": "pig warlord barbarian",
-    "keywords": "recover ad patreon",
+    "keywords": "recover ad",
     "types": "character",
     "upgradeTypes": "tactic weapon potion item",
     "factions": "adversary",
@@ -4728,697 +4776,6 @@ export default {
     "factions": "advocate",
     "markBoxes": []
   },
-  "Monsters Color - 0": {
-    "uid": "Monsters Color - 0",
-    "base": "Ancient Dead 0 Team Neutral Character",
-    "cost": "0",
-    "name": "Ancient Dead",
-    "classes": "",
-    "keywords": "monster",
-    "types": "character campaign",
-    "upgradeTypes": "",
-    "factions": "neutral",
-    "markBoxes": [[0.13297536323436512, 0.9015420627913184, 0], 
-    [0.2101590765520014, 0.9041703455781196, 0], 
-    [0.29101820478952506, 0.9067986283649206, 0], 
-    [0.4123068971458106, 0.902856204184719, 0], 
-    [0.4931660253833343, 0.9067986283649206, 0], 
-    [0.5740251536208579, 0.9067986283649206, 0], 
-    [0.698989260897031, 0.9067986283649206, 0], 
-    [0.7816860965944984, 0.902856204184719, 0], 
-    [0.8607075173720783, 0.9041703455781196, 0]]
-  },
-  "Monsters Color - 1": {
-    "uid": "Monsters Color - 1",
-    "base": "Banshee 0 Team Neutral Character",
-    "cost": "0",
-    "name": "Banshee",
-    "classes": "",
-    "keywords": "monster",
-    "types": "character campaign",
-    "upgradeTypes": "",
-    "factions": "neutral",
-    "markBoxes": [
-      [0.4105840464021134, 0.8975996386111168, 0], 
-      [0.4877677597197496, 0.902856204184719, 0], 
-      [0.5851662550967668, 0.9081127697583212, 0]
-    ]
-  },
-  "Monsters Color - 2": {
-    "uid": "Monsters Color - 2",
-    "base": "Basilisk 0 Team Neutral Character",
-    "cost": "0",
-    "name": "Basilisk",
-    "classes": "",
-    "keywords": "monster",
-    "types": "character campaign",
-    "upgradeTypes": "",
-    "factions": "neutral",
-    "markBoxes": [
-      [0.31330040774134266, 0.9120551939385229, 0], 
-      [0.39967265835869753, 0.9133693353319233, 0], 
-      [0.48972032389593984, 0.9081127697583212, 0], 
-      [0.5705794521334635, 0.9120551939385229, 0], 
-      [0.6643025325905932, 0.9081127697583212, 0]
-    ]
-  },
-  "Monsters Color - 3": {
-    "uid": "Monsters Color - 3",
-    "base": "Fay Knight 0 Team Neutral Character",
-    "cost": "0",
-    "name": "Fay Knight",
-    "classes": "",
-    "keywords": "monster",
-    "types": "character campaign",
-    "upgradeTypes": "",
-    "factions": "neutral",
-    "markBoxes": [
-      [0.3189283868374203, 0.9067986283649206, 0], 
-      [0.40162522253488775, 0.9067986283649206, 0], 
-      [0.49167288807213, 0.9041703455781196, 0], 
-      [0.5780451386894848, 0.902856204184719, 0], 
-      [0.6680928042267271, 0.8989137800045174, 0]
-    ]
-  },
-  "Monsters Color - 4": {
-    "uid": "Monsters Color - 4",
-    "base": "Night Prowlers 0 Team Neutral Character",
-    "cost": "0",
-    "name": "Night Prowlers",
-    "classes": "",
-    "keywords": "monster",
-    "types": "character campaign",
-    "upgradeTypes": "",
-    "factions": "neutral",
-    "markBoxes": [
-      [0.15732498707861942, 0.9081127697583212, 0], 
-      [0.245534945155918, 0.9081127697583212, 0], 
-      [0.33558261069316025, 0.8989137800045174, 0], 
-      [0.4311433986102337, 0.9041703455781196, 0], 
-      [0.5781599954057314, 0.9081127697583212, 0], 
-      [0.6700453684029174, 0.9067986283649206, 0], 
-      [0.7619307414001034, 0.9041703455781196, 0], 
-      [0.8611669442370643, 0.9041703455781196, 0]
-    ]
-  },
-  "Monsters Color - 5": {
-    "uid": "Monsters Color - 5",
-    "base": "Revenant 0 Team Neutral Character",
-    "cost": "0",
-    "name": "Revenant",
-    "classes": "",
-    "keywords": "monster",
-    "types": "character campaign",
-    "upgradeTypes": "",
-    "factions": "neutral",
-    "markBoxes": [
-      [0.3118072704301384, 0.9120551939385229, 0], 
-      [0.39817952104749327, 0.9120551939385229, 0], 
-      [0.4863894791247918, 0.9120551939385229, 0], 
-      [0.5690863148222592, 0.9094269111517217, 0], 
-      [0.6572962728995578, 0.9041703455781196, 0]
-    ]
-  },
-  "Monsters Color - 9": {
-    "uid": "Monsters Color - 9",
-    "base": "Ruins Harrier 0 Team Neutral Character",
-    "cost": "0",
-    "name": "Ruins Harrier",
-    "classes": "",
-    "keywords": "monster",
-    "types": "character campaign",
-    "upgradeTypes": "",
-    "factions": "neutral",
-    "markBoxes": [
-      [0.3707287658645839, 0.9278248906593294, 0], 
-      [0.4571010164819388, 0.9304531734461304, 0], 
-      [0.54163555963935, 0.92913903205273, 0], 
-      [0.6445471773961983, 0.9251966078725283, 0]
-    ]
-  },
-  "Legends 1 - 0": {
-    "uid": "Legends 1 - 0",
-    "cost": "23",
-    "name": "Woggie Woggelbuck",
-    "classes": "knight",
-    "keywords": "legends range armor",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [
-    ]
-  },
-  "Legends 1 - 1": {
-    "uid": "Legends 1 - 1",
-    "cost": "23",
-    "name": "Armon Minoux",
-    "classes": "knight holy",
-    "keywords": "legends dodge",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [
-    ]
-  },
-  "Legends 1 - 2": {
-    "uid": "Legends 1 - 2",
-    "cost": "23",
-    "name": "Cora the Bold",
-    "classes": "knight",
-    "keywords": "legends deadly reroll",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [
-    ]
-  },
-  "Legends 1 - 3": {
-    "uid": "Legends 1 - 3",
-    "cost": "23",
-    "name": "Jayne Stokes",
-    "classes": "shield fighter",
-    "keywords": "legends charge dodge",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion potion",
-    "factions": "advocate",
-    "markBoxes": [
-    ]
-  },
-  "Legends 1 - 4": {
-    "uid": "Legends 1 - 4",
-    "cost": "20",
-    "name": "Porter McScotch",
-    "classes": "bard",
-    "keywords": "legends range bind recover",
-    "types": "character",
-    "upgradeTypes": "weapon item spell potion",
-    "factions": "advocate",
-    "markBoxes": [
-    ]
-  },
-  "Legends 1 - 5": {
-    "uid": "Legends 1 - 5",
-    "cost": "26",
-    "name": "Synvar the Sneak",
-    "classes": "rogue",
-    "keywords": "legends ad range defence ",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "adversary",
-    "markBoxes": [
-    ]
-  },
-  "Legends 1 - 6": {
-    "uid": "Legends 1 - 6",
-    "cost": "26",
-    "name": "Tyralyon Larithyan, the Blade Master",
-    "classes": "knight",
-    "keywords": "legends beam deadly",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion potion",
-    "factions": "advocate",
-    "markBoxes": [
-    ]
-  },
-  "Legends 1 - 7": {
-    "uid": "Legends 1 - 7",
-    "cost": "23",
-    "name": "Verin Six-Fingers, captain of the severed company",
-    "classes": "fighter warlord",
-    "keywords": "legends charge ad ",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion potion",
-    "factions": "adversary",
-    "markBoxes": [
-    ]
-  },
-  "Legends 1 - 8": {
-    "uid": "Legends 1 - 8",
-    "cost": "23",
-    "name": "Wulfbad",
-    "classes": "barbarian scout",
-    "keywords": "legends armor damage",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [
-    ]
-  },
-  "Legends 1 - 9": {
-    "uid": "Legends 1 - 9",
-    "base": "",
-    "cost": "0",
-    "name": "Monkey Idol",
-    "classes": "",
-    "keywords": "choose immune",
-    "types": "relic",
-    "factions": ""
-  },
-  "Legends 2 - 0": {
-    "uid": "Legends 2 - 0",
-    "cost": "23",
-    "name": "While Brann",
-    "classes": "shield fighter",
-    "keywords": "legends stun bind",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 2 - 1": {
-    "uid": "Legends 2 - 1",
-    "cost": "20",
-    "name": "Hrolf Dwarven Gadgeteer",
-    "classes": "rogue",
-    "keywords": "legends range push move",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 2 - 2": {
-    "uid": "Legends 2 - 2",
-    "cost": "20",
-    "name": "Hrolf Dwarven Gadgeteer",
-    "classes": "rogue",
-    "keywords": "legends range push move",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 2 - 3": {
-    "uid": "Legends 2 - 3",
-    "cost": "23",
-    "name": "Almar the Hexbreaker",
-    "classes": "fighter cleric",
-    "keywords": "legends spells difficulty",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 2 - 4": {
-    "uid": "Legends 2 - 4",
-    "cost": "23",
-    "name": "The Iron Tyrant",
-    "classes": "knight warlord",
-    "keywords": "legends beam poison reroll",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "adversary",
-    "markBoxes": [ ]
-  },
-  "Legends 2 - 5": {
-    "uid": "Legends 2 - 5",
-    "cost": "23",
-    "name": "Lucas Hayland",
-    "classes": "holy cleric",
-    "keywords": "legends recover",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 2 - 6": {
-    "uid": "Legends 2 - 6",
-    "cost": "23",
-    "name": "Mah'dlin and Lekshi",
-    "classes": "wizard fighter",
-    "keywords": "legends stun range choose",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 2 - 7": {
-    "uid": "Legends 2 - 7",
-    "cost": "23",
-    "name": "Victoria the Demon Hunter",
-    "classes": "rogue scout",
-    "keywords": "legends range stun dodge move",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 2 - 8": {
-    "uid": "Legends 1 - 8",
-    "base": "",
-    "cost": "0",
-    "name": "Runehammer",
-    "classes": "",
-    "keywords": "range stun",
-    "types": "relic",
-    "factions": ""
-  },
-  "Legends 2 - 9": {
-    "uid": "Legends 2 - 9",
-    "cost": "23",
-    "name": "Kenna de Aura",
-    "classes": "nature wizard",
-    "keywords": "legends range stun move",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 2 - 10": {
-    "uid": "Legends 2 - 10",
-    "cost": "23",
-    "name": "Mocifer",
-    "classes": "rogue fighter",
-    "keywords": "legends range dodge move",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "adversary",
-    "markBoxes": [ ]
-  },
-  "Legends 3 - 0": {
-    "uid": "Legends 3 - 0",
-    "cost": "23",
-    "name": "Horedin the Beastlord",
-    "classes": "barbarian nature",
-    "keywords": "legends companion armor damage",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 3 - 1": {
-    "uid": "Legends 3 - 1",
-    "cost": "23",
-    "name": "Malev da Word Weaver",
-    "classes": "rogue bard",
-    "keywords": "legends range stun dodge",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 3 - 2": {
-    "uid": "Legends 3 - 2",
-    "cost": "23",
-    "name": "Alder",
-    "classes": "shield fighter",
-    "keywords": "legends beam recover",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 3 - 3": {
-    "uid": "Legends 3 - 3",
-    "cost": "23",
-    "name": "Quercus Strongbough",
-    "classes": "druid nature",
-    "keywords": "legends range bind recover",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 3 - 4": {
-    "uid": "Legends 3 - 4",
-    "cost": "23",
-    "name": "The Black Knight",
-    "classes": "knight",
-    "keywords": "legends deadly recovery",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "adversary",
-    "markBoxes": [ ]
-  },
-  "Legends 3 - 5": {
-    "uid": "Legends 3 - 5",
-    "cost": "23",
-    "name": "Sabine the Traveler",
-    "classes": "nature scout",
-    "keywords": "legends push stun engage climb",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 3 - 6": {
-    "uid": "Legends 3 - 6",
-    "cost": "23",
-    "name": "Sister Judy",
-    "classes": "cleric holy",
-    "keywords": "legends range stun",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 3 - 7": {
-    "uid": "Legends 3 - 7",
-    "cost": "23",
-    "name": "Liam Fairweather",
-    "classes": "shield fighter",
-    "keywords": "legends dodge",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 3 - 8": {
-    "uid": "Legends 3 - 8",
-    "cost": "26",
-    "name": "Cyrion Everflame",
-    "classes": "wizard knight",
-    "keywords": "legends beam damage",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 3 - 9": {
-    "uid": "Legends 3 - 9",
-    "cost": "26",
-    "name": "Alrik Ashblade",
-    "classes": "darkness witch",
-    "keywords": "legends range stun",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "adversary",
-    "markBoxes": [ ]
-  },
-  "Legends 4 - 0": {
-    "uid": "Legends 4 - 0",
-    "cost": "23",
-    "name": "Flint and Pig",
-    "classes": "knight",
-    "keywords": "legends dodge",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 4 - 1": {
-    "uid": "Legends 4 - 1",
-    "cost": "23",
-    "name": "Miss Tiffy",
-    "classes": "cleric holy",
-    "keywords": "legends range stun",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 4 - 2": {
-    "uid": "Legends 4 - 2",
-    "cost": "23",
-    "name": "Burp the Inebriated",
-    "classes": "rogue",
-    "keywords": "legends range dodge",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 4 - 3": {
-    "uid": "Legends 4 - 3",
-    "cost": "23",
-    "name": "Brogan",
-    "classes": "barbarian",
-    "keywords": "legends dodge bind damage",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "neutral",
-    "markBoxes": [ ]
-  },
-  "Legends 4 - 4": {
-    "uid": "Legends 4 - 4",
-    "cost": "23",
-    "name": "La'ra",
-    "classes": "rogue",
-    "keywords": "legends range dodge speed",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "neutral",
-    "markBoxes": [ ]
-  },
-  "Legends 4 - 5": {
-    "uid": "Legends 4 - 5",
-    "cost": "23",
-    "name": "Ihm' Att",
-    "classes": "nature druid",
-    "keywords": "legends range binds",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "adversary",
-    "markBoxes": [ ]
-  },
-  "Legends 4 - 6": {
-    "uid": "Legends 4 - 6",
-    "cost": "26",
-    "name": "Shard",
-    "classes": "wizard fighter",
-    "keywords": "legends move dodge",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "neutral",
-    "markBoxes": [ ]
-  },
-  "Legends 4 - 7": {
-    "uid": "Legends 4 - 7",
-    "cost": "26",
-    "name": "Karinos",
-    "classes": "knight darkness",
-    "keywords": "legends",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "adversary",
-    "markBoxes": [ ]
-  },
-  "Legends 4 - 8": {
-    "uid": "Legends 4 - 8",
-    "cost": "23",
-    "name": "Tawros the Samarritan",
-    "classes": "knight darkness",
-    "keywords": "legends recover stun",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Legends 4 - 9": {
-    "uid": "Legends 4 - 9",
-    "cost": "23",
-    "name": "Malian",
-    "classes": "fighter",
-    "keywords": "legends armor range",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "neutral",
-    "markBoxes": [ ]
-  },
-  "Legends 4 - 10": {
-    "uid": "Legends 4 - 10",
-    "cost": "23",
-    "name": "Gribardson",
-    "classes": "fighter",
-    "keywords": "legends range recover",
-    "types": "character",
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "advocate",
-    "markBoxes": [ ]
-  },
-  "Seeker's Campaign Cards - 0": {
-    "uid": "Seeker's Campaign Cards - 0",
-    "cost": "0",
-    "name": "Extraordinary Health Potion",
-    "classes": "",
-    "keywords": "potion heal",
-    "types": "upgrade campaign potion",
-    "factions": ""
-  },
-  "Seeker's Campaign Cards - 1": {
-    "uid": "Seeker's Campaign Cards - 1",
-    "cost": "0",
-    "name": "Flower Crown",
-    "classes": "",
-    "keywords": "item armor",
-    "types": "upgrade campaign item",
-    "factions": ""
-  },
-  "Seeker's Campaign Cards - 2": {
-    "uid": "Seeker's Campaign Cards - 2",
-    "cost": "0",
-    "name": "Masterwork Weapon",
-    "classes": "",
-    "keywords": "item difficulty reroll",
-    "types": "upgrade campaign weapon",
-    "factions": ""
-  },
-  "Seeker's Campaign Cards - 3": {
-    "uid": "Seeker's Campaign Cards - 3",
-    "cost": "0",
-    "name": "Optimized Armor",
-    "classes": "",
-    "keywords": "item reroll",
-    "types": "upgrade campaign item",
-    "factions": ""
-  },
-  "Seeker's Campaign Cards - 4": {
-    "uid": "Seeker's Campaign Cards - 4",
-    "cost": "0",
-    "name": "Rune Engraved Skull",
-    "classes": "",
-    "keywords": "item single use damage",
-    "types": "upgrade campaign item",
-    "factions": ""
-  },
-  "Seeker's Campaign Cards - 5": {
-    "uid": "Seeker's Campaign Cards - 5",
-    "cost": "0",
-    "name": "Warden's Bolas",
-    "classes": "",
-    "keywords": "item range bind",
-    "types": "upgrade campaign weapon",
-    "factions": ""
-  },
-  "Seeker's Campaign Cards - 6": {
-    "uid": "Seeker's Campaign Cards - 6",
-    "base": "",
-    "cost": "0",
-    "name": "Lamp of the Djinn",
-    "classes": "",
-    "keywords": "",
-    "types": "relic campaign",
-    "factions": ""
-  },
-  "Seeker's Campaign Cards - 7": {
-    "uid": "Seeker's Campaign Cards - 7",
-    "base": "",
-    "cost": "0",
-    "name": "Sludge Encrusted Eyeball",
-    "classes": "",
-    "keywords": "",
-    "types": "relic campaign",
-    "factions": ""
-  },
-  "Seeker's Campaign Cards - 8": {
-    "uid": "Seeker's Campaign Cards - 8",
-    "base": "",
-    "cost": "0",
-    "name": "The Stormking's Hammer",
-    "classes": "",
-    "keywords": "",
-    "types": "relic campaign",
-    "factions": ""
-  },
-  "Seeker's Campaign Cards - 9": {
-    "uid": "Seeker's Campaign Cards - 9",
-    "base": "",
-    "cost": "0",
-    "name": "The Lady's Favor",
-    "classes": "",
-    "keywords": "",
-    "types": "relic campaign",
-    "factions": ""
-  },
   "Guild Champions Cards - 0": {
     "uid": "Guild Champions Cards - 0",
     "base": "range dodge token keywords spell wizard beast 23 neutral character",
@@ -5430,6 +4787,26 @@ export default {
     "upgradeTypes": "item spell spell potion",
     "factions": "neutral",
     "markBoxes": [
+      [
+        0.16835751894182613,
+        0.9121630928876441,
+        0
+      ],
+      [
+        0.26287402080390393,
+        0.9180403140640067,
+        0
+      ],
+      [
+        0.3532811095415436,
+        0.9180403140640067,
+        0
+      ],
+      [
+        0.4519070245280596,
+        0.9151017034758253,
+        0
+      ]
     ]
   },
   "Guild Champions Cards - 1": {
@@ -5442,6 +4819,26 @@ export default {
     "upgradeTypes": "tactic weapon item item potion",
     "factions": "neutral",
     "markBoxes": [
+      [
+        0.17323744702709645,
+        0.9121630928876441,
+        0
+      ],
+      [
+        0.27186336201361244,
+        0.9151017034758253,
+        0
+      ],
+      [
+        0.35405162450237576,
+        0.9121630928876441,
+        0
+      ],
+      [
+        0.4485681263644536,
+        0.9121630928876441,
+        0
+      ]
     ]
   },
   "Guild Champions Cards - 2": {
@@ -5454,6 +4851,26 @@ export default {
     "upgradeTypes": "tactic weapon item potion",
     "factions": "neutral",
     "markBoxes": [
+      [
+        0.16566071657891357,
+        0.9121630928876441,
+        0
+      ],
+      [
+        0.2642866315654296,
+        0.9151017034758253,
+        0
+      ],
+      [
+        0.3546937203030692,
+        0.9151017034758253,
+        0
+      ],
+      [
+        0.44921022216514706,
+        0.9151017034758253,
+        0
+      ]
     ]
   },
   "Guild Champions Cards - 3": {
@@ -5466,6 +4883,21 @@ export default {
     "upgradeTypes": "item spell",
     "factions": "neutral",
     "markBoxes": [
+      [
+        0.2388596378579684,
+        0.9121630928876441,
+        0
+      ],
+      [
+        0.3251573134711699,
+        0.9121630928876441,
+        0
+      ],
+      [
+        0.4196738153332477,
+        0.9151017034758253,
+        0
+      ]
     ]
   },
   "Guild Champions Cards - 4": {
@@ -5475,7 +4907,14 @@ export default {
     "classes": "smith",
     "keywords": "single armor",
     "types": "upgrade item",
-    "factions": ""
+    "factions": "",
+    "markBoxes": [
+      [
+        0.42416848593810197,
+        0.9239175352403691,
+        0
+      ]
+    ]
   },
   "Guild Champions Cards - 5": {
     "uid": "Guild Champions Cards - 5",
@@ -5484,7 +4923,19 @@ export default {
     "classes": "smith",
     "keywords": "two uses additional damage die fails bonus",
     "types": "upgrade weapon",
-    "factions": ""
+    "factions": "",
+    "markBoxes": [
+      [
+        0.7042506742005907,
+        0.9356719775930943,
+        0
+      ],
+      [
+        0.7700012841916014,
+        0.9327333670049129,
+        0
+      ]
+    ]
   },
   "Guild Champions Cards - 6": {
     "uid": "Guild Champions Cards - 6",
@@ -5493,7 +4944,14 @@ export default {
     "classes": "smith",
     "keywords": "single use scenario action free succeeds",
     "types": "upgrade item",
-    "factions": ""
+    "factions": "",
+    "markBoxes": [
+      [
+        0.485167587003981,
+        0.9239175352403691,
+        0
+      ]
+    ]
   },
   "Guild Champions Cards - 7": {
     "uid": "Guild Champions Cards - 7",
@@ -5511,7 +4969,14 @@ export default {
     "classes": "",
     "keywords": "single use target ground ranged attack difficulty",
     "types": "upgrade weapon",
-    "factions": ""
+    "factions": "",
+    "markBoxes": [
+      [
+        0.5438551431873636,
+        0.9327333670049129,
+        0
+      ]
+    ]
   },
   "Guild Champions Cards - 9": {
     "uid": "Guild Champions Cards - 9",
@@ -5532,6 +4997,26 @@ export default {
     "upgradeTypes": "item spell spell potion",
     "factions": "neutral",
     "markBoxes": [
+      [
+        0.17811737511236678,
+        0.9121630928876441,
+        0
+      ],
+      [
+        0.26852446385000645,
+        0.9121630928876441,
+        0
+      ],
+      [
+        0.35071272633876976,
+        0.9092244822994627,
+        0
+      ],
+      [
+        0.46166688069860023,
+        0.9092244822994627,
+        0
+      ]
     ]
   },
   "Severed Hand Cards - 1": {
@@ -5544,6 +5029,46 @@ export default {
     "upgradeTypes": "tactic weapon item potion",
     "factions": "neutral",
     "markBoxes": [
+      [
+        0.11506356748426866,
+        0.9151017034758253,
+        0
+      ],
+      [
+        0.17670476435084115,
+        0.9151017034758253,
+        0
+      ],
+      [
+        0.23423654809297548,
+        0.9151017034758253,
+        0
+      ],
+      [
+        0.30820598433286245,
+        0.9151017034758253,
+        0
+      ],
+      [
+        0.38628483369718764,
+        0.9151017034758253,
+        0
+      ],
+      [
+        0.46025426993707463,
+        0.9121630928876441,
+        0
+      ],
+      [
+        0.5218954668036471,
+        0.9121630928876441,
+        0
+      ],
+      [
+        0.5835366636702196,
+        0.9121630928876441,
+        0
+      ]
     ]
   },
   "Severed Hand Cards - 2": {
@@ -5556,6 +5081,31 @@ export default {
     "upgradeTypes": "tactic weapon item potion",
     "factions": "neutral",
     "markBoxes": [
+      [
+        0.11994349556953897,
+        0.9151017034758253,
+        0
+      ],
+      [
+        0.21035058430717862,
+        0.9121630928876441,
+        0
+      ],
+      [
+        0.30486708616925645,
+        0.9092244822994627,
+        0
+      ],
+      [
+        0.39116476178245796,
+        0.9151017034758253,
+        0
+      ],
+      [
+        0.4692436111467831,
+        0.9151017034758253,
+        0
+      ]
     ]
   },
   "Severed Hand Cards - 3": {
@@ -5583,7 +5133,24 @@ export default {
     "classes": "",
     "keywords": "three uses stun",
     "types": "upgrade potion",
-    "factions": ""
+    "factions": "",
+    "markBoxes": [
+      [
+        0.6449210222165147,
+        0.9386105881812755,
+        0
+      ],
+      [
+        0.7106716322075254,
+        0.9415491987694569,
+        0
+      ],
+      [
+        0.7723128290740978,
+        0.9415491987694569,
+        0
+      ]
+    ]
   },
   "Severed Hand Cards - 6": {
     "uid": "Severed Hand Cards - 6",
@@ -5620,5 +5187,466 @@ export default {
     "keywords": "range fail",
     "types": "relic",
     "factions": ""
+  },
+  "Paragons Vol 1 - 0": {
+    "uid": "Paragons Vol 1 - 0",
+    "cost": "26",
+    "name": "Kistra Xaine Gnome Magister",
+    "classes": "wizard illusion",
+    "keywords": "poison dodge place",
+    "types": "character",
+    "upgradeTypes": "item spell spell potion potion",
+    "factions": "neutral",
+    "markBoxes": [
+      [
+        0.17272377038654166,
+        0.9092244822994627,
+        0
+      ],
+      [
+        0.2631308591241813,
+        0.9092244822994627,
+        0
+      ],
+      [
+        0.35353794786182097,
+        0.9092244822994627,
+        0
+      ],
+      [
+        0.452163862848337,
+        0.9092244822994627,
+        0
+      ]
+    ]
+  },
+  "Paragons Vol 1 - 1": {
+    "uid": "Paragons Vol 1 - 1",
+    "cost": "26",
+    "name": "Tahoor Bajwa Storm Bearer",
+    "classes": "wizard",
+    "keywords": "stun place target dodge",
+    "types": "character",
+    "upgradeTypes": "item spell spell spell potion",
+    "factions": "advocate",
+    "markBoxes": [
+      [
+        0.17298060870681906,
+        0.9092244822994627,
+        0
+      ],
+      [
+        0.2633876974444587,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.35379478618209836,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.4524207011686144,
+        0.9121630928876441,
+        0
+      ]
+    ]
+  },
+  "Paragons Vol 1 - 2": {
+    "uid": "Paragons Vol 1 - 2",
+    "cost": "23",
+    "name": "Traveler Corine Cleric of Justice",
+    "classes": "holy cleric",
+    "keywords": "heal dodge poison",
+    "types": "character",
+    "upgradeTypes": "item spell spell potion potion",
+    "factions": "advocate",
+    "markBoxes": [
+      [
+        0.17015538718376783,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.25645306279696933,
+        0.9121630928876441,
+        0
+      ],
+      [
+        0.346860151534609,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.44548606652112493,
+        0.9092244822994627,
+        0
+      ]
+    ]
+  },
+  "Paragons Vol 1 - 3": {
+    "uid": "Paragons Vol 1 - 3",
+    "cost": "26",
+    "name": "Wise Guinn Arboleth Druid",
+    "classes": "nature druid",
+    "keywords": "push bind range",
+    "types": "character",
+    "upgradeTypes": "item spell spell potion",
+    "factions": "advocate",
+    "markBoxes": [
+      [
+        0.12353923205342238,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.20983690766662386,
+        0.9033472611231003,
+        0
+      ],
+      [
+        0.29613458327982534,
+        0.9033472611231003,
+        0
+      ],
+      [
+        0.38654167201746503,
+        0.9004086505349189,
+        0
+      ],
+      [
+        0.460511108257352,
+        0.9004086505349189,
+        0
+      ],
+      [
+        0.5468087838705535,
+        0.9033472611231003,
+        0
+      ]
+    ]
+  },
+  "Paragons Vol 1 - 4": {
+    "uid": "Paragons Vol 1 - 4",
+    "cost": "23",
+    "name": "Lady Blackstone Dark Watcher",
+    "classes": "bone darkness",
+    "keywords": "range dodge",
+    "types": "character",
+    "upgradeTypes": "tactic weapon spell item",
+    "factions": "adversary",
+    "markBoxes": [
+      [
+        0.14113265699242328,
+        0.9092244822994627,
+        0
+      ],
+      [
+        0.2233209194811866,
+        0.9092244822994627,
+        0
+      ],
+      [
+        0.3178374213432644,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.40002568383202775,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.48221394632079106,
+        0.9062858717112815,
+        0
+      ]
+    ]
+  },
+  "Paragons Vol 1 - 5": {
+    "uid": "Paragons Vol 1 - 5",
+    "cost": "14",
+    "name": "Cricket Bone Stalker",
+    "classes": "bone",
+    "keywords": "move jump climb reroll damage",
+    "types": "character",
+    "upgradeTypes": "tactic item",
+    "factions": "adversary",
+    "markBoxes": [
+      [
+        0.16116604597405934,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.24746372158726082,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.33787081032490046,
+        0.9033472611231003,
+        0
+      ],
+      [
+        0.4364967253114165,
+        0.9062858717112815,
+        0
+      ]
+    ]
+  },
+  "Paragons Vol 1 - 6": {
+    "uid": "Paragons Vol 1 - 6",
+    "cost": "26",
+    "name": "Illika the second sister iguan witch",
+    "classes": "deep witch",
+    "keywords": "dire range dodge",
+    "types": "character",
+    "upgradeTypes": "item potion spell spell",
+    "factions": "adversary",
+    "markBoxes": [
+      [
+        0.17336586618723512,
+        0.9033472611231003,
+        0
+      ],
+      [
+        0.2637729549248748,
+        0.9033472611231003,
+        0
+      ],
+      [
+        0.3500706305380763,
+        0.9033472611231003,
+        0
+      ],
+      [
+        0.44458713240015413,
+        0.9004086505349189,
+        0
+      ]
+    ]
+  },
+  "Paragons Vol 1 - 7": {
+    "uid": "Paragons Vol 1 - 7",
+    "cost": "23",
+    "name": "Hellebore pig warlord",
+    "classes": "pig warlord barbarian",
+    "keywords": "range recover ad damage",
+    "types": "character",
+    "upgradeTypes": "tactic weapon item potion",
+    "factions": "adversary",
+    "markBoxes": [
+      [
+        0.12752022601772184,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.20970848850648516,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.29600616411968667,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.36997560035957366,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.4727109284705278,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.5466803647104148,
+        0.9062858717112815,
+        0
+      ]
+    ]
+  },
+  "Paragons Vol 1 - 8": {
+    "uid": "Paragons Vol 1 - 8",
+    "cost": "23",
+    "name": "Griksek Kreskek Crab Warrior",
+    "classes": "deep fighter",
+    "keywords": "damage dodge",
+    "types": "character",
+    "upgradeTypes": "tactic weapon item potion",
+    "factions": "adversary",
+    "markBoxes": [
+      [
+        0.1371516630281238,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.22755875176576346,
+        0.9033472611231003,
+        0
+      ],
+      [
+        0.3097470142545268,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.3919352767432901,
+        0.9004086505349189,
+        0
+      ],
+      [
+        0.4782329523564916,
+        0.9004086505349189,
+        0
+      ]
+    ]
+  },
+  "Paragons Vol 1 - 9": {
+    "uid": "Paragons Vol 1 - 9",
+    "cost": "23",
+    "name": "Telkin Eldenfoord gnome grenadier",
+    "classes": "scout",
+    "keywords": "stun range dire",
+    "types": "character",
+    "upgradeTypes": "tactic weapon item potion potion",
+    "factions": "advocate",
+    "markBoxes": [
+      [
+        0.17362270450751252,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.259920380120714,
+        0.9092244822994627,
+        0
+      ],
+      [
+        0.3462180557339155,
+        0.9092244822994627,
+        0
+      ],
+      [
+        0.44895338384486966,
+        0.9062858717112815,
+        0
+      ]
+    ]
+  },
+  "Paragons Vol 1 - 10": {
+    "uid": "Paragons Vol 1 - 10",
+    "cost": "26",
+    "name": "Nelda the Keeper wild elf druidess",
+    "classes": "nature druid",
+    "keywords": "bind push transform turn",
+    "types": "character",
+    "upgradeTypes": "item spell spell",
+    "factions": "advocate",
+    "markBoxes": [
+      [
+        0.1984076024142802,
+        0.9092244822994627,
+        0
+      ],
+      [
+        0.2888146911519199,
+        0.9092244822994627,
+        0
+      ],
+      [
+        0.37511236676512133,
+        0.9092244822994627,
+        0
+      ],
+      [
+        0.47373828175163735,
+        0.9092244822994627,
+        0
+      ]
+    ]
+  },
+  "Paragons Vol 1 - 11": {
+    "uid": "Paragons Vol 1 - 11",
+    "cost": "0",
+    "name": "Nelda's bear form Nelda the Keeper wild elf druidess",
+    "classes": "beast",
+    "keywords": "recover transform",
+    "types": "character",
+    "upgradeTypes": "tactic item",
+    "factions": "advocate",
+    "markBoxes": [
+      [
+        0.16411968665724927,
+        0.9121630928876441,
+        0
+      ],
+      [
+        0.25041736227045075,
+        0.9151017034758253,
+        0
+      ],
+      [
+        0.33260562475921407,
+        0.9121630928876441,
+        0
+      ],
+      [
+        0.41068447412353926,
+        0.9151017034758253,
+        0
+      ],
+      [
+        0.5052009759856171,
+        0.9092244822994627,
+        0
+      ],
+      [
+        0.5832798253499422,
+        0.9092244822994627,
+        0
+      ]
+    ]
+  },
+  "Paragons Vol 1 - 12": {
+    "uid": "Paragons Vol 1 - 12",
+    "cost": "23",
+    "name": "Lady Aurelia Questing Knight",
+    "classes": "knight",
+    "keywords": "armor engage",
+    "types": "character",
+    "upgradeTypes": "tactic weapon item potion potion",
+    "factions": "advocate",
+    "markBoxes": [
+      [
+        0.12379607037369976,
+        0.9092244822994627,
+        0
+      ],
+      [
+        0.11557724412482343,
+        0.9033472611231003,
+        0
+      ],
+      [
+        0.29228200847566455,
+        0.9033472611231003,
+        0
+      ],
+      [
+        0.38268909721330424,
+        0.9004086505349189,
+        0
+      ],
+      [
+        0.4607679465776294,
+        0.9033472611231003,
+        0
+      ]
+    ]
   }
 }

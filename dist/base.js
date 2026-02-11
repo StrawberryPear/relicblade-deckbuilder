@@ -126,6 +126,7 @@ const init = async () => {
   await initStorage();
 
   document.body.setAttribute("displayType", storage.getStoredDisplayType() || "");
+  document.body.setAttribute("listType", storage.getStoredListType() || "");
 
   document.addEventListener("contextmenu", (event) => {
     event.preventDefault();
