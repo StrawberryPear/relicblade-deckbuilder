@@ -27,7 +27,6 @@ export const getStoredDeck = () => {
   var storedDeck = [];
   var storedDeckName = "";
   try {
-
     storedDeck = JSON.parse(localStorage.getItem('deck') || '[]');
     storedDeckName = localStorage.getItem('deckName') || '';
   } catch (e) { }
@@ -62,8 +61,8 @@ export const writeCardToDatabase = async (uid, image) => {
     const objectStore = transaction.objectStore('cards');
 
     try {
-      await objectStore.put({uid, image, index: card.index});
-    } catch(err) {
+      await objectStore.put({ uid, image, index: card.index });
+    } catch (err) {
       console.error(err);
     }
     return false;
@@ -75,15 +74,15 @@ export const writeCardToDatabase = async (uid, image) => {
   try {
     // check if the card is in there.
     const objectStore = transaction.objectStore('cards');
-    const storeId = await objectStore.add({uid, image});
+    const storeId = await objectStore.add({ uid, image });
 
     const result = await objectStore.get(storeId);
 
     // write the card to localData
-    localData.push({uid, image, index: storeId});
+    localData.push({ uid, image, index: storeId });
 
     return result;
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     return false;
   }
@@ -109,7 +108,7 @@ export const removeCardFromDatabase = async (uid) => {
     localData.splice(cardIndex, 1);
 
     return true;
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     return false;
   }
@@ -142,11 +141,12 @@ export const init = async () => {
         }
       }
 
-      const cardObjectStore = db.createObjectStore('cards', { keyPath: 'index', autoIncrement: true }); 
+      const cardObjectStore = db.createObjectStore('cards', { keyPath: 'index', autoIncrement: true });
 
       cardObjectStore.createIndex('uid', 'uid', { unique: true });
-    }});
-  
+    }
+  });
+
   // check to see if we've loaded the basecards
   if (!hasLoadedBase()) {
     const baseCards = await import('./baseCards.js');

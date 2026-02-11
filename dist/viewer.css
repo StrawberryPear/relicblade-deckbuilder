@@ -44,7 +44,7 @@
   --card-ratio: calc(var(--card-base-height) / var(--card-base-width));
   --height-based-card-width: calc((var(--screen-height) - 252px) / var(--card-ratio));
   --width-based-card-width: calc(var(--screen-width) * 0.98);
-  --card-width: min(var(--height-based-card-width)  * 0.8, var(--width-based-card-width));
+  --card-width: min(var(--height-based-card-width) * 0.8, var(--width-based-card-width));
   --card-height: calc(var(--card-width) * var(--card-ratio) * 1.025);
   --card-width-deck: var(--card-width);
   --card-height-deck: var(--card-height);
@@ -58,16 +58,21 @@
   --token-size: min(10vh, 64px);
 }
 
+::view-transition-group(root) {
+  animation-duration: 0.7s;
+}
+
 html,
 body {
   overscroll-behavior: none;
 }
 
 html {
-  background:#000;
+  background: #000;
   height: 100%;
   overflow: hidden;
 }
+
 html::before {
   position: fixed;
   content: '';
@@ -91,13 +96,13 @@ body {
   height: calc(var(--screen-height));
   max-height: calc(var(--screen-height));
   top: var(--safe-area-top);
-  overflow:hidden;
+  overflow: hidden;
 }
 
 * {
   user-select: none;
   -webkit-user-select: none;
-  -webkit-touch-callout: none !important; 
+  -webkit-touch-callout: none !important;
 }
 
 templates {
@@ -256,12 +261,14 @@ call {
   justify-content: flex-start;
   align-items: center;
 }
+
 hamContainer {
   display: inline-block;
   position: relative;
   height: 100%;
   flex-shrink: 0;
 }
+
 ham {
   display: inline-block;
   position: relative;
@@ -274,6 +281,7 @@ ham {
   background-position: center;
   background-repeat: no-repeat;
 }
+
 share {
   display: inline-block;
   position: relative;
@@ -375,6 +383,7 @@ cardButton.grid {
   grid-column: 2;
   background-image: url(./assets/add-remove-flipped.png);
 }
+
 cardButton.grid::before {
   background-image: url(./assets/add-remove-flipped.png);
 }
@@ -382,15 +391,18 @@ cardButton.grid::before {
 body:not([subfilter="upgrade"]) cardButton.legal {
   display: none;
 }
+
 cardButton.legal {
   grid-column: 3;
   background-image: url(./assets/add-remove.png);
   background-position: 0px -60px;
 }
+
 cardButton.legal::before {
   content: 'Legal';
   background-size: auto 80%;
 }
+
 body[legal="false"] cardButton.legal::before {
   content: 'All';
   background-size: auto 80%;
@@ -453,6 +465,7 @@ toast {
   justify-content: center;
   align-items: center;
   font-size: 24px;
+  z-index: 11;
 }
 
 @keyframes loadingSpin {
@@ -539,7 +552,6 @@ menuControl,
   font-size: min(5vh, 18px);
   font-family: 'tradeWinds';
   margin-top: min(4vh, 24px);
-  text-decoration: underline;
 }
 
 searchContainer {
@@ -584,8 +596,9 @@ topButton {
   background: #0d2426;
 }
 
-cardButton.grid::after, cardButton.search::after {
-  content:'';
+cardButton.grid::after,
+cardButton.search::after {
+  content: '';
   position: absolute;
   top: 50%;
   left: 50%;
@@ -598,9 +611,11 @@ cardButton.grid::after, cardButton.search::after {
   background-repeat: no-repeat;
   background-size: auto 74%;
 }
+
 cardButton.search::after {
   background-image: url('./assets/search-button.png');
 }
+
 cardButton.searched::after {
   background-image: url(./assets/search-button-cancel.png);
 }
@@ -608,6 +623,7 @@ cardButton.searched::after {
 body[displayType="grid"] cardButton.grid::after {
   background-image: url(./assets/grid.png);
 }
+
 body[displayType="grid"] cardButton.grid {
   background-image: url(./assets/add-remove-white.png);
 }
@@ -707,7 +723,9 @@ cardScrollerContainer {
   justify-items: start;
 }
 
-body[showing="library"][displayType="grid"] cardcarousel {display: none;}
+body[showing="library"][displayType="grid"] cardcarousel {
+  display: none;
+}
 
 cardbutton.addUpgrade {
   grid-column: 3;
@@ -717,7 +735,8 @@ cardbutton.attachUpgrade {
   grid-column: 3;
 }
 
-label.fileUpload, label.imageUpload {
+label.fileUpload,
+label.imageUpload {
   pointer-events: all;
   top: 0px;
   bottom: 0px;
@@ -815,6 +834,7 @@ main {
   flex-direction: column;
   flex-wrap: nowrap;
 }
+
 body[showing="library"] main {
   background: #111;
 }
@@ -845,6 +865,7 @@ deckTitleMirror {
   font-family: 'tradeWinds';
   padding-right: 4px;
 }
+
 deckTitlePoints {
   display: inline-block;
   padding-top: 6px;
@@ -864,7 +885,8 @@ edit {
   pointer-events: none;
 }
 
-add, random {
+add,
+random {
   margin-bottom: calc(var(--screen-height) * 0.1);
   background: url('./assets/addCharacter.png');
   background-size: 110%;
@@ -900,7 +922,6 @@ overlayMenu:not([showing="savesMenu"]) savesMenu {
   display: none;
 }
 
-savesMenu,
 hamMenu {
   top: 0px;
   left: 0px;
@@ -959,13 +980,14 @@ modalbutton#modalReturn {
   grid-column: 2;
   background-image: url(./assets/add-remove-flipped.png);
 }
+
 modalbutton.fullwidth {
-    background-size: 100%, 80px;
-    background-repeat: space;
-    background-image: linear-gradient(90deg, transparent 0%, #58d5e6 10%, #58d5e6 90%, transparent 100%), url(./assets/add-remove.png);
-    filter: none;
-    text-shadow: none;
-    margin-bottom: min(2%, 13px);
+  background-size: 100%, 80px;
+  background-repeat: space;
+  background-image: linear-gradient(90deg, transparent 0%, #58d5e6 10%, #58d5e6 90%, transparent 100%), url(./assets/add-remove.png);
+  filter: none;
+  text-shadow: none;
+  margin-bottom: min(2%, 13px);
 }
 
 card::before {
@@ -986,7 +1008,7 @@ card::before {
 card.highlight::before {
   opacity: 1;
 }
-  
+
 modalOverlay.option modalbutton#modalAccept {
   display: none;
 }
@@ -994,11 +1016,11 @@ modalOverlay.option modalbutton#modalAccept {
 
 tokenContainer {
   position: absolute;
-  top:0px;
-  left:0px;
+  top: 0px;
+  left: 0px;
   pointer-events: none;
-  right:0px;
-  bottom:0px;
+  right: 0px;
+  bottom: 0px;
   z-index: 10;
 }
 
@@ -1037,26 +1059,33 @@ token {
   pointer-events: all;
   z-index: 9;
 }
+
 token.destroy {
   pointer-events: none;
   transition: opacity 0.2s;
   opacity: 0;
 }
+
 token[type="stun"] {
   background-image: url(./assets/token/stunned.png);
 }
+
 token[type="dodge"] {
   background-image: url(./assets/token/dodge.png);
 }
+
 token[type="unconscious"] {
   background-image: url(./assets/token/unconscious.png);
 }
+
 token[type="bind"] {
   background-image: url(./assets/token/bound.png);
 }
+
 token[type="poison"] {
   background-image: url(./assets/token/poison.png);
 }
+
 token[type="shieldwall"] {
   background-image: url(./assets/token/shieldwall.png);
 }
@@ -1065,96 +1094,113 @@ token[type="shieldwall"] {
   cardButtons.library_ {
     position: relative;
   }
+
   tokenButton {
-      position: fixed;
-      bottom: calc(36px + var(--safe-area-bottom));
-      left: calc(0.5 * var(--screen-width));
-      width: 64px;
-      height: 64px;
-      background: url(./assets/token/dodge.png);
-      background-position: center;
-      background-size: contain;
-      background-repeat: no-repeat;
-      transform: translate(-50%, 50%);
-      border-radius: 50%;
-      filter: drop-shadow(2px 4px 6px black) saturate(0.85);
-      pointer-events: all;
-      z-index: 9;
+    position: fixed;
+    bottom: calc(36px + var(--safe-area-bottom));
+    left: calc(0.5 * var(--screen-width));
+    width: 64px;
+    height: 64px;
+    background: url(./assets/token/dodge.png);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: translate(-50%, 50%);
+    border-radius: 50%;
+    filter: drop-shadow(2px 4px 6px black) saturate(0.85);
+    pointer-events: all;
+    z-index: 9;
   }
+
   tokenButton::before {
-      content: '';
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      right: 0px;
-      bottom: 0px;
-      background: #d20;
-      border-radius: 50%;
-      opacity: 0;
-      transition: opacity 0.4s;
+    content: '';
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background: #d20;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.4s;
   }
+
   tokenButton.active::before {
-      opacity: 1;
+    opacity: 1;
   }
+
   tokenButton.active::after {
     transform: translate(-50%, -50%) rotate(0deg);
   }
+
   tokenButton::after {
-      content: '';
-      background: url(./assets/close.png);
-      background-size: contain;
-      width: 34px;
-      height: 34px;
-      transform: translate(-50%, -50%) rotate(-45deg);
-      transition: transform 0.2s;
-      top: 50%;
-      left: 50%;
-      position: absolute;
-      filter: drop-shadow(2px 2px 0px black) drop-shadow(-2px 2px 0px black);
+    content: '';
+    background: url(./assets/close.png);
+    background-size: contain;
+    width: 34px;
+    height: 34px;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    transition: transform 0.2s;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    filter: drop-shadow(2px 2px 0px black) drop-shadow(-2px 2px 0px black);
   }
+
   token {
     position: absolute;
-    
-    top:0px;
+
+    top: 0px;
     left: 0px;
   }
+
   tokenOverlay.hidden {
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.2s;
   }
-  tokenExpander > token {
+
+  tokenExpander>token {
     transition: transform 0.3s 0.15s;
   }
-  tokenOverlay.hidden > tokenExpander > token {
+
+  tokenOverlay.hidden>tokenExpander>token {
     transform: translate(-50%, -50%) rotate(-90deg) translate(0px, 0px) rotate(90deg);
     transition: transform 0.3s;
     pointer-events: none;
   }
-  tokenExpander > token:nth-child(1) {
+
+  tokenExpander>token:nth-child(1) {
     transform: translate(-50%, calc(-50% + 13px)) rotate(-6deg) translate(var(--token-fan), 0px) rotate(6deg);
   }
-  tokenExpander > token:nth-child(2) {  
+
+  tokenExpander>token:nth-child(2) {
     transform: translate(-50%, calc(-50% + 13px)) rotate(-38deg) translate(calc(var(--token-fan) * 0.95), 0px) rotate(38deg);
   }
-  tokenExpander > token:nth-child(3) {  
+
+  tokenExpander>token:nth-child(3) {
     transform: translate(-50%, calc(-50% + 13px)) rotate(-72deg) translate(calc(var(--token-fan) * 0.9), 0px) rotate(72deg);
   }
-  tokenExpander > token:nth-child(4) {  
+
+  tokenExpander>token:nth-child(4) {
     transform: translate(-50%, calc(-50% + 13px)) rotate(-108deg) translate(calc(var(--token-fan) * 0.9), 0px) rotate(108deg);
   }
-  tokenExpander > token:nth-child(5) {  
+
+  tokenExpander>token:nth-child(5) {
     transform: translate(-50%, calc(-50% + 13px)) rotate(-142deg) translate(calc(var(--token-fan) * 0.95), 0px) rotate(142deg);
   }
-  tokenExpander > token:nth-child(6) {
+
+  tokenExpander>token:nth-child(6) {
     transform: translate(-50%, calc(-50% + 13px)) rotate(-174deg) translate(var(--token-fan), 0px) rotate(174deg);
   }
+
   modalOverlay card {
     position: absolute;
     z-index: 11;
     opacity: 0;
     transform: translate(-50%, -50%) translate(50vw, 35vh) rotate(3deg) scale(1);
   }
+
   body[showing="library"] modalOverlay card {
     transform: translate(-50%, -50%) translate(50vw, 40vh) rotate(3deg) scale(1);
   }
@@ -1163,6 +1209,7 @@ token[type="shieldwall"] {
 body[showing="deck"] cardscroller.library {
   transform: translate(0px, -100vh);
 }
+
 body[showing="library"] cardscroller.deck,
 body[showing="deck"] cardButtons.library_,
 body[showing="library"] cardButtons.deck_,
@@ -1179,17 +1226,18 @@ modalOverlay cardContainer {
   height: 100vh;
   pointer-events: none;
 }
+
 modalOverlay card::before {
   opacity: 1;
 }
 
 a {
-    color: #59d4e5;
+  color: #59d4e5;
 }
 
 modal.input {
-    bottom: auto;
-    top: calc(2vh + var(--safe-area-top));
+  bottom: auto;
+  top: calc(2vh + var(--safe-area-top));
 }
 
 /* Main Menu Styles */
@@ -1203,7 +1251,9 @@ mainMenu {
   z-index: 10;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-top: calc(60px + var(--safe-area-top));
+  box-sizing: border-box;
   align-items: center;
   gap: 24px;
   opacity: 0;
@@ -1229,30 +1279,47 @@ menuLogo {
   filter: drop-shadow(0 0 10px rgba(88, 213, 230, 0.3));
 }
 
+mainMenu menuButtons {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding-bottom: calc(24px + var(--safe-area-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
 mainMenu menuButton {
   display: flex;
-  width: 80%;
-  max-width: 320px;
+  width: 85%;
+  max-width: 600px;
   height: 64px;
-  background: rgba(17, 62, 64, 0.8);
-  color: #fff;
+  background: url(./assets/add-remove.png);
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #091e21;
   font-family: 'tradeWinds';
   font-size: min(24px, 5vw);
+  font-weight: 700;
+  line-height: 90%;
   justify-content: center;
   align-items: center;
-  border: 2px solid #58d5e6;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  filter: drop-shadow(2px 4px 6px black);
   cursor: pointer;
-  transition: transform 0.1s, background 0.2s;
+  transition: transform 0.1s;
   text-align: center;
   padding: 0 10px;
   user-select: none;
+  box-sizing: border-box;
 }
 
 mainMenu menuButton:active {
   transform: scale(0.98);
-  background: rgba(17, 62, 64, 1);
 }
 
 /* Hide other main UI elements when showing menu */
@@ -1262,25 +1329,21 @@ body[showing="menu"] cardScrollerContainer,
 body[showing="menu"] tokenContainer,
 body[showing="menu"] cardCarousel,
 body[showing="menu"] cardButtons,
-body[showing="menu"] toast, 
 body[showing="menu"] deckTitleContainer {
   display: none !important;
 }
 
-mainMenu menuButton.hidden {
-  display: none;
-}
-
 mainMenu savesMenu {
-  display: flex !important;
+  display: flex;
   flex-direction: column;
   width: 100%;
   align-items: center;
   gap: 16px;
 }
 
-mainMenu savesMenu.hidden {
-  display: none !important;
+mainMenu savesMenu.hidden,
+mainMenu menuButtons.hidden {
+  display: none;
 }
 
 mainMenu savesMenu .menuControl.saveSlot {
@@ -1308,4 +1371,40 @@ mainMenu savesMenu .menuControl.saveReturn {
   width: 100%;
   display: block;
   text-decoration: underline;
+}
+
+saveSlotLabel {
+  text-align: left;
+  padding-left: 16px;
+  pointer-events: none;
+  padding-right: 24px;
+}
+
+saveSlotRename {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  background-image: url('./assets/edit.png');
+  background-size: 22px;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+saveSlotDelete {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  background-image: url('./assets/close.png');
+  background-size: 22px;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+saveSlotRename:hover,
+saveSlotDelete:hover {
+  opacity: 1;
 }

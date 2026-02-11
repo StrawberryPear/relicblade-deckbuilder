@@ -1,13 +1,13 @@
 
 import { cardsStore, showToast, awaitScrollStop, canCharacterEquipUpgrade, getUpgradeType, getParentCardEleFromAny } from './cards.shared.js';
 import { storage } from './storage.js';
-import { awaitFrame, awaitTime, getSId, clamp, getAllCardsIdsInDeck } from './utils.js';
-import { getCardStore } from './store.web.js';
+import { awaitFrame, awaitTime, getSId, clamp } from './utils.js';
 import { showInteractCard, hideInteractCard, showConfirm, showOption, isModalShowing } from './dom.modal.js';
 import { getPointerCardEle, getCenterCardEle } from './dom.js';
-import { cardLibraryListEle, setSubFilter, scrollLibraryScroller, applyCarousel, setScrolledLibraryCard, onShowLibrary as navigateToLibrary } from './library.js';
+import { cardLibraryListEle, setSubFilter, applyCarousel, setScrolledLibraryCard } from './library.js';
 import { CARD_SLIDE_DURATION } from './constants.js';
 
+export var deckIdx = -1;
 export var deck = [];
 export var deckName = "";
 export var deckFocusCard;
@@ -32,17 +32,45 @@ export const showDeckButton = document.querySelector("cardButton.showDeck");
 const deckTitleInput = document.querySelector("input#title");
 const deckTitleInputMirror = document.querySelector("deckTitleMirror#titleMirror");
 
+export const loadDeckFromLocalIndex = (idx) => {
+  const localJsonDecks = storage.getStoredDecks();
+
+  deckIdx = idx;
+
+  setDeck(localJsonDecks[idx].deck || {});
+  setDeckName(localJsonDecks[idx].deckName || "");
+
+  storage.setStoredDeck(deckName, deck);
+
+  loadDeckFromLocal();
+}
+
+export const getValueFromDeckCards = (deck) => {
+  const cards = deck.map(deckStore => [deckStore, ...(deckStore.upgrades || [])]).flat().map(deckStore => cardsStore[deckStore.uid]);
+  const cost = cards.reduce((sum, card) => card ? sum + (parseInt(card.cost) || 0) : sum, 0);
+
+  return cost;
+}
 
 export const updateDeck = () => {
   // work out total points in deck :D
-  const cards = deck.map(deckStore => [deckStore, ...(deckStore.upgrades || [])]).flat().map(deckStore => cardsStore[deckStore.uid]);
-  const cost = cards.reduce((sum, card) => card ? sum + (parseInt(card.cost) || 0) : sum, 0);
+  const cost = getValueFromDeckCards(deck);
 
   const deckCostEle = document.getElementById('points');
 
   deckCostEle.innerHTML = cost ? `&nbsp;(${cost})` : '';
 
   storage.setStoredDeck(deckName, deck);
+
+  // update the stored deck too
+  const currentStoredDecks = storage.getStoredDecks();
+
+  const newStoredDecks = { ...currentStoredDecks };
+
+  newStoredDecks[deckIdx].deckName = deckName;
+  newStoredDecks[deckIdx].deck = [...deck];
+
+  storage.setStoredDecks(newStoredDecks);
 };
 
 export const scrollDeckScroller = async (left) => {
@@ -404,11 +432,6 @@ export const loadDeckFromLocal = () => {
   }
   scrollDeckScroller(0);
   var storedDecks = storage.getStoredDecks();
-  [...document.querySelectorAll("menuControl.saveSlot")].forEach((saveSlotEle) => {
-    const saveSlotIdx = saveSlotEle.getAttribute("idx");
-    const localJsonDeckIdx = storedDecks[saveSlotIdx] || { deckName: "Empty Slot" };
-    saveSlotEle.innerText = `${saveSlotIdx}. ${localJsonDeckIdx.deckName}`;
-  });
 };
 
 export const initDeckEvents = () => {
