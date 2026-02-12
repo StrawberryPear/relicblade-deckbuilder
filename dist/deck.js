@@ -33,6 +33,26 @@ export const showDeckButton = document.querySelector("cardButton.showDeck");
 const deckTitleInput = document.querySelector("input#title");
 const deckTitleInputMirror = document.querySelector("deckTitleMirror#titleMirror");
 
+export const getDeckCardEleFromIndex = (deckIndex) => {
+  return [...cardDeckListEle.children].filter(ele => ele.tagName === "CARDDECKWRAPPER")[deckIndex].querySelector("CARD");
+};
+
+export const getDeckUpgradeCardEleFromIndex = (deckIndex, upgradeIndex) => {
+  const parentEle = getDeckCardEleFromIndex(deckIndex);
+
+  return [...parentEle.querySelectorAll("CARD")][upgradeIndex];
+};
+
+export const getDeckNameCardEleFromIndex = (deckIndex) => {
+  return [...cardDeckNameListEle.children].filter(ele => ele.tagName === "NAMECARD")[deckIndex];
+}
+
+export const getDeckNameUpgradeCardEleFromIndex = (deckIndex, upgradeIndex) => {
+  const parentEle = getDeckNameCardEleFromIndex(deckIndex);
+
+  return [...parentEle.querySelectorAll("NAMECARD")][upgradeIndex];
+}
+
 export const loadDeckFromLocalIndex = (idx) => {
   const localJsonDecks = storage.getStoredDecks();
 
@@ -193,11 +213,29 @@ export const applyDeckCardTopScroll = (containerCardEle, rangeScalar, setScalar 
 };
 
 export const getDeckIndexOfCardEle = (cardEle) => {
+  if (cardEle.tagName == "NAMECARD") {
+    const cardWrapperEle = cardEle.parentElement.closest("nameCard") ?? cardEle;
+    
+    return [...cardDeckNameListEle.children].filter(ele => ele.tagName == "NAMECARD").indexOf(cardWrapperEle);
+  }
+
   const cardWrapperEle = cardEle.closest("cardDeckWrapper");
   if (!cardWrapperEle) return -1;
 
   return [...cardDeckListEle.children].filter(ele => ele.tagName == "CARDDECKWRAPPER").indexOf(cardWrapperEle);
 };
+
+export const getUpgradeIndexOfCardEle = (cardEle) => {
+    const parentCardEle = getParentCardEleFromAny(cardEle);
+
+  if (cardEle.tagName == "NAMECARD") {
+    const upgradeContainerEle = parentCardEle.querySelector("upgradeContainer");
+
+    return [...upgradeContainerEle.children].filter(ele => ele.tagName == "NAMECARD").indexOf(cardEle);
+  }
+
+  return [...parentCardEle.children].filter(ele => ele.tagName == "CARD").indexOf(cardEle);
+}
 
 export const addCharacterToDeck = (data, updateDeckStore = true) => {
   const uid = data.uid;
@@ -226,9 +264,9 @@ export const addCharacterToDeck = (data, updateDeckStore = true) => {
   wrapperEle.append(cardCloneEle);
 
   // add the card name to the deck
-  debugger;
   const cardNameCloneEle = cardNameEle.cloneNode(true);
   const addCardNameEle = cardDeckNameListEle.querySelector("add");
+  const cardNameCloneHealthContainerEle = cardNameCloneEle.querySelector("nameCardHealthBoxes");
 
   cardDeckNameListEle.insertBefore(cardNameCloneEle, addCardNameEle);
 
@@ -253,6 +291,7 @@ export const addCharacterToDeck = (data, updateDeckStore = true) => {
 
     boxEle.addEventListener("click", () => {
       const willBeMarked = !boxEle.classList.contains("marked");
+      namedBoxEle.classList.toggle("marked", willBeMarked);
       boxEle.classList.toggle("marked", willBeMarked);
       const cardIndex = deck.findIndex(card => card.sid == sessionId);
       if (cardIndex == -1) return;
@@ -260,8 +299,32 @@ export const addCharacterToDeck = (data, updateDeckStore = true) => {
       deck[cardIndex].marked[index] = willBeMarked;
       updateDeck();
     });
+
+    // mark everything for the named thing
+    const namedBoxEle = document.createElement("markBox");
+
+    if (cardStore.criticalHealthBox == index) {
+      namedBoxEle.classList.add("critical");
+    }
+
+    if (dataMarked) {
+      namedBoxEle.classList.add("marked");
+    }
+
+    namedBoxEle.addEventListener("click", () => {
+      const willBeMarked = !namedBoxEle.classList.contains("marked");
+      namedBoxEle.classList.toggle("marked", willBeMarked);
+      boxEle.classList.toggle("marked", willBeMarked);
+      const cardIndex = deck.findIndex(card => card.sid == sessionId);
+      if (cardIndex == -1) return;
+      deck[cardIndex].marked = deck[cardIndex].marked || [];
+      deck[cardIndex].marked[index] = willBeMarked;
+      updateDeck();
+    });
+
+    cardNameCloneHealthContainerEle.append(namedBoxEle);
   });
-  
+
 
   if (updateDeckStore) {
     deck.push({ uid });
@@ -286,6 +349,7 @@ export const addUpgradeToCharacter = (upgradeUID, characterCardEle, deckCharacte
 
   const libraryCardEles = [...cardLibraryListEle.children];
   const cardEle = libraryCardEles.find(ele => ele.getAttribute('uid') == upgradeUID);
+  const nameCardEle = [...cardLibraryNameListEle.children].find(ele => ele.getAttribute('uid') == upgradeUID);
   if (!cardEle) return;
 
   const cardCloneEle = cardEle.cloneNode(true);
@@ -301,6 +365,28 @@ export const addUpgradeToCharacter = (upgradeUID, characterCardEle, deckCharacte
       boxEle.classList.toggle("marked");
     });
   });
+
+  const characterCardIndex = deck.findIndex(deckCard => deckCard == deckCharacter);
+
+  const nameCardCharacterEle = getDeckNameCardEleFromIndex(characterCardIndex);
+
+  if (!nameCardCharacterEle) console.error("namedCharacter card mismatch!");
+
+  const nameCardUpgradeEle = nameCardCharacterEle.querySelector('upgradeContainer');
+  const nameCardCloneEle = nameCardEle.cloneNode(true);  
+  const nameCardHealthBoxContainerEle = nameCardCloneEle.querySelector("nameCardHealthBoxes");
+
+  (upgradeCardStore.markBoxes || []).forEach((_, index) => {
+    const boxEle = document.createElement("markBox");
+
+    nameCardHealthBoxContainerEle.append(boxEle);
+
+    boxEle.addEventListener("click", () => {
+      boxEle.classList.toggle("marked");
+    });
+  });
+
+  nameCardUpgradeEle.append(nameCardCloneEle);
 
   if (updateDeckStore) {
     deckCharacter.upgrades = deckCharacter.upgrades || [];
@@ -328,11 +414,12 @@ export const removeCharacter = async () => {
   }
 
   const currentCardIndex = getDeckIndexOfCardEle(selectedCardEle);
-
   if (currentCardIndex == -1) {
     showToast('Can\'t remove that');
     return;
   };
+
+  const nameCardEle = getDeckNameCardEleFromIndex(currentCardIndex);
 
   const currentFocusSubIndex = parentCardEle
     ? [...parentCardEle.querySelectorAll("card")].indexOf(selectedCardEle) + 1
@@ -346,6 +433,10 @@ export const removeCharacter = async () => {
 
     deck.splice(currentCardIndex, 1);
     containerCardEle.remove();
+
+    // find the corresponding nameCard
+
+    nameCardEle.remove();
   } else {
     const upgradeIndex = currentFocusSubIndex - 1;
 
@@ -355,6 +446,10 @@ export const removeCharacter = async () => {
     upgradeCardEle.remove();
 
     applyDeckCardTopScroll(parentCardEle, 0);
+
+    const upgradeNameCardEle = getDeckNameUpgradeCardEleFromIndex(currentCardIndex, upgradeIndex);
+
+    upgradeNameCardEle.remove();
   }
   updateDeck();
 
@@ -452,8 +547,9 @@ export const addCharacter = async () => {
 };
 
 export const loadDeckFromLocal = () => {
+  debugger;
   [...cardDeckListEle.children].filter(ele => ["CARDDECKWRAPPER", "SNAPPOINT"].includes(ele.tagName)).forEach(ele => ele.remove());
-  [...cardDeckNameListEle.children].filter(ele => ["namecard"].includes(ele.tagName)).forEach(ele => ele.remove());
+  [...cardDeckNameListEle.children].filter(ele => ["NAMECARD"].includes(ele.tagName)).forEach(ele => ele.remove());
   const storedDeck = storage.getStoredDeck();
 
   const libraryCards = [...cardLibraryListEle.children].map(ele => ({ uid: ele.getAttribute("uid") }));
@@ -520,6 +616,8 @@ export const initDeckEvents = () => {
 
   cardScrollerDeckEle.addEventListener("touchend", async (event) => {
     if (document.body.getAttribute("showing") != "deck") return;
+    if (document.body.getAttribute("listType") === "list") return;
+
     if (!deckFocusCard) return;
     if (!deckFocusCard.deckDragging) return;
 
@@ -559,30 +657,35 @@ export const initDeckEvents = () => {
 
     const selectedCardEle = event.target;
     if (!selectedCardEle) return;
-    if (selectedCardEle.tagName != "CARD") return;
+    if (!["CARD", "NAMECARD"].includes(selectedCardEle.tagName)) return;
 
     // check if it's the focused card
     const deckIndex = getDeckIndexOfCardEle(selectedCardEle);
     if (deckIndex == -1) return;
     const parentCardEle = getParentCardEleFromAny(selectedCardEle);
-
-    const upgradeIndex = [...parentCardEle.querySelectorAll("card")].indexOf(selectedCardEle);
+    const upgradeIndex = getUpgradeIndexOfCardEle(selectedCardEle);
 
     // check the deckcardtop scroll
 
-    console.log(parentCardEle.currentRangeScalar, upgradeIndex + 1);
-    if (parentCardEle.currentRangeScalar !== (upgradeIndex + 1)) {
-      applyDeckCardTopScroll(parentCardEle, upgradeIndex + 1);
-      return;
+    if (selectedCardEle.tagName === "CARD") {
+      if (parentCardEle.currentRangeScalar !== (upgradeIndex + 1)) {
+        applyDeckCardTopScroll(parentCardEle, upgradeIndex + 1);
+        return;
+      }
     }
 
+    const deckParentCardEle = getDeckCardEleFromIndex(deckIndex);
+    const deckCardEle = upgradeIndex === -1 
+      ? deckParentCardEle 
+      : getDeckUpgradeCardEleFromIndex(deckIndex, upgradeIndex);
+
     awaitTime(100).then(() => {
-      selectedCardEle.classList.toggle("highlight", true);
+      deckCardEle.classList.toggle("highlight", true);
     });
 
     // Deck specific logic
-    showInteractCard(selectedCardEle);
-    const currentFocusCard = cardsStore[selectedCardEle.getAttribute("uid")];
+    showInteractCard(deckCardEle);
+    const currentFocusCard = cardsStore[deckCardEle.getAttribute("uid")];
     const options = [];
     if (currentFocusCard.types == "character") {
       options.push("Add Upgrade");
@@ -609,7 +712,7 @@ export const initDeckEvents = () => {
   });
 
   [...addCharacterButtonEles].forEach(addCharacterButtonEle => {
-      addCharacterButtonEle.addEventListener('click', () => {
+    addCharacterButtonEle.addEventListener('click', () => {
       if (document.body.getAttribute("showing") !== 'deck') return;
       attachCharacter = undefined;
       setSubFilter('character');

@@ -5,8 +5,14 @@ export const cardsStore = await getCardStore();
 import { awaitFrame, clamp } from './utils.js';
 
 export const getParentCardEleFromAny = (ele) => {
+  if (ele.tagName === "NAMECARD") {
+    const parentEle = ele.parentElement.closest("NAMECARD")
+
+    return parentEle || ele;
+  }
+
   // find the top level parent
-  while (ele.parentElement && ["CARD", "NAMECARD"].includes(ele.parentElement.tagName)) {
+  while (ele.parentElement && ["CARD"].includes(ele.parentElement.tagName)) {
     ele = ele.parentElement;
   }
 

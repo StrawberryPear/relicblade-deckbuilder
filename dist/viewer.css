@@ -1077,7 +1077,8 @@ card::before {
   transition: opacity 0.2s;
 }
 
-card.highlight::before {
+card.highlight::before,
+nameCard.highlight upper::before {
   opacity: 1;
 }
 
@@ -1637,12 +1638,13 @@ nameCard upper armor {
 }
 
 nameCard upper speed {
-  top:100%;
+  top: 100%;
   right: 25%;
   height: 60%;
   background-image: url('./assets/speed.png');
   background-size: contain;
 }
+
 nameCard upper armor {
   top: calc(100% - 1cqi);
   right: 12%;
