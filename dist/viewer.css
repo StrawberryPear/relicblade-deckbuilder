@@ -700,11 +700,11 @@ cardbutton.removeFromDeck {
   grid-column: 2;
 }
 
-body[displayType="list"] cardScroller.library cardlist {
+body[displayType="list"] cardScroller cardlist {
   display: none;
 }
 
-body:not([displayType="list"]) cardScroller.library cardNameList {
+body:not([displayType="list"]) cardScroller cardNameList {
   display: none;
 }
 

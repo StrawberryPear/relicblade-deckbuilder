@@ -4,7 +4,7 @@ import { storage } from './storage.js';
 import { awaitFrame, awaitTime, getSId, clamp } from './utils.js';
 import { showInteractCard, hideInteractCard, showConfirm, showOption, isModalShowing } from './dom.modal.js';
 import { getPointerCardEle, getCenterCardEle } from './dom.js';
-import { cardLibraryListEle, setSubFilter, applyCarousel, setScrolledLibraryCard } from './library.js';
+import { cardLibraryListEle, setSubFilter, applyCarousel, setScrolledLibraryCard, cardLibraryNameListEle } from './library.js';
 import { CARD_SLIDE_DURATION } from './constants.js';
 
 export var deckIdx = -1;
@@ -25,7 +25,8 @@ export const setScrolledDeckCard = (c) => scrolledDeckCard = c;
 
 export const cardScrollerDeckEle = document.querySelector('cardScroller.deck');
 export const cardDeckListEle = cardScrollerDeckEle.querySelector('cardList');
-export const addCharacterButton = document.querySelector("add");
+export const cardDeckNameListEle = cardScrollerDeckEle.querySelector('cardNameList');
+export const addCharacterButtonEles = document.querySelectorAll("add");
 export const showDeckButton = document.querySelector("cardButton.showDeck");
 
 // imported from base.js originally
@@ -197,9 +198,13 @@ export const addCharacterToDeck = (data, updateDeckStore = true) => {
   const libraryCardEles = [...cardLibraryListEle.children]; // Imported from library.js
   const cardEle = libraryCardEles.find(ele => ele.getAttribute('uid') == uid);
   if (!cardEle) return;
+  const libraryNameCardEles = [...cardLibraryNameListEle.children];
+  const cardNameEle = libraryNameCardEles.find(ele => ele.getAttribute('uid') == uid);
+  if (!cardNameEle) return;
 
   const wrapperEle = document.createElement("cardDeckWrapper");
-  cardDeckListEle.insertBefore(wrapperEle, addCharacterButton);
+  const cardDeckAddEle = cardDeckListEle.querySelector("add");
+  cardDeckListEle.insertBefore(wrapperEle, cardDeckAddEle);
 
   // add a snap point infront and behind it
   const beforeSnapEle = document.createElement("snapPoint");
@@ -208,6 +213,11 @@ export const addCharacterToDeck = (data, updateDeckStore = true) => {
   const cardCloneEle = cardEle.cloneNode(true);
   cardCloneEle.className = "";
   wrapperEle.append(cardCloneEle);
+
+  const cardNameCloneEle = cardNameEle.cloneNode(true);
+  const addCardNameEle = cardDeckNameListEle.querySelector("add");
+  // add the card name to the deck
+  cardDeckNameListEle.insertBefore(cardNameCloneEle, addCardNameEle);
 
   const sessionId = getSId();
 
@@ -238,6 +248,7 @@ export const addCharacterToDeck = (data, updateDeckStore = true) => {
       updateDeck();
     });
   });
+  
 
   if (updateDeckStore) {
     deck.push({ uid });
@@ -583,17 +594,19 @@ export const initDeckEvents = () => {
     storage.setStoredDeck(deckName, deck);
   });
 
-  addCharacterButton.addEventListener('click', () => {
-    if (document.body.getAttribute("showing") !== 'deck') return;
-    attachCharacter = undefined;
-    setSubFilter('character');
-    // navigateToLibrary(); // Calling implementation
-    // Implementing locally again to avoid cycle if necessary or just import
-    // Local:
-    document.body.className = '';
-    scrolledDeckCard = getCenterCardEle();
-    document.body.setAttribute("showing", "library");
-    applyCarousel();
+  [...addCharacterButtonEles].forEach(addCharacterButtonEle => {
+      addCharacterButtonEle.addEventListener('click', () => {
+      if (document.body.getAttribute("showing") !== 'deck') return;
+      attachCharacter = undefined;
+      setSubFilter('character');
+      // navigateToLibrary(); // Calling implementation
+      // Implementing locally again to avoid cycle if necessary or just import
+      // Local:
+      document.body.className = '';
+      scrolledDeckCard = getCenterCardEle();
+      document.body.setAttribute("showing", "library");
+      applyCarousel();
+    });
   });
 
   showDeckButton.addEventListener('click', onShowDeck);
