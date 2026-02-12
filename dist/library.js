@@ -174,7 +174,6 @@ export const applyFilters = () => {
 }
 
 export const performSearchForString = (newSearchText) => {
-  debugger;
   const currentFocusCard = getCenterCardEle();
   const libraryCardEles = [...cardLibraryListEle.children];
   const previousActiveLibraryCardEles = libraryCardEles.filter(e => !e.classList.contains('inactive'));
@@ -318,26 +317,30 @@ export const loadCard = (card) => {
   else cardLibraryListEle.append(cardEle);
   cardEle.style.setProperty('background-image', `url('${card.image}')`);
 
+  const isCharacter = cardStoreData.types.match(/character/i);
+  const isUpgrade = cardStoreData.types.match(/upgrade/i);
+
+  const nameCardClass = isCharacter ? "character" : "upgrade";
+
   // setup the name card for the library(list)
-  const nameCardEle = document.querySelector('templates nameCard').cloneNode(true);
+  const nameCardEle = document.querySelector(`templates nameCard.${nameCardClass}`).cloneNode(true);
 
   nameCardEle.setAttribute('uid', card.uid);
   nameCardEle.setAttribute('index', card.index);
 
   // check the type of card it is,
-  const isCharacter = cardStoreData.types.match(/character/i);
-  const isUpgrade = cardStoreData.types.match(/upgrade/i);
   const isRelic = cardStoreData.types.match(/relic/i);
 
   if (isCharacter) {
-    nameCardEle.classList.add('character');
     const activationEle = nameCardEle.querySelector('activations');
+    const speedEle = nameCardEle.querySelector('speed');
+    const armorEle = nameCardEle.querySelector('armor');
 
-    activationEle.innerText = cardStoreData?.activations ?? "2";
+    activationEle.innerText = cardStoreData?.activations ?? "?";
+    speedEle.innerText = cardStoreData?.speed ?? "?";
+    armorEle.innerText = cardStoreData?.armor ?? "?";
   }
   if (isUpgrade || isRelic) {
-    nameCardEle.classList.add('upgrade');
-
     const upgradeType = cardStoreData.types.split(' ').filter(type => type !== 'upgrade')[0];
     nameCardEle.classList.add(upgradeType);
   }

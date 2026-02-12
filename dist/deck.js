@@ -74,15 +74,24 @@ export const updateDeck = () => {
   storage.setStoredDecks(newStoredDecks);
 };
 
-export const scrollDeckScroller = async (left) => {
-  cardScrollerDeckEle.scrollTo({ left, top: 0, behavior: 'instant' });
+export const scrollDeckScroller = async (left, top = 0) => {
+  cardScrollerDeckEle.scrollTo({ left, top: top, behavior: 'instant' });
 
   await awaitFrame();
-
   await awaitScrollStop();
 }
 
 export const scrollDeckToCard = async (cardEle) => {
+  // check if we're in list view
+  if (document.body.getAttribute("listType") == "list") {
+    // scroll to the top of it
+    const offsetTop = cardEle.offsetTop;
+
+    scrollDeckScroller(0, offsetTop);
+
+    return;
+  }
+
   const closestCardContainerEle = cardEle.closest("cardDeckWrapper");
   if (!closestCardContainerEle) return; // safety
 
@@ -111,6 +120,8 @@ export const getDeckUpgradeRangeScalar = (containerCardEle, _scrollY) => {
 };
 
 export const applyDeckCardTopScroll = (containerCardEle, rangeScalar, setScalar = true) => {
+  if (document.body.getAttribute("listType") == "list") return;
+
   // adjust the range scalar
   if (!containerCardEle) return;
 
@@ -214,9 +225,11 @@ export const addCharacterToDeck = (data, updateDeckStore = true) => {
   cardCloneEle.className = "";
   wrapperEle.append(cardCloneEle);
 
+  // add the card name to the deck
+  debugger;
   const cardNameCloneEle = cardNameEle.cloneNode(true);
   const addCardNameEle = cardDeckNameListEle.querySelector("add");
-  // add the card name to the deck
+
   cardDeckNameListEle.insertBefore(cardNameCloneEle, addCardNameEle);
 
   const sessionId = getSId();
@@ -440,6 +453,7 @@ export const addCharacter = async () => {
 
 export const loadDeckFromLocal = () => {
   [...cardDeckListEle.children].filter(ele => ["CARDDECKWRAPPER", "SNAPPOINT"].includes(ele.tagName)).forEach(ele => ele.remove());
+  [...cardDeckNameListEle.children].filter(ele => ["namecard"].includes(ele.tagName)).forEach(ele => ele.remove());
   const storedDeck = storage.getStoredDeck();
 
   const libraryCards = [...cardLibraryListEle.children].map(ele => ({ uid: ele.getAttribute("uid") }));

@@ -138,6 +138,14 @@ body[displayType="list"] cardScroller.library {
   max-height: calc(var(--screen-height) - var(--nav-height) - var(--foot-button-height) - var(--search-height) - 16px);
 }
 
+body[displayType="list"] cardScroller.deck {
+  display: block !important;
+  scroll-behavior: smooth;
+  overflow-x: auto;
+  overflow-y: scroll;
+  max-height: calc(var(--screen-height) - var(--nav-height) - var(--foot-button-height) - var(--search-height));
+}
+
 body[displayType="list"] cardscrollercontainer::after {
   content: '';
   position: absolute;
@@ -700,11 +708,13 @@ cardbutton.removeFromDeck {
   grid-column: 2;
 }
 
-body[displayType="list"] cardScroller cardlist {
+body[listType="list"] cardScroller.deck cardlist,
+body:not([listType="list"]) cardScroller.deck cardnamelist {
   display: none;
 }
 
-body:not([displayType="list"]) cardScroller cardNameList {
+body:not([displayType="list"]) cardScroller.library cardNameList,
+body[displayType="list"] cardScroller.library cardList {
   display: none;
 }
 
@@ -1602,7 +1612,9 @@ nameCard upper nameCardName.short {
   padding-left: 12cqi;
 }
 
-nameCard upper points {
+nameCard upper points,
+nameCard upper speed,
+nameCard upper armor {
   position: absolute;
   top: 50%;
   right: 2%;
@@ -1616,12 +1628,28 @@ nameCard upper points {
   color: #000;
   font-family: 'tradeWinds';
   font-size: 21px;
-  padding-top: 4px;
+  padding-top: 1cqi;
   box-sizing: border-box;
   background: url('./assets/cost-circle.png');
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+nameCard upper speed {
+  top:100%;
+  right: 25%;
+  height: 60%;
+  background-image: url('./assets/speed.png');
+  background-size: contain;
+}
+nameCard upper armor {
+  top: calc(100% - 1cqi);
+  right: 12%;
+  height: 66%;
+  padding-top: 3cqi;
+  background-image: url('./assets/armor.png');
+  background-size: contain;
 }
 
 cardnamelist nameCard:first-child {

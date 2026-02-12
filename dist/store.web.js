@@ -7,6 +7,11 @@ export const getCardStore = async () => {
   try {
     console.log("Attempting to get online store");
 
+    if (window.location.href.includes("localhost")) {
+      // don't load the url;
+      throw "Not loading it from gungob";
+    }
+    
     const storeRequestOptions = { url };
     const response = await Capacitor.Plugins.CapacitorHttp.get(storeRequestOptions);
 
@@ -27,6 +32,7 @@ export const getCardStore = async () => {
     console.log(e);
 
     console.log("using fallback store");
-    return (await import("./store.js")).default;
+    const fallbackResponse = await fetch("./store.json");
+    return await fallbackResponse.json();
   } 
 }
