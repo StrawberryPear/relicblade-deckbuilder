@@ -893,7 +893,7 @@ body[showing="deck"] cardScroller.deck cardlist {
   padding-top: calc(var(--screen-height) * 0.05);
 }
 
-cardcontrol:not(.inactive) {
+cardControl:not(.inactive) {
   background: #fff;
   color: #000;
 }
@@ -905,6 +905,7 @@ main {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+  overflow: hidden;
 }
 
 body[showing="library"] main {
@@ -1288,6 +1289,7 @@ body[showing="deck"] cardButtons.library_,
 body[showing="library"] cardButtons.deck_,
 body[showing="library"] tokenExpander.deck_,
 body[showing="deck"] cardCarousel.vertical_ {
+  position: absolute;
   transform: translate(0px, 100vh);
 }
 
@@ -1487,7 +1489,7 @@ nameCard {
   display: block;
   width: 100%;
   padding: 0 48px;
-  padding-right: 24px;
+  padding-right: 0px;
   padding-top: 6px;
   margin-bottom: 16px;
   box-sizing: border-box;
@@ -1497,7 +1499,7 @@ nameCard upper {
   position: relative;
   display: flex;
   align-items: center;
-  width: 100%;
+  width: calc(100% - 24px);
   padding: 0 0;
   box-sizing: border-box;
   padding-left: 28px;
@@ -1656,4 +1658,8 @@ nameCard upper armor {
 
 cardnamelist nameCard:first-child {
   margin-top: 16px;
+}
+
+nameCard upgradeContainer {
+  display: block;
 }

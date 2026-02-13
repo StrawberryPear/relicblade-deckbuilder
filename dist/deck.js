@@ -420,12 +420,9 @@ export const removeCharacter = async () => {
   };
 
   const nameCardEle = getDeckNameCardEleFromIndex(currentCardIndex);
+  const upgradeIndex = getUpgradeIndexOfCardEle(selectedCardEle);
 
-  const currentFocusSubIndex = parentCardEle
-    ? [...parentCardEle.querySelectorAll("card")].indexOf(selectedCardEle) + 1
-    : parentCardEle.currentRangeScalar || 0;
-
-  if (!currentFocusSubIndex) {
+  if (upgradeIndex === -1) {
     const confirmValue = await showConfirm('Are you sure you want to remove this card, and all it\'s upgrades from this deck?');
     await awaitTime(200);
 
@@ -438,10 +435,8 @@ export const removeCharacter = async () => {
 
     nameCardEle.remove();
   } else {
-    const upgradeIndex = currentFocusSubIndex - 1;
-
     deck[currentCardIndex].upgrades.splice(upgradeIndex, 1);
-    const upgradeCardEle = [...parentCardEle.querySelectorAll("card")][upgradeIndex];
+    const upgradeCardEle = getDeckUpgradeCardEleFromIndex(currentCardIndex, upgradeIndex);
 
     upgradeCardEle.remove();
 
@@ -657,7 +652,10 @@ export const initDeckEvents = () => {
 
     const selectedCardEle = event.target;
     if (!selectedCardEle) return;
+    
     if (!["CARD", "NAMECARD"].includes(selectedCardEle.tagName)) return;
+
+    const isDeckCard = selectedCardEle.tagName === "CARD";
 
     // check if it's the focused card
     const deckIndex = getDeckIndexOfCardEle(selectedCardEle);
@@ -667,7 +665,7 @@ export const initDeckEvents = () => {
 
     // check the deckcardtop scroll
 
-    if (selectedCardEle.tagName === "CARD") {
+    if (isDeckCard) {
       if (parentCardEle.currentRangeScalar !== (upgradeIndex + 1)) {
         applyDeckCardTopScroll(parentCardEle, upgradeIndex + 1);
         return;
@@ -679,7 +677,7 @@ export const initDeckEvents = () => {
       ? deckParentCardEle 
       : getDeckUpgradeCardEleFromIndex(deckIndex, upgradeIndex);
 
-    awaitTime(100).then(() => {
+    awaitTime(isDeckCard ? 100 : 0).then(() => {
       deckCardEle.classList.toggle("highlight", true);
     });
 
@@ -701,7 +699,7 @@ export const initDeckEvents = () => {
       await removeCharacter();
     }
     hideInteractCard(!optionResult);
-    selectedCardEle.classList.toggle("highlight", false);
+    deckCardEle.classList.toggle("highlight", false);
     return;
   });
 
