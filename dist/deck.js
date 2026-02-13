@@ -272,8 +272,14 @@ export const addCharacterToDeck = (data, updateDeckStore = true) => {
 
   const sessionId = getSId();
 
+  const markBoxes = cardStore.markBoxes || [];
+
+  if (markBoxes.length === 0) {
+    cardNameCloneHealthContainerEle.remove();
+  }
+  
   // create mark boxes...
-  (cardStore.markBoxes || []).forEach(([boxX, boxY], index) => {
+  markBoxes.forEach(([boxX, boxY], index) => {
     // check if the box should be marked
     const dataMarked = (data.marked || [])[index];
 
@@ -376,7 +382,13 @@ export const addUpgradeToCharacter = (upgradeUID, characterCardEle, deckCharacte
   const nameCardCloneEle = nameCardEle.cloneNode(true);  
   const nameCardHealthBoxContainerEle = nameCardCloneEle.querySelector("nameCardHealthBoxes");
 
-  (upgradeCardStore.markBoxes || []).forEach((_, index) => {
+  const markBoxes = upgradeCardStore.markBoxes || [];
+
+  if (markBoxes.length === 0) {
+    nameCardHealthBoxContainerEle.remove();
+  }
+
+  markBoxes.forEach((_, index) => {
     const boxEle = document.createElement("markBox");
 
     nameCardHealthBoxContainerEle.append(boxEle);
@@ -542,7 +554,6 @@ export const addCharacter = async () => {
 };
 
 export const loadDeckFromLocal = () => {
-  debugger;
   [...cardDeckListEle.children].filter(ele => ["CARDDECKWRAPPER", "SNAPPOINT"].includes(ele.tagName)).forEach(ele => ele.remove());
   [...cardDeckNameListEle.children].filter(ele => ["NAMECARD"].includes(ele.tagName)).forEach(ele => ele.remove());
   const storedDeck = storage.getStoredDeck();
@@ -692,7 +703,7 @@ export const initDeckEvents = () => {
       options.push("Remove Upgrade");
     }
 
-    const optionResult = await showOption(`<h4>${currentFocusCard.name} selected</h4> `, options);
+    const optionResult = await showOption(``, options);
     if (optionResult == "Add Upgrade") {
       await startAttachUpgrade();
     } else if (optionResult == "Remove Character" || optionResult == "Remove Upgrade") {

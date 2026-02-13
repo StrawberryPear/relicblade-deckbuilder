@@ -175,7 +175,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item spell spell potion",
     "factions": "adversary",
     "markBoxes": [
@@ -217,7 +217,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "adversary",
     "markBoxes": [
@@ -345,7 +345,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item",
     "factions": "adversary",
     "markBoxes": [
@@ -402,7 +402,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "adversary",
     "markBoxes": [
@@ -449,7 +449,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon potion",
     "factions": "adversary",
     "markBoxes": [
@@ -486,7 +486,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item tactic weapon potion",
     "factions": "adversary",
     "markBoxes": [
@@ -523,7 +523,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon potion",
     "factions": "adversary",
     "markBoxes": [
@@ -560,7 +560,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon potion",
     "factions": "adversary",
     "markBoxes": [
@@ -647,7 +647,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item spell",
     "factions": "adversary",
     "markBoxes": [
@@ -689,7 +689,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item spell",
     "factions": "adversary",
     "markBoxes": [
@@ -731,7 +731,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic",
     "factions": "adversary",
     "markBoxes": [
@@ -768,7 +768,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic",
     "factions": "adversary",
     "markBoxes": [
@@ -805,7 +805,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic",
     "factions": "adversary",
     "markBoxes": [
@@ -904,7 +904,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell potion",
     "factions": "neutral"
   },
@@ -919,7 +919,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item",
     "factions": "neutral",
     "markBoxes": [
@@ -956,7 +956,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic",
     "factions": "neutral",
     "markBoxes": [
@@ -993,7 +993,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "neutral",
     "markBoxes": [
@@ -1114,7 +1114,7 @@
     "activations": "5",
     "speed": "2",
     "armor": "2",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic tactic item",
     "factions": "advocate",
     "markBoxes": [
@@ -1161,7 +1161,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell",
     "factions": "advocate",
     "markBoxes": [
@@ -1198,7 +1198,7 @@
     "activations": "3",
     "speed": "5",
     "armor": "2",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item",
     "factions": "advocate",
     "markBoxes": [
@@ -1245,7 +1245,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item spell",
     "factions": "advocate",
     "markBoxes": [
@@ -1366,7 +1366,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell spell potion",
     "factions": "neutral",
     "markBoxes": [
@@ -1413,7 +1413,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "neutral",
     "markBoxes": [
@@ -1455,7 +1455,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item item potion",
     "factions": "neutral",
     "markBoxes": [
@@ -1571,7 +1571,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "2",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item item potion",
     "factions": "advocate",
     "markBoxes": [
@@ -1625,7 +1625,7 @@
     "activations": "2",
     "speed": "-",
     "armor": "+1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "advocate"
   },
@@ -1640,7 +1640,7 @@
     "activations": "2",
     "speed": "6",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item",
     "factions": "advocate",
     "markBoxes": [
@@ -1677,7 +1677,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "2",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "advocate",
     "markBoxes": [
@@ -1729,7 +1729,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item potion",
     "factions": "adversary",
     "markBoxes": [
@@ -1776,7 +1776,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "adversary",
     "markBoxes": [
@@ -1838,7 +1838,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "weapon item tactic potion",
     "factions": "adversary",
     "markBoxes": [
@@ -1890,7 +1890,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell spell potion",
     "factions": "advocate",
     "markBoxes": [
@@ -1969,7 +1969,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic tactic weapon item potion",
     "factions": "advocate",
     "markBoxes": [
@@ -2021,7 +2021,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "advocate",
     "markBoxes": [
@@ -2049,31 +2049,6 @@
         0.47587499999999994,
         0.9116879169755374,
         0
-      ],
-      [
-        0.12825,
-        0.9093098591549296,
-        0
-      ],
-      [
-        0.219375,
-        0.9164440326167531,
-        0
-      ],
-      [
-        0.300375,
-        0.9069318013343217,
-        0
-      ],
-      [
-        0.394875,
-        0.9116879169755374,
-        0
-      ],
-      [
-        0.47587499999999994,
-        0.9069318013343217,
-        0
       ]
     ]
   },
@@ -2098,7 +2073,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item",
     "factions": "adversary",
     "markBoxes": [
@@ -2175,7 +2150,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon potion",
     "factions": "adversary",
     "markBoxes": [
@@ -2227,7 +2202,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item spell",
     "factions": "advocate",
     "markBoxes": [
@@ -2269,7 +2244,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "weapon item tactic potion potion",
     "factions": "advocate",
     "markBoxes": [
@@ -2306,7 +2281,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item weapon potion",
     "factions": "advocate",
     "markBoxes": [
@@ -2348,7 +2323,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell potion",
     "factions": "advocate",
     "markBoxes": [
@@ -2385,7 +2360,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic spell spell potion item",
     "factions": "adversary",
     "markBoxes": [
@@ -2422,7 +2397,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon potion item",
     "factions": "adversary",
     "markBoxes": [
@@ -2459,7 +2434,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "adversary",
     "markBoxes": [
@@ -2501,7 +2476,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "adversary",
     "markBoxes": [
@@ -2812,7 +2787,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "weapon tactic potion item potion",
     "factions": "advocate",
     "markBoxes": [
@@ -2854,7 +2829,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item item potion",
     "factions": "advocate",
     "markBoxes": [
@@ -2891,7 +2866,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item spell",
     "factions": "advocate",
     "markBoxes": [
@@ -3052,7 +3027,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item potion",
     "factions": "advocate",
     "markBoxes": [
@@ -3089,7 +3064,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "advocate",
     "markBoxes": [
@@ -3131,7 +3106,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "advocate",
     "markBoxes": [
@@ -3173,7 +3148,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item",
     "factions": "advocate",
     "markBoxes": [
@@ -3265,7 +3240,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "adversary",
     "markBoxes": [
@@ -3307,7 +3282,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "adversary",
     "markBoxes": [
@@ -3349,7 +3324,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item potion spell spell",
     "factions": "adversary",
     "markBoxes": [
@@ -3386,7 +3361,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item",
     "factions": "adversary",
     "markBoxes": [
@@ -3505,7 +3480,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "advocate",
     "markBoxes": [
@@ -3552,7 +3527,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item tactic potion potion",
     "factions": "advocate"
   },
@@ -3567,7 +3542,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item",
     "factions": "advocate",
     "markBoxes": [
@@ -3604,7 +3579,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell",
     "factions": "advocate",
     "markBoxes": [
@@ -3801,7 +3776,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item item potion",
     "factions": "neutral",
     "markBoxes": [
@@ -3848,7 +3823,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell potion",
     "factions": "neutral",
     "markBoxes": [
@@ -3895,7 +3870,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "neutral",
     "markBoxes": [
@@ -3947,7 +3922,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "neutral",
     "markBoxes": [
@@ -4004,7 +3979,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell spell potion",
     "factions": "advocate"
   },
@@ -4019,7 +3994,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item tactic",
     "factions": "advocate",
     "markBoxes": [
@@ -4056,7 +4031,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic",
     "factions": "neutral",
     "markBoxes": [
@@ -4103,7 +4078,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "advocate",
     "markBoxes": [
@@ -4170,7 +4145,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic tactic item potion",
     "factions": "neutral",
     "markBoxes": [
@@ -4222,7 +4197,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic potion item spell",
     "factions": "adversary",
     "markBoxes": [
@@ -4281,7 +4256,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item",
     "factions": "adversary",
     "markBoxes": [
@@ -4338,7 +4313,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item weapon",
     "factions": "adversary",
     "markBoxes": [
@@ -4395,7 +4370,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item potion",
     "factions": "neutral",
     "markBoxes": [
@@ -4502,7 +4477,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "adversary",
     "markBoxes": [
@@ -4544,7 +4519,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "adversary",
     "markBoxes": [
@@ -4586,7 +4561,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "adversary",
     "markBoxes": [
@@ -4720,7 +4695,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item",
     "factions": "adversary",
     "markBoxes": [
@@ -4772,7 +4747,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell potion",
     "factions": "adversary",
     "markBoxes": [
@@ -4852,7 +4827,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item",
     "factions": "adversary",
     "markBoxes": [
@@ -4899,7 +4874,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item",
     "factions": "adversary",
     "markBoxes": [
@@ -4971,7 +4946,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion potion",
     "factions": "advocate",
     "markBoxes": []
@@ -4987,7 +4962,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "advocate",
     "markBoxes": []
@@ -5003,7 +4978,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item spell spell potion",
     "factions": "advocate",
     "markBoxes": []
@@ -5019,7 +4994,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item",
     "factions": "advocate",
     "markBoxes": []
@@ -5035,7 +5010,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "adversary",
     "markBoxes": []
@@ -5051,7 +5026,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon spell item",
     "factions": "adversary",
     "markBoxes": []
@@ -5067,7 +5042,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item potion spell spell",
     "factions": "adversary",
     "markBoxes": []
@@ -5083,7 +5058,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon potion item",
     "factions": "adversary",
     "markBoxes": []
@@ -5099,7 +5074,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon potion item",
     "factions": "advocate",
     "markBoxes": []
@@ -5115,7 +5090,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "adversary",
     "markBoxes": []
@@ -5131,7 +5106,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "spell spell item potion",
     "factions": "advocate",
     "markBoxes": []
@@ -5147,7 +5122,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell potion",
     "factions": "neutral",
     "markBoxes": [
@@ -5183,7 +5158,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item item potion",
     "factions": "neutral",
     "markBoxes": [
@@ -5219,7 +5194,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "neutral",
     "markBoxes": [
@@ -5255,7 +5230,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell",
     "factions": "neutral",
     "markBoxes": [
@@ -5373,7 +5348,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell potion",
     "factions": "neutral",
     "markBoxes": [
@@ -5409,7 +5384,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "neutral",
     "markBoxes": [
@@ -5465,7 +5440,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "neutral",
     "markBoxes": [
@@ -5586,7 +5561,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell potion potion",
     "factions": "neutral",
     "markBoxes": [
@@ -5622,7 +5597,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell spell potion",
     "factions": "advocate",
     "markBoxes": [
@@ -5658,7 +5633,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell potion potion",
     "factions": "advocate",
     "markBoxes": [
@@ -5694,7 +5669,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell potion",
     "factions": "advocate",
     "markBoxes": [
@@ -5740,7 +5715,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon spell item",
     "factions": "adversary",
     "markBoxes": [
@@ -5781,7 +5756,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item",
     "factions": "adversary",
     "markBoxes": [
@@ -5817,7 +5792,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item potion spell spell",
     "factions": "adversary",
     "markBoxes": [
@@ -5853,7 +5828,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "adversary",
     "markBoxes": [
@@ -5899,7 +5874,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion",
     "factions": "adversary",
     "markBoxes": [
@@ -5940,7 +5915,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion potion",
     "factions": "advocate",
     "markBoxes": [
@@ -5976,7 +5951,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "item spell spell",
     "factions": "advocate",
     "markBoxes": [
@@ -6012,7 +5987,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic item",
     "factions": "advocate",
     "markBoxes": [
@@ -6058,7 +6033,7 @@
     "activations": "4",
     "speed": "3",
     "armor": "1",
-    "criticalHealthBox": 3,
+    "criticalHealthBox": 2,
     "upgradeTypes": "tactic weapon item potion potion",
     "factions": "advocate",
     "markBoxes": [

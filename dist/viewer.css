@@ -143,7 +143,7 @@ body[displayType="list"] cardScroller.deck {
   scroll-behavior: smooth;
   overflow-x: auto;
   overflow-y: scroll;
-  max-height: calc(var(--screen-height) - var(--nav-height) - var(--foot-button-height) - var(--search-height));
+  max-height: calc(var(--screen-height) - var(--nav-height) - var(--foot-button-height) - 16px);
 }
 
 body[displayType="list"] cardscrollercontainer::after {
@@ -1662,4 +1662,56 @@ cardnamelist nameCard:first-child {
 
 nameCard upgradeContainer {
   display: block;
+  margin-top: -2cqi;
+}
+
+nameCardHealthBoxes {
+  display: inline-block;
+  margin-bottom: -4cqi;
+}
+
+.upgrade nameCardHealthBoxes {
+  position: relative;
+  top: calc(100% - 7cqi);
+}
+
+nameCardHealthBoxes > markBox {
+  display: inline-block;
+  width: 7cqi;
+  height: auto;
+  aspect-ratio: 1;
+  position: relative;
+  animation: none;
+  filter: none;
+  margin-right: 0.25cqi;
+  background-image: url('./assets/unmarked.png');
+  pointer-events: all;
+}
+nameCardHealthBoxes > markBox.marked {
+  background-image: url('./assets/marked.png'), url('./assets/unmarked.png');
+}
+lower nameCardHealthBoxes > markBox.critical {
+  background-image: url('./assets/health-box-critical.png');
+}
+lower nameCardHealthBoxes > markBox.critical.marked {
+  background-image: url('./assets/marked.png'), url('./assets/health-box-critical.png');
+}
+lower nameCardHealthBoxes > markBox:last-child {
+  background-image: url('./assets/health-box-last.png');
+}
+lower nameCardHealthBoxes > markBox:last-child.marked {
+  background-image: url('./assets/marked.png'), url('./assets/health-box-last.png');
+}
+
+lower {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 63%;
+}
+
+body[listType="list"] add {
+    left: 50%;
+    transform: translate(-50%, 0);
 }
