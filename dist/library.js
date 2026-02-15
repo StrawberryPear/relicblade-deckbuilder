@@ -301,37 +301,36 @@ const getCardLibraryPlacementBeforeEle = (placeCard, nameList = false) => {
   return undefined;
 };
 
-export const loadCard = (card) => {
-  if (!card) return;
-  const existingCardEle = cardLibraryListEle.querySelector(`card[uid="${card.uid}"]`);
+export const loadCard = (cardStoreData) => {
+  if (!cardStoreData) return;
+  const existingCardEle = cardLibraryListEle.querySelector(`card[uid="${cardStoreData.uid}"]`);
   if (existingCardEle) existingCardEle.remove();
-
-  const cardStoreData = cardsStore[card.uid];
 
   // setup the card for the library(card)
   const cardEle = document.createElement('card');
-  cardEle.setAttribute('uid', card.uid);
-  cardEle.setAttribute('index', card.index);
+  cardEle.setAttribute('uid', cardStoreData.uid);
+  cardEle.setAttribute('index', cardStoreData.index);
   const beforeEle = getCardLibraryPlacementBeforeEle(cardEle);
   if (beforeEle) cardLibraryListEle.insertBefore(cardEle, beforeEle);
   else cardLibraryListEle.append(cardEle);
-  cardEle.style.setProperty('background-image', `url('${card.image}')`);
+  cardEle.style.setProperty('background-image', `url('./assets/cards/${cardStoreData.uid}.jpg')`);
 
   const isCharacter = cardStoreData.types.match(/character/i);
+  const isSummon = cardStoreData.types.match(/summon/i);
   const isUpgrade = cardStoreData.types.match(/upgrade/i);
 
-  const nameCardClass = isCharacter ? "character" : "upgrade";
+  const nameCardClass = (isCharacter || isSummon) ? "character" : "upgrade";
 
   // setup the name card for the library(list)
   const nameCardEle = document.querySelector(`templates nameCard.${nameCardClass}`).cloneNode(true);
 
-  nameCardEle.setAttribute('uid', card.uid);
-  nameCardEle.setAttribute('index', card.index);
+  nameCardEle.setAttribute('uid', cardStoreData.uid);
+  nameCardEle.setAttribute('index', cardStoreData.index);
 
   // check the type of card it is,
   const isRelic = cardStoreData.types.match(/relic/i);
 
-  if (isCharacter) {
+  if (isCharacter || isSummon) {
     const activationEle = nameCardEle.querySelector('activations');
     const speedEle = nameCardEle.querySelector('speed');
     const armorEle = nameCardEle.querySelector('armor');
@@ -339,6 +338,16 @@ export const loadCard = (card) => {
     activationEle.innerText = cardStoreData?.activations ?? "?";
     speedEle.innerText = cardStoreData?.speed ?? "?";
     armorEle.innerText = cardStoreData?.armor ?? "?";
+
+    if (cardStoreData.name.toLowerCase().includes('elemental')) debugger
+
+    // check if it's a construct
+    if (cardStoreData.classes.includes("construct")) {
+      nameCardEle.classList.add("construct");
+    }
+    if (cardStoreData.keywords.includes("team")) {
+      nameCardEle.classList.add("team");
+    }
   }
   if (isUpgrade || isRelic) {
     const upgradeType = cardStoreData.types.split(' ').filter(type => type !== 'upgrade')[0];
@@ -346,12 +355,18 @@ export const loadCard = (card) => {
   }
 
   const nameEle = nameCardEle.querySelector('nameCardName');
-  nameEle.innerText = cardStoreData.name;
+  nameEle.innerHTML = cardStoreData.name;
 
-  if (cardStoreData.name.length > 16) {
+  const cleanName = cardStoreData.name
+    .replace(/<aboveText\b[^>]*>.*?<\/aboveText>/gis, '')
+    .replace(/<bellowText\b[^>]*>.*?<\/bellowText>/gis, '')
+    .replace(/<[^>]+>/g, '')
+    .trim();
+
+  if (cleanName.length > 16) {
     nameEle.classList.add('long');
   }
-  else if (cardStoreData.name.length < 7) {
+  else if (cleanName.length < 7) {
     nameEle.classList.add('short');
   }
 

@@ -138,7 +138,7 @@ body[displayType="list"] cardScroller.library {
   max-height: calc(var(--screen-height) - var(--nav-height) - var(--foot-button-height) - var(--search-height) - 16px);
 }
 
-body[displayType="list"] cardScroller.deck {
+body[listType="list"] cardScroller.deck {
   display: block !important;
   scroll-behavior: smooth;
   overflow-x: auto;
@@ -899,7 +899,7 @@ cardControl:not(.inactive) {
 }
 
 main {
-  background: #091e21;
+  background: #ccc0c6;
   position: relative;
   height: var(--screen-height);
   display: flex;
@@ -1606,6 +1606,14 @@ nameCard upper nameCardName {
   padding-top: 1cqi;
 }
 
+nameCard upper nameCardName bellowText {
+  position: absolute;
+  top: -2cqi;
+  left: 10cqi;
+  font-size:50%;
+  text-transform: capitalize;
+}
+
 nameCard upper nameCardName.long {
   font-size: 7cqi;
 }
@@ -1671,8 +1679,9 @@ nameCardHealthBoxes {
 }
 
 .upgrade nameCardHealthBoxes {
-  position: relative;
-  top: calc(100% - 7cqi);
+  position: absolute;
+  top: 98%;
+  right: 10%;
 }
 
 nameCardHealthBoxes > markBox {
@@ -1696,19 +1705,34 @@ lower nameCardHealthBoxes > markBox.critical {
 lower nameCardHealthBoxes > markBox.critical.marked {
   background-image: url('./assets/marked.png'), url('./assets/health-box-critical.png');
 }
-lower nameCardHealthBoxes > markBox:last-child {
+lower nameCardHealthBoxes > markBox.dead {
   background-image: url('./assets/health-box-last.png');
+  margin-right: 2cqi;
 }
-lower nameCardHealthBoxes > markBox:last-child.marked {
+lower nameCardHealthBoxes > markBox.dead.marked {
   background-image: url('./assets/marked.png'), url('./assets/health-box-last.png');
 }
 
+nameCard.construct nameCardHealthBoxes > markBox {
+  background-image: url('./assets/unmarked-construct.png') !important;
+}
+nameCard.construct nameCardHealthBoxes > markBox.marked {
+  background-image: url('./assets/marked-construct.png'), url('./assets/unmarked-construct.png') !important;
+}
+
+nameCard nameCard markBox {
+  width: calc((100cqi + 48px) * 0.07) !important;
+  height: auto !important;
+}
 lower {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
-    width: 63%;
+    width: 68%;
+}
+.team lower {
+  width:71%;
 }
 
 body[listType="list"] add {

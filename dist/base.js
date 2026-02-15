@@ -195,8 +195,8 @@ const init = async () => {
 
   await storage.init();
 
-  const cards = await storage.getAllCards();
-  for (const card of cards) {
+  const cards = cardsStore;
+  for (const card of Object.values(cards)) {
     loadCard(card);
   }
 

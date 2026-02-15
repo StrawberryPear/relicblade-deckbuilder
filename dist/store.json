@@ -361,8 +361,8 @@
     "types": "upgrade tactic",
     "factions": ""
   },
-  "Battle Pigs - 0": {
-    "uid": "Battle Pigs - 0",
+  "Battle Pigs 25 - 0": {
+    "uid": "Battle Pigs 25 - 0",
     "base": "pig warlord charge pig warlord fighter 23 adversary character",
     "cost": "23",
     "name": "pig warlord",
@@ -408,8 +408,8 @@
       ]
     ]
   },
-  "Battle Pigs - 1": {
-    "uid": "Battle Pigs - 1",
+  "Battle Pigs 25 - 1": {
+    "uid": "Battle Pigs 25 - 1",
     "base": "axe pig range recover pig 14 adversary character",
     "cost": "12",
     "name": "axe pig",
@@ -445,8 +445,8 @@
       ]
     ]
   },
-  "Battle Pigs - 2": {
-    "uid": "Battle Pigs - 2",
+  "Battle Pigs 25 - 2": {
+    "uid": "Battle Pigs 25 - 2",
     "base": "raider pig range pig scout 16 adversary character",
     "cost": "16",
     "name": "raider pig",
@@ -482,8 +482,8 @@
       ]
     ]
   },
-  "Battle Pigs - 3": {
-    "uid": "Battle Pigs - 3",
+  "Battle Pigs 25 - 3": {
+    "uid": "Battle Pigs 25 - 3",
     "base": "shield pig recover 16 adversary character",
     "cost": "14",
     "name": "shield pig",
@@ -519,8 +519,8 @@
       ]
     ]
   },
-  "Battle Pigs - 4": {
-    "uid": "Battle Pigs - 4",
+  "Battle Pigs 25 - 4": {
+    "uid": "Battle Pigs 25 - 4",
     "base": "soldier pig range recover 14 adversary character",
     "cost": "12",
     "name": "soldier pig",
@@ -556,8 +556,8 @@
       ]
     ]
   },
-  "Battle Pigs - 5": {
-    "uid": "Battle Pigs - 5",
+  "Battle Pigs 25 - 5": {
+    "uid": "Battle Pigs 25 - 5",
     "base": "banner of the swinelord warlord tactics 1 upgrade item",
     "cost": "1",
     "name": "banner of the swinelord",
@@ -566,8 +566,8 @@
     "types": "upgrade item",
     "factions": ""
   },
-  "Battle Pigs - 6": {
-    "uid": "Battle Pigs - 6",
+  "Battle Pigs 25 - 6": {
+    "uid": "Battle Pigs 25 - 6",
     "base": "shield wall 2 upgrade armor upgrade tactic",
     "cost": "2",
     "name": "shield wall",
@@ -576,8 +576,8 @@
     "types": "upgrade tactic",
     "factions": ""
   },
-  "Battle Pigs - 7": {
-    "uid": "Battle Pigs - 7",
+  "Battle Pigs 25 - 7": {
+    "uid": "Battle Pigs 25 - 7",
     "base": "brutal charge pig beast 1 upgrade tactic",
     "cost": "2",
     "name": "brutal charge",
@@ -586,8 +586,8 @@
     "types": "upgrade tactic",
     "factions": ""
   },
-  "Battle Pigs - 8": {
-    "uid": "Battle Pigs - 8",
+  "Battle Pigs 25 - 8": {
+    "uid": "Battle Pigs 25 - 8",
     "base": "cudgel pig -2 upgrade weapon",
     "cost": "-2",
     "name": "cudgel",
@@ -596,19 +596,8 @@
     "types": "upgrade weapon",
     "factions": ""
   },
-  "Battle Pigs - 9": {
-    "uid": "Battle Pigs - 9",
-    "base": "sling and stone range 2 upgrade weapon",
-    "cost": "2",
-    "name": "sling and stone",
-    "classes": "",
-    "keywords": "range one ad",
-    "types": "upgrade weapon",
-    "factions": ""
-  },
-  "Battle Pigs - 10": {
-    "uid": "Battle Pigs - 10",
-    "base": "sling and stone range 2 upgrade weapon",
+  "Battle Pigs 25 - 10": {
+    "uid": "Battle Pigs 25 - 10",
     "cost": "2",
     "name": "warrior lineage",
     "classes": "pig",
@@ -616,8 +605,156 @@
     "types": "upgrade tactic",
     "factions": ""
   },
-  "Bone and Darkness AI - 0": {
-    "uid": "Bone and Darkness AI - 0",
+  "Battle Pigs 25 - 11": {
+    "uid": "Battle Pigs 25 - 11",
+    "base": "berserker pig ad barbarian pig 16 adversary character",
+    "cost": "18",
+    "name": "berserker pig",
+    "classes": "pig barbarian",
+    "keywords": "bonus ad frenzy",
+    "types": "character",
+    "activations": "4",
+    "speed": "3",
+    "armor": "1",
+    "criticalHealthBox": -1,
+    "upgradeTypes": "tactic weapon potion item",
+    "factions": "adversary",
+    "markBoxes": [
+      [
+        0.12825,
+        0.9140659747961453,
+        0
+      ],
+      [
+        0.20925,
+        0.9164440326167531,
+        0
+      ],
+      [
+        0.297,
+        0.9140659747961453,
+        0
+      ],
+      [
+        0.38137499999999996,
+        0.9093098591549296,
+        0
+      ],
+      [
+        0.4725,
+        0.9116879169755374,
+        0
+      ]
+    ]
+  },
+  "Battle Pigs 25 - 12": {
+    "uid": "Battle Pigs 25 - 12",
+    "base": "pig out destroy recover health 1 upgrade tactic",
+    "cost": "1",
+    "name": "pig out",
+    "classes": "pig",
+    "keywords": "destroy health heal recover ad",
+    "types": "upgrade tactic",
+    "factions": ""
+  },
+  "Battle Pigs 25 - 13": {
+    "uid": "Battle Pigs 25 - 13",
+    "base": "vermin mouth bonus damage pig 20 adversary character",
+    "cost": "20",
+    "name": "vermin mouth",
+    "classes": "pig",
+    "keywords": "bonus damage bonus ad natural weapon summon",
+    "types": "character",
+    "activations": "3",
+    "speed": "4",
+    "armor": "1",
+    "criticalHealthBox": 2,
+    "upgradeTypes": "tactic item potion",
+    "factions": "adversary",
+    "markBoxes": [
+      [
+        0.124875,
+        0.9212001482579688,
+        0
+      ],
+      [
+        0.20925,
+        0.9140659747961453,
+        0
+      ],
+      [
+        0.31387499999999996,
+        0.9093098591549296,
+        0
+      ],
+      [
+        0.401625,
+        0.9116879169755374,
+        0
+      ]
+    ]
+  },
+  "Battle Pigs 25 - 14": {
+    "uid": "Battle Pigs 25 - 14",
+    "base": "vermin mouth rat swarm summon dire recover adversary summon",
+    "cost": "0",
+    "name": "rat swarm",
+    "classes": "",
+    "keywords": "recover dire ad",
+    "types": "summon",
+    "speed": "5",
+    "armor": "1",
+    "activations": "2",
+    "factions": "adversary"
+  },
+  "Battle Pigs 25 - 15": {
+    "uid": "Battle Pigs 25 - 15",
+    "cost": "23",
+    "name": "Hellebore<bellowText>pig warlord</bellowText>",
+    "classes": "pig warlord barbarian",
+    "keywords": "range recover ad damage",
+    "types": "character",
+    "activations": "4",
+    "speed": "4",
+    "armor": "2",
+    "criticalHealthBox": 4,
+    "upgradeTypes": "tactic weapon item potion",
+    "factions": "adversary",
+    "markBoxes": [
+      [
+        0.12752022601772184,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.20970848850648516,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.29600616411968667,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.36997560035957366,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.4727109284705278,
+        0.9062858717112815,
+        0
+      ],
+      [
+        0.5466803647104148,
+        0.9062858717112815,
+        0
+      ]
+    ]
+  },
+  "Bone and Darkness 25 - 0": {
+    "uid": "Bone and Darkness 25 - 0",
     "base": "dark wanderer dodge bone darkness 23 adversary character",
     "cost": "23",
     "name": "dark wanderer",
@@ -658,8 +795,8 @@
       ]
     ]
   },
-  "Bone and Darkness AI - 1": {
-    "uid": "Bone and Darkness AI - 1",
+  "Bone and Darkness 25 - 1": {
+    "uid": "Bone and Darkness 25 - 1",
     "base": "dark watcher range dodge bone darkness 23 adversary character",
     "cost": "23",
     "name": "dark watcher",
@@ -700,11 +837,11 @@
       ]
     ]
   },
-  "Bone and Darkness AI - 2": {
-    "uid": "Bone and Darkness AI - 2",
+  "Bone and Darkness 25 - 2": {
+    "uid": "Bone and Darkness 25 - 2",
     "base": "bone stalker range move armor bone 12 adversary character",
     "cost": "14",
-    "name": "bone stalker #1",
+    "name": "bone stalker",
     "classes": "bone",
     "keywords": "armor range one move ad",
     "types": "character",
@@ -737,11 +874,11 @@
       ]
     ]
   },
-  "Bone and Darkness AI - 3": {
-    "uid": "Bone and Darkness AI - 3",
+  "Bone and Darkness 25 - 3": {
+    "uid": "Bone and Darkness 25 - 3",
     "base": "bone stalker range move armor bone 12 adversary character",
     "cost": "14",
-    "name": "bone stalker #2",
+    "name": "bone stalker",
     "classes": "bone",
     "keywords": "armor range one move ad",
     "types": "character",
@@ -774,8 +911,8 @@
       ]
     ]
   },
-  "Bone and Darkness AI - 4": {
-    "uid": "Bone and Darkness AI - 4",
+  "Bone and Darkness 25 - 4": {
+    "uid": "Bone and Darkness 25 - 4",
     "base": "bone construct range bone 15 adversary character",
     "cost": "14",
     "name": "bone construct",
@@ -811,28 +948,8 @@
       ]
     ]
   },
-  "Bone and Darkness AI - 5": {
-    "uid": "Bone and Darkness AI - 5",
-    "base": "mark of violence darkness deadly magical 2 upgrade weapon",
-    "cost": "1",
-    "name": "mark of violence",
-    "classes": "darkness",
-    "keywords": "deadly ad magical",
-    "types": "upgrade weapon",
-    "factions": ""
-  },
-  "Bone and Darkness AI - 6": {
-    "uid": "Bone and Darkness AI - 6",
-    "base": "bone harvest darkness spell health range 3 upgrade spell",
-    "cost": "2",
-    "name": "bone harvest",
-    "classes": "darkness bone",
-    "keywords": "health heal spell range one spell ad",
-    "types": "upgrade spell",
-    "factions": ""
-  },
-  "Bone and Darkness AI - 7": {
-    "uid": "Bone and Darkness AI - 7",
+  "Bone and Darkness 25 - 5": {
+    "uid": "Bone and Darkness 25 - 5",
     "base": "black shroud darkness spell armor range 1 upgrade spell",
     "cost": "1",
     "name": "black shroud",
@@ -841,8 +958,18 @@
     "types": "upgrade spell",
     "factions": ""
   },
-  "Bone and Darkness AI - 8": {
-    "uid": "Bone and Darkness AI - 8",
+  "Bone and Darkness 25 - 6": {
+    "uid": "Bone and Darkness 25 - 6",
+    "base": "bone harvest darkness spell health range 3 upgrade spell",
+    "cost": "2",
+    "name": "bone harvest",
+    "classes": "darkness bone",
+    "keywords": "health heal spell range one spell ad",
+    "types": "upgrade spell",
+    "factions": ""
+  },
+  "Bone and Darkness 25 - 7": {
+    "uid": "Bone and Darkness 25 - 7",
     "base": "dark machination darkness 5 upgrade tactic",
     "cost": "2",
     "name": "dark machination",
@@ -851,8 +978,18 @@
     "types": "upgrade tactic",
     "factions": ""
   },
-  "Bone and Darkness AI - 9": {
-    "uid": "Bone and Darkness AI - 9",
+  "Bone and Darkness 25 - 8": {
+    "uid": "Bone and Darkness 25 - 8",
+    "base": "mark of violence darkness deadly magical 2 upgrade weapon",
+    "cost": "1",
+    "name": "mark of violence",
+    "classes": "darkness",
+    "keywords": "deadly ad magical",
+    "types": "upgrade weapon",
+    "factions": ""
+  },
+  "Bone and Darkness 25 - 9": {
+    "uid": "Bone and Darkness 25 - 9",
     "base": "murder of crows darkness two uses dodge 2 upgrade item",
     "cost": "2",
     "name": "murder of crows",
@@ -1083,8 +1220,8 @@
     "types": "upgrade spell",
     "factions": ""
   },
-  "Lostwood Enclave - 0": {
-    "uid": "Lostwood Enclave - 0",
+  "Lostwood - 0": {
+    "uid": "Lostwood - 0",
     "base": "arboleth sentinel push range ally shield fighter 23 advocate character",
     "cost": "23",
     "name": "arboleth sentinel",
@@ -1130,8 +1267,8 @@
       ]
     ]
   },
-  "Lostwood Enclave - 1": {
-    "uid": "Lostwood Enclave - 1",
+  "Lostwood - 1": {
+    "uid": "Lostwood - 1",
     "base": "wild elf druid range nature druid transform bind 26 advocate character",
     "cost": "26",
     "name": "wild elf druid",
@@ -1167,8 +1304,8 @@
       ]
     ]
   },
-  "Lostwood Enclave - 2": {
-    "uid": "Lostwood Enclave - 2",
+  "Lostwood - 2": {
+    "uid": "Lostwood - 2",
     "base": "cave bear wild elf druid beast transform 0 advocate character",
     "cost": "0",
     "name": "cave bear",
@@ -1214,8 +1351,8 @@
       ]
     ]
   },
-  "Lostwood Enclave - 3": {
-    "uid": "Lostwood Enclave - 3",
+  "Lostwood - 3": {
+    "uid": "Lostwood - 3",
     "base": "wild elf pathfinder range place climb nature scout 21 advocate character",
     "cost": "21",
     "name": "wild elf pathfinder",
@@ -1251,8 +1388,8 @@
       ]
     ]
   },
-  "Lostwood Enclave - 4": {
-    "uid": "Lostwood Enclave - 4",
+  "Lostwood - 4": {
+    "uid": "Lostwood - 4",
     "base": "brawler bonus die 2 upgrade tactic",
     "cost": "2",
     "name": "brawler",
@@ -1261,8 +1398,8 @@
     "types": "upgrade tactic",
     "factions": ""
   },
-  "Lostwood Enclave - 5": {
-    "uid": "Lostwood Enclave - 5",
+  "Lostwood - 5": {
+    "uid": "Lostwood - 5",
     "base": "true grit recovery 2 upgrade tactic",
     "cost": "2",
     "name": "true grit",
@@ -1271,8 +1408,8 @@
     "types": "upgrade tactic",
     "factions": ""
   },
-  "Lostwood Enclave - 6": {
-    "uid": "Lostwood Enclave - 6",
+  "Lostwood - 6": {
+    "uid": "Lostwood - 6",
     "base": "pendant beast single use damage bonus 1 upgrade item",
     "cost": "1",
     "name": "pendant of ferocity",
@@ -1288,8 +1425,8 @@
       ]
     ]
   },
-  "Lostwood Enclave - 7": {
-    "uid": "Lostwood Enclave - 7",
+  "Lostwood - 7": {
+    "uid": "Lostwood - 7",
     "base": "bark skin druid armor range 2 upgrade spell",
     "cost": "2",
     "name": "bark skin",
@@ -1298,8 +1435,8 @@
     "types": "upgrade spell",
     "factions": ""
   },
-  "Lostwood Enclave - 8": {
-    "uid": "Lostwood Enclave - 8",
+  "Lostwood - 8": {
+    "uid": "Lostwood - 8",
     "base": "regrowth nature three uses spell range recover health 3 upgrade spell",
     "cost": "3",
     "name": "regrowth",
@@ -1325,8 +1462,8 @@
       ]
     ]
   },
-  "Lostwood Enclave - 9": {
-    "uid": "Lostwood Enclave - 9",
+  "Lostwood - 9": {
+    "uid": "Lostwood - 9",
     "base": "wind walk nature spell place 2 upgrade spell",
     "cost": "2",
     "name": "wind walk",
@@ -1701,56 +1838,6 @@
     "types": "upgrade tactic",
     "factions": ""
   },
-  "Singular Champions 1 - 6": {
-    "uid": "Singular Champions 1 - 6",
-    "base": "vermin mouth bonus damage pig 20 adversary character",
-    "cost": "20",
-    "name": "vermin mouth",
-    "classes": "pig",
-    "keywords": "bonus damage bonus ad natural weapon summon",
-    "types": "character",
-    "activations": "3",
-    "speed": "4",
-    "armor": "1",
-    "criticalHealthBox": 2,
-    "upgradeTypes": "tactic item potion",
-    "factions": "adversary",
-    "markBoxes": [
-      [
-        0.124875,
-        0.9212001482579688,
-        0
-      ],
-      [
-        0.20925,
-        0.9140659747961453,
-        0
-      ],
-      [
-        0.31387499999999996,
-        0.9093098591549296,
-        0
-      ],
-      [
-        0.401625,
-        0.9116879169755374,
-        0
-      ]
-    ]
-  },
-  "Singular Champions 1 - 7": {
-    "uid": "Singular Champions 1 - 7",
-    "base": "vermin mouth rat swarm summon dire recover adversary summon",
-    "cost": "0",
-    "name": "rat swarm",
-    "classes": "",
-    "keywords": "recover dire ad",
-    "types": "summon",
-    "speed": "5",
-    "armor": "1",
-    "activations": "2",
-    "factions": "adversary"
-  },
   "Singular Champions 1 - 8": {
     "uid": "Singular Champions 1 - 8",
     "base": "ogre retiarius range dodge recover fighter 26 character adversary character",
@@ -2122,58 +2209,6 @@
     "name": "bloodthirsty",
     "classes": "barbarian beast",
     "keywords": "charge ad disable",
-    "types": "upgrade tactic",
-    "factions": ""
-  },
-  "Singular Champions 2 - 8": {
-    "uid": "Singular Champions 2 - 8",
-    "base": "berserker pig ad barbarian pig 16 adversary character",
-    "cost": "18",
-    "name": "berserker pig",
-    "classes": "pig barbarian",
-    "keywords": "bonus ad frenzy",
-    "types": "character",
-    "activations": "4",
-    "speed": "3",
-    "armor": "1",
-    "criticalHealthBox": -1,
-    "upgradeTypes": "tactic weapon potion item",
-    "factions": "adversary",
-    "markBoxes": [
-      [
-        0.12825,
-        0.9140659747961453,
-        0
-      ],
-      [
-        0.20925,
-        0.9164440326167531,
-        0
-      ],
-      [
-        0.297,
-        0.9140659747961453,
-        0
-      ],
-      [
-        0.38137499999999996,
-        0.9093098591549296,
-        0
-      ],
-      [
-        0.4725,
-        0.9116879169755374,
-        0
-      ]
-    ]
-  },
-  "Singular Champions 2 - 9": {
-    "uid": "Singular Champions 2 - 9",
-    "base": "pig out destroy recover health 1 upgrade tactic",
-    "cost": "1",
-    "name": "pig out",
-    "classes": "pig",
-    "keywords": "destroy health heal recover ad",
     "types": "upgrade tactic",
     "factions": ""
   },
@@ -3657,106 +3692,6 @@
     "types": "upgrade weapon",
     "factions": ""
   },
-  "Relics of the Volge - 0": {
-    "uid": "Relics of the Volge - 0",
-    "base": "arctic warblade relic",
-    "cost": "0",
-    "name": "arctic warblade",
-    "classes": "",
-    "keywords": "ad",
-    "types": "relic",
-    "factions": ""
-  },
-  "Relics of the Volge - 1": {
-    "uid": "Relics of the Volge - 1",
-    "base": "black figure relic",
-    "cost": "0",
-    "name": "black figure",
-    "classes": "",
-    "keywords": "",
-    "types": "relic",
-    "factions": ""
-  },
-  "Relics of the Volge - 2": {
-    "uid": "Relics of the Volge - 2",
-    "base": "crown of madness relic",
-    "cost": "0",
-    "name": "crown of madness",
-    "classes": "",
-    "keywords": "ad",
-    "types": "relic",
-    "factions": ""
-  },
-  "Relics of the Volge - 3": {
-    "uid": "Relics of the Volge - 3",
-    "base": "fire brand relic",
-    "cost": "0",
-    "name": "fire brand",
-    "classes": "",
-    "keywords": "",
-    "types": "relic",
-    "factions": ""
-  },
-  "Relics of the Volge - 4": {
-    "uid": "Relics of the Volge - 4",
-    "base": "javelin of the renegade relic",
-    "cost": "0",
-    "name": "javelin of the renegade",
-    "classes": "",
-    "keywords": "ad",
-    "types": "relic",
-    "factions": ""
-  },
-  "Relics of the Volge - 5": {
-    "uid": "Relics of the Volge - 5",
-    "base": "kettle of saint agatha relic",
-    "cost": "0",
-    "name": "kettle of saint agatha",
-    "classes": "",
-    "keywords": "",
-    "types": "relic",
-    "factions": ""
-  },
-  "Relics of the Volge - 6": {
-    "uid": "Relics of the Volge - 6",
-    "base": "laurel of peace relic",
-    "cost": "0",
-    "name": "laurel of peace",
-    "classes": "",
-    "keywords": "",
-    "types": "relic",
-    "factions": ""
-  },
-  "Relics of the Volge - 7": {
-    "uid": "Relics of the Volge - 7",
-    "base": "plague shield relic",
-    "cost": "0",
-    "name": "plague",
-    "classes": "shield",
-    "keywords": "",
-    "types": "relic",
-    "factions": ""
-  },
-  "Relics of the Volge - 8": {
-    "uid": "Relics of the Volge - 8",
-    "base": "glaive of the storm lord relic",
-    "cost": "0",
-    "name": "glaive of the storm lord",
-    "classes": "",
-    "keywords": "",
-    "types": "relic",
-    "factions": ""
-  },
-  "Relics of the Volge - 9": {
-    "uid": "Relics of the Volge - 9",
-    "base": "sword of ruin relic",
-    "cost": "0",
-    "name": "sword of ruin",
-    "classes": "",
-    "keywords": "",
-    "types": "relic",
-    "factions": ""
-  },
   "Singular Champions 3 - 10": {
     "uid": "Singular Champions 3 - 10",
     "base": "moldorf archaeologian range focus scout 23 neutral character",
@@ -4017,7 +3952,7 @@
     "base": "fire elemental construct construct empowered 15 neutral character",
     "cost": "15",
     "name": "fire elemental",
-    "classes": "elemental",
+    "classes": "elemental construct",
     "keywords": "construct",
     "types": "character",
     "activations": " ",
@@ -4396,66 +4331,6 @@
     "classes": "knight",
     "keywords": "armor ad",
     "types": "upgrade tactic",
-    "factions": ""
-  },
-  "Storms of Kural cards - 4": {
-    "uid": "Storms of Kural cards - 4",
-    "base": "reference",
-    "cost": "0",
-    "name": "basic actions",
-    "classes": "",
-    "keywords": "",
-    "types": "reference",
-    "factions": ""
-  },
-  "Storms of Kural cards - 5": {
-    "uid": "Storms of Kural cards - 5",
-    "base": "reference",
-    "cost": "0",
-    "name": "fate weave actions",
-    "classes": "",
-    "keywords": "",
-    "types": "reference",
-    "factions": ""
-  },
-  "Storms of Kural cards - 10": {
-    "uid": "Storms of Kural cards - 10",
-    "base": "delete ",
-    "cost": "0",
-    "name": "delete",
-    "classes": "",
-    "keywords": "",
-    "types": "",
-    "factions": ""
-  },
-  "Storms of Kural cards - 11": {
-    "uid": "Storms of Kural cards - 11",
-    "base": "delete ",
-    "cost": "0",
-    "name": "delete",
-    "classes": "",
-    "keywords": "",
-    "types": "",
-    "factions": ""
-  },
-  "Storms of Kural cards - 36": {
-    "uid": "Storms of Kural cards - 36",
-    "base": "delete ",
-    "cost": "0",
-    "name": "delete",
-    "classes": "",
-    "keywords": "",
-    "types": "",
-    "factions": ""
-  },
-  "Storms of Kural cards - 37": {
-    "uid": "Storms of Kural cards - 37",
-    "base": "delete ",
-    "cost": "0",
-    "name": "delete",
-    "classes": "",
-    "keywords": "",
-    "types": "",
     "factions": ""
   },
   "Aug Suul - 0": {
@@ -5384,7 +5259,7 @@
   "Paragons Vol 1 - 0": {
     "uid": "Paragons Vol 1 - 0",
     "cost": "26",
-    "name": "Kistra Xaine Gnome Magister",
+    "name": "Kistra Xaine<bellowText>Gnome Magister</bellowText>",
     "classes": "wizard illusion",
     "keywords": "poison dodge place",
     "types": "character",
@@ -5420,7 +5295,7 @@
   "Paragons Vol 1 - 1": {
     "uid": "Paragons Vol 1 - 1",
     "cost": "26",
-    "name": "Tahoor Bajwa Storm Bearer",
+    "name": "Tahoor Bajwa<bellowText>Storm Bearer</bellowText>",
     "classes": "wizard",
     "keywords": "stun place target dodge",
     "types": "character",
@@ -5456,7 +5331,7 @@
   "Paragons Vol 1 - 2": {
     "uid": "Paragons Vol 1 - 2",
     "cost": "23",
-    "name": "Traveler Corine Cleric of Justice",
+    "name": "Traveler Corine<bellowText>Cleric of Justice</bellowText>",
     "classes": "holy cleric",
     "keywords": "heal dodge poison",
     "types": "character",
@@ -5492,7 +5367,7 @@
   "Paragons Vol 1 - 3": {
     "uid": "Paragons Vol 1 - 3",
     "cost": "23",
-    "name": "Wise Guinn Arboleth Druid",
+    "name": "Wise Guinn<bellowText>Arboleth Druid</bellowText>",
     "classes": "nature druid",
     "keywords": "push bind range",
     "types": "character",
@@ -5538,7 +5413,7 @@
   "Paragons Vol 1 - 4": {
     "uid": "Paragons Vol 1 - 4",
     "cost": "23",
-    "name": "Lady Blackstone Dark Watcher",
+    "name": "Lady Blackstone<bellowText>Dark Watcher</bellowText>",
     "classes": "bone darkness",
     "keywords": "range dodge",
     "types": "character",
@@ -5579,7 +5454,7 @@
   "Paragons Vol 1 - 5": {
     "uid": "Paragons Vol 1 - 5",
     "cost": "14",
-    "name": "Cricket Bone Stalker",
+    "name": "Cricket<bellowText>Bone Stalker</bellowText>",
     "classes": "bone",
     "keywords": "move jump climb reroll damage",
     "types": "character",
@@ -5615,7 +5490,7 @@
   "Paragons Vol 1 - 6": {
     "uid": "Paragons Vol 1 - 6",
     "cost": "26",
-    "name": "Illika the second sister iguan witch",
+    "name": "Illika the second sister<bellowText>iguan witch</bellowText>",
     "classes": "deep witch",
     "keywords": "dire range dodge allies",
     "types": "character",
@@ -5648,56 +5523,10 @@
       ]
     ]
   },
-  "Paragons Vol 1 - 7": {
-    "uid": "Paragons Vol 1 - 7",
-    "cost": "23",
-    "name": "Hellebore pig warlord",
-    "classes": "pig warlord barbarian",
-    "keywords": "range recover ad damage",
-    "types": "character",
-    "activations": "4",
-    "speed": "4",
-    "armor": "2",
-    "criticalHealthBox": 4,
-    "upgradeTypes": "tactic weapon item potion",
-    "factions": "adversary",
-    "markBoxes": [
-      [
-        0.12752022601772184,
-        0.9062858717112815,
-        0
-      ],
-      [
-        0.20970848850648516,
-        0.9062858717112815,
-        0
-      ],
-      [
-        0.29600616411968667,
-        0.9062858717112815,
-        0
-      ],
-      [
-        0.36997560035957366,
-        0.9062858717112815,
-        0
-      ],
-      [
-        0.4727109284705278,
-        0.9062858717112815,
-        0
-      ],
-      [
-        0.5466803647104148,
-        0.9062858717112815,
-        0
-      ]
-    ]
-  },
   "Paragons Vol 1 - 8": {
     "uid": "Paragons Vol 1 - 8",
     "cost": "23",
-    "name": "Griksek Kreskek Crab Warrior",
+    "name": "Griksek Kreskek<bellowText>Crab Warrior</bellowText>",
     "classes": "deep fighter",
     "keywords": "damage dodge move engage",
     "types": "character",
@@ -5738,7 +5567,7 @@
   "Paragons Vol 1 - 9": {
     "uid": "Paragons Vol 1 - 9",
     "cost": "23",
-    "name": "Telkin Eldenfoord gnome grenadier",
+    "name": "Telkin Eldenfoord<bellowText>gnome grenadier</bellowText>",
     "classes": "scout",
     "keywords": "stun range dire",
     "types": "character",
@@ -5774,7 +5603,7 @@
   "Paragons Vol 1 - 10": {
     "uid": "Paragons Vol 1 - 10",
     "cost": "26",
-    "name": "Nelda the Keeper wild elf druidess",
+    "name": "Nelda the Keeper<bellowText>wild elf druidess</bellowText>",
     "classes": "nature druid",
     "keywords": "bind push transform turn",
     "types": "character",
@@ -5810,9 +5639,9 @@
   "Paragons Vol 1 - 11": {
     "uid": "Paragons Vol 1 - 11",
     "cost": "0",
-    "name": "Nelda's bear form Nelda the Keeper wild elf druidess",
+    "name": "Nelda's bear form",
     "classes": "beast",
-    "keywords": "recover transform",
+    "keywords": "recover transform Nelda the Keeper wild elf druidess",
     "types": "character",
     "activations": "3",
     "speed": "5",
@@ -5856,7 +5685,7 @@
   "Paragons Vol 1 - 12": {
     "uid": "Paragons Vol 1 - 12",
     "cost": "23",
-    "name": "Lady Aurelia Questing Knight",
+    "name": "Lady Aurelia<bellowText>Questing Knight</bellowText>",
     "classes": "knight",
     "keywords": "armor engage",
     "types": "character",

@@ -309,8 +309,24 @@ export const addCharacterToDeck = (data, updateDeckStore = true) => {
     // mark everything for the named thing
     const namedBoxEle = document.createElement("markBox");
 
-    if (cardStore.criticalHealthBox == index) {
-      namedBoxEle.classList.add("critical");
+    if (cardStore?.keywords.includes("team")) {
+      const teamMemberHealth = markBoxes.length / 2;
+      const adjustedIndex = index % (teamMemberHealth);
+      if (cardStore.criticalHealthBox == adjustedIndex) {
+        namedBoxEle.classList.add("critical");
+      }
+
+      if ((teamMemberHealth - 1) == adjustedIndex) {
+        namedBoxEle.classList.add("dead");
+      }
+    } else {
+      if (cardStore.criticalHealthBox == index) {
+        namedBoxEle.classList.add("critical");
+      }
+
+      if ((markBoxes.length - 1) == index) {
+        namedBoxEle.classList.add("dead");
+      }
     }
 
     if (dataMarked) {
