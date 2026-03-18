@@ -153,6 +153,10 @@ export const initMenuEvents = () => {
   });
 
   showListEle.addEventListener('click', () => {
+    // Prevent list mode in horizontal orientation
+    if (window.matchMedia('(orientation: landscape)').matches) {
+      return;
+    }
     document.body.setAttribute("listType", "list");
     storage.setStoredListType("list");
   });

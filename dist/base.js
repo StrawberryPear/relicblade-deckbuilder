@@ -115,6 +115,23 @@ const updateAppSize = async (event) => {
 const onResize = async (event) => {
   await updateAppSize();
 
+  // Reset list modes when in horizontal orientation
+  if (window.matchMedia('(orientation: landscape)').matches) {
+    const currentDisplayType = document.body.getAttribute("displayType");
+    const currentListType = document.body.getAttribute("listType");
+
+    if (currentDisplayType === "list") {
+      document.body.setAttribute("displayType", "");
+      storage.setStoredDisplayType("");
+      applyCarousel();
+    }
+
+    if (currentListType === "list") {
+      document.body.setAttribute("listType", "");
+      storage.setStoredListType("");
+    }
+  }
+
   const characterCardEles = [...cardDeckListEle.querySelectorAll('cardDeckWrapper > card')];
 
   for (const characterCardEle of characterCardEles) {
@@ -125,8 +142,13 @@ const onResize = async (event) => {
 const init = async () => {
   await initStorage();
 
-  document.body.setAttribute("displayType", storage.getStoredDisplayType() || "");
-  document.body.setAttribute("listType", storage.getStoredListType() || "");
+  // Prevent list modes in horizontal orientation
+  const isHorizontal = window.matchMedia('(orientation: landscape)').matches;
+  const storedDisplayType = storage.getStoredDisplayType() || "";
+  const storedListType = storage.getStoredListType() || "";
+
+  document.body.setAttribute("displayType", (isHorizontal && storedDisplayType === "list") ? "" : storedDisplayType);
+  document.body.setAttribute("listType", (isHorizontal && storedListType === "list") ? "" : storedListType);
 
   document.addEventListener("contextmenu", (event) => {
     event.preventDefault();

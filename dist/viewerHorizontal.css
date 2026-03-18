@@ -2,6 +2,14 @@
 /* check if we're horizontal */
 @media (orientation: landscape) {
 
+  /* Control borders for landscape - now handled by classes */
+
+  /* Hide list mode menu options in horizontal orientation */
+  menuControl.showList,
+  menuControl.showCards {
+    display: none !important;
+  }
+
   :root {
     --height-based-card-width: calc((var(--screen-height) - 32px) / var(--card-ratio));
 
@@ -26,42 +34,42 @@
   }
 
   call {
-    background: linear-gradient(90deg, #58d5e6 92%, #0000 81%), url(./assets/add-remove.png);
-    background-size: 100%, 38px 38px;
+    background: linear-gradient(90deg, var(--color-primary) 92%, #0000 81%);
+    background-size: 100%;
     background-position: right;
     background-repeat: no-repeat;
     padding-right: 16px;
     padding-left: 32px;
     margin-left: -32px;
-    color: black;
+    color: var(--color-text-secondary);
     height: 38px;
-    filter: drop-shadow(2px 4px 6px black);
+    filter: drop-shadow(2px 4px 6px var(--color-black));
     flex-shrink: 0;
   }
   call edit {
     filter: brightness(0);
   }
   call input#title {
-    color: black;
+    color: var(--color-text-secondary);
   }
 
   ham {
-    background: url('./assets/ham-black.png'), url(./assets/add-remove.png);
-    background-size: 80%, 100%;
-    background-position:center;
+    background: url('./assets/ham-var(--color-black).png');
+    background-size: 80%;
+    background-position: center;
     background-repeat: no-repeat;
     height: 38px;
     margin-top: 6px;
-    filter:drop-shadow(2px 4px 6px black);
+    filter:drop-shadow(2px 4px 6px var(--color-black));
   }
   share {
-    background: url('./assets/share-black.png'), url(./assets/add-remove-flipped.png);
-    background-size: 80%, 100%;
-    background-position:center;
+    background: url('./assets/share-var(--color-black).png');
+    background-size: 80%;
+    background-position: center;
     background-repeat: no-repeat;
     height: 38px;
     margin-top: 6px;
-    filter:drop-shadow(2px 4px 6px black);
+    filter:drop-shadow(2px 4px 6px var(--color-black));
   }
 
   card, purchase, import, add, random {
@@ -160,7 +168,7 @@
   }
 
   ::placeholder {
-    color: #222c;
+    color: var(--color-text-placeholder);
     opacity: 1;
   }
 
@@ -187,10 +195,10 @@
   }
 
   modalOverlay {
-    background: linear-gradient(0deg, black, black 30%, rgba(0,0,0,0.5) 70%, black);
+    background: linear-gradient(0deg, var(--color-black), var(--color-black) 30%, var(--color-background-overlay-medium) 70%, var(--color-black));
   }
   body[showing="library"] modalOverlay {
-    background: linear-gradient(0deg, black, black 20%, transparent 100%);
+    background: linear-gradient(0deg, var(--color-black), var(--color-black) 20%, transparent 100%);
   }
 
   modalOverlay card {

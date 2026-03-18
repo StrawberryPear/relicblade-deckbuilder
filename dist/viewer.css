@@ -3,37 +3,40 @@
   src: url('./assets/trade-winds.ttf');
 }
 
-@keyframes markboxFlash {
-  0% {
-    opacity: 0;
-  }
-
-  45% {
-    opacity: 0;
-  }
-
-  50% {
-    opacity: 0.3;
-  }
-
-  55% {
-    opacity: 0;
-  }
-
-  60% {
-    opacity: 0.3;
-  }
-
-  65% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
 :root {
+  /* Color Variables */
+  --color-primary: #58d5e6;
+  --color-primary-light: #59d4e5;
+  --color-primary-alpha: #58d5e688;
+  --color-primary-glow: var(--color-primary-glow);
+
+  --color-background-primary: #0d2426;
+  --color-background-secondary: #091e21;
+  --color-background-tertiary: #113e40;
+  --color-background-card: #133a3c;
+  --color-background-modal: #1d393c;
+  --color-background-gradient: #020607;
+  --color-background-transparent: #0206072F;
+  --color-background-overlay: rgba(0, 0, 0, 0.95);
+  --color-background-overlay-light: rgba(0, 0, 0, 0.9);
+  --color-background-overlay-modal: rgba(17, 62, 64, 0.4);
+  --color-background-overlay-medium: rgba(0, 0, 0, 0.5);
+
+  --color-black: #000;
+  --color-black-transparent: #0000;
+  --color-white: #fff;
+  --color-white-alpha: #fff1;
+
+  --color-text-primary: #fff;
+  --color-text-secondary: #000;
+  --color-text-accent: #59d4e5;
+  --color-text-placeholder: #222c;
+
+  --color-gray-light: #ccc0c6;
+  --color-gray-dark: #111;
+  --color-accent-red: #d20;
+
+  /* Layout Variables */
   --screen-width: 100%;
   --screen-height: 100%;
   --screen-width-raw: 100;
@@ -64,13 +67,69 @@
   animation-duration: 0.7s;
 }
 
+/* Control border classes */
+.control-border,
+footButton,
+cardButton.legal,
+modalbutton.fullwidth {
+  border-width: 8px;
+  -webkit-mask-box-image: url(./assets/control.svg) 30 fill;
+}
+
+.control-border-flipped,
+cardButton.grid::before {
+  border-width: 8px;
+  -webkit-mask-box-image: url(./assets/control2.svg) 30 fill;
+}
+
+.control-border-white {
+  border-width: 8px;
+  -webkit-mask-box-image: url(./assets/control3.svg) 30 fill;
+}
+
+/* Special cases for display type changes */
+body[displayType="grid"] cardButton.grid.control-border-flipped,
+body[displayType="list"] cardButton.grid.control-border-flipped {
+  -webkit-mask-box-image: url(./assets/control3.svg) 30 fill;
+}
+
+@keyframes markboxFlash {
+  0% {
+    opacity: 0;
+  }
+
+  45% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+
+  55% {
+    opacity: 0;
+  }
+
+  60% {
+    opacity: 0.3;
+  }
+
+  65% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
 html,
 body {
   overscroll-behavior: none;
 }
 
 html {
-  background: #000;
+  background: var(--color-black);
   height: 100%;
   overflow: hidden;
 }
@@ -82,7 +141,7 @@ html::before {
   left: 0px;
   right: 0px;
   height: var(--safe-area-top);
-  background: #000;
+  background: var(--color-black);
   z-index: 100;
 }
 
@@ -90,9 +149,9 @@ body {
   margin: 0;
   height: 100%;
   width: 100%;
-  background: #000;
+  background: var(--color-black);
   font-family: "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #fff;
+  color: var(--color-white);
   box-sizing: border-box;
   position: absolute;
   height: calc(var(--screen-height));
@@ -138,12 +197,20 @@ body[displayType="list"] cardScroller.library {
   max-height: calc(var(--screen-height) - var(--nav-height) - var(--foot-button-height) - var(--search-height) - 16px);
 }
 
+body[displayType="list"] cardScroller.library cardNameList {
+  padding: 0 16px;
+}
+
 body[listType="list"] cardScroller.deck {
   display: block !important;
   scroll-behavior: smooth;
   overflow-x: auto;
   overflow-y: scroll;
   max-height: calc(var(--screen-height) - var(--nav-height) - var(--foot-button-height) - 16px);
+}
+
+body[listType="list"] cardScroller.deck cardNameList {
+  padding: 0 16px;
 }
 
 body[displayType="list"] cardscrollercontainer::after {
@@ -153,7 +220,7 @@ body[displayType="list"] cardscrollercontainer::after {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(0deg, #1118 0%, transparent 4px, transparent calc(100% - 4px), #1118 100%);
+  background: linear-gradient(0deg, var(--color-gray-dark)8 0%, transparent 4px, transparent calc(100% - 4px), var(--color-gray-dark)8 100%);
   pointer-events: none;
 }
 
@@ -220,7 +287,7 @@ purchase,
 add,
 random {
   height: var(--card-width);
-  background-color: #113e40;
+  background-color: var(--color-background-tertiary);
 }
 
 purchase label,
@@ -231,7 +298,7 @@ random label {
   box-sizing: border-box;
   width: 100%;
   padding: calc(var(--card-width) * 0.05) 0;
-  background: rgba(0, 0, 0, 0.9);
+  background: var(--color-background-overlay-light);
   font-family: 'tradeWinds';
   text-align: center;
   font-size: calc(var(--card-width) * 0.1);
@@ -243,7 +310,7 @@ purchase.bought label {
 }
 
 purchase[uid="visitRelicblade"] {
-  background-color: #000000;
+  background-color: var(--color-black)000;
   background-image: url('./assets/cardpacks/Metal-King.png');
 }
 
@@ -271,7 +338,7 @@ nav {
   left: 0px;
   width: 100%;
   height: var(--nav-height);
-  background: #020607;
+  background: var(--color-background-gradient);
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
@@ -355,7 +422,7 @@ cardTopControls {
   /* pointer-events: none; */
   flex-wrap: nowrap;
   align-items: stretch;
-  background: #1d393c;
+  background: var(--color-background-modal);
   font-size: 16px;
   overflow: hidden;
   min-height: 30.5px;
@@ -386,17 +453,13 @@ modalButton {
   grid-row: 1;
   height: min(64px, calc(0.085 * var(--screen-height)));
   width: calc(100% - 2vw);
-  background: url(./assets/add-remove.png);
-  background-size: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
   box-sizing: border-box;
   align-content: flex-end;
   justify-content: center;
   font-family: 'tradeWinds';
   font-size: min(24px, calc(10px + 0.01 * var(--screen-height)));
   align-items: center;
-  color: #091e21;
+  color: var(--color-background-secondary);
   font-weight: 700;
   line-height: 90%;
   pointer-events: all;
@@ -413,11 +476,6 @@ cardButtons:not(.searched) cardButton.clearSearch {
 
 cardButton.grid {
   grid-column: 2;
-  background-image: url(./assets/add-remove-flipped.png);
-}
-
-cardButton.grid::before {
-  background-image: url(./assets/add-remove-flipped.png);
 }
 
 body:not([subfilter="upgrade"]) cardButton.legal {
@@ -426,8 +484,6 @@ body:not([subfilter="upgrade"]) cardButton.legal {
 
 cardButton.legal {
   grid-column: 3;
-  background-image: url(./assets/add-remove.png);
-  background-position: 0px -60px;
 }
 
 cardButton.legal::before {
@@ -467,13 +523,13 @@ foot footControl {
   justify-content: center;
   align-items: center;
   font-size: 18px;
-  background: #020607;
+  background: var(--color-background-gradient);
   font-family: 'tradeWinds';
 }
 
 cardScroller.library~foot footControl.showLibrary,
 cardScroller.deck~foot footControl.showDeck {
-  background: #0206072F;
+  background: var(--color-background-gradient)2F;
 }
 
 toast {
@@ -487,7 +543,7 @@ toast {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  color: #fff;
+  color: var(--color-white);
   opacity: 0;
   transition: opacity 0.4s;
   pointer-events: none;
@@ -520,16 +576,16 @@ loading {
 
   animation: loadingSpin 3s infinite linear;
   border-radius: 50%;
-  border: 12px solid #0000;
-  border-top-color: #fff;
-  border-bottom-color: #fff1;
+  border: 12px solid var(--color-black)0;
+  border-top-color: var(--color-white);
+  border-bottom-color: var(--color-white)1;
 }
 
 overlayMenu,
 loadingOverlay,
 modalOverlay {
   position: fixed;
-  background: rgba(0, 0, 0, 0.95);
+  background: var(--color-background-overlay);
   top: 0px;
   left: 0px;
   width: 100%;
@@ -617,12 +673,12 @@ searchContainer {
 
 searchContainer input[type="text"] {
   width: 100%;
-  background: #133a3c;
+  background: var(--color-background-card);
   box-sizing: border-box;
   border: none;
   position: relative;
   padding: 6px 32px;
-  color: white;
+  color: var(--color-text-primary);
   font-size: inherit;
 }
 
@@ -649,7 +705,7 @@ topButton {
   align-items: center;
   justify-content: center;
   font-family: 'tradeWinds';
-  background: #0d2426;
+  background: var(--color-background-primary);
 }
 
 cardButton.grid::after,
@@ -683,11 +739,6 @@ body[displayType="grid"] cardButton.grid::after {
 body[displayType="list"] cardButton.grid::after {
   background-image: url(./assets/list.png);
   background-size: auto 60%;
-}
-
-body[displayType="grid"] cardButton.grid,
-body[displayType="list"] cardButton.grid {
-  background-image: url(./assets/add-remove-white.png);
 }
 
 searchicon[type="clear"] {
@@ -894,12 +945,12 @@ body[showing="deck"] cardScroller.deck cardlist {
 }
 
 cardControl:not(.inactive) {
-  background: #fff;
-  color: #000;
+  background: var(--color-white);
+  color: var(--color-black);
 }
 
 main {
-  background: #ccc0c6;
+  background: var(--color-gray-light);
   position: relative;
   height: var(--screen-height);
   display: flex;
@@ -909,7 +960,7 @@ main {
 }
 
 body[showing="library"] main {
-  background: #111;
+  background: var(--color-gray-dark);
 }
 
 input#title {
@@ -923,7 +974,7 @@ input#title {
   width: 100%;
   height: 100%;
   font-family: 'tradeWinds';
-  color: #fff;
+  color: var(--color-white);
   font-size: min(4vw, 1.35rem);
 }
 
@@ -979,7 +1030,7 @@ random::after {
   font-size: calc(var(--card-width) / 2);
   transform: translate(-50%, -50%);
   text-align: center;
-  color: #fff;
+  color: var(--color-white);
   filter: drop-shadow(0px 0px 2px black) drop-shadow(-2px -1px 2px black) drop-shadow(2px 2px 2px black);
   pointer-events: none;
 }
@@ -1019,7 +1070,7 @@ modaloverlay {
   align-content: center;
   justify-content: flex-end;
   align-items: center;
-  background: linear-gradient(0deg, black, black 30%, transparent 70%, black 100%);
+  background: linear-gradient(0deg, var(--color-black), var(--color-black) 30%, transparent 70%, var(--color-black) 100%);
   padding-bottom: 10%;
   box-sizing: border-box;
   z-index: 10;
@@ -1036,7 +1087,7 @@ modal {
   width: 90%;
   padding: 5%;
   box-sizing: border-box;
-  background: #091e21ee;
+  background: var(--color-background-secondary)ee;
   z-index: 12;
 }
 
@@ -1051,13 +1102,11 @@ modalbuttons {
 
 modalbutton#modalReturn {
   grid-column: 2;
-  background-image: url(./assets/add-remove-flipped.png);
 }
 
 modalbutton.fullwidth {
-  background-size: 100%, 80px;
-  background-repeat: space;
-  background-image: linear-gradient(90deg, transparent 0%, #58d5e6 10%, #58d5e6 90%, transparent 100%), url(./assets/add-remove.png);
+  background: linear-gradient(90deg, transparent 0%, var(--color-primary) 10%, var(--color-primary) 90%, transparent 100%);
+  background-size: 100%;
   filter: none;
   text-shadow: none;
   margin-bottom: min(2%, 13px);
@@ -1071,8 +1120,8 @@ card::before {
   left: 0;
   right: 0;
   bottom: 0;
-  border: 3px solid #58d5e6;
-  outline: 6px solid #58d5e688;
+  border: 3px solid var(--color-primary);
+  outline: 6px solid var(--color-primary)88;
   border-radius: 3.8%;
   opacity: 0;
   transition: opacity 0.2s;
@@ -1115,7 +1164,7 @@ tokenOverlay {
   left: 0px;
   width: 100%;
   height: 100%;
-  background: linear-gradient(0deg, #000 0%, #0000 20%);
+  background: linear-gradient(0deg, var(--color-black) 0%, var(--color-black)0 20%);
   pointer-events: all;
   transition: opacity 0.5s;
   z-index: 8;
@@ -1193,7 +1242,7 @@ token[type="shieldwall"] {
     left: 0px;
     right: 0px;
     bottom: 0px;
-    background: #d20;
+    background: var(--color-accent-red);
     border-radius: 50%;
     opacity: 0;
     transition: opacity 0.4s;
@@ -1307,7 +1356,7 @@ modalOverlay card::before {
 }
 
 a {
-  color: #59d4e5;
+  color: var(--color-text-accent);
 }
 
 modal.input {
@@ -1322,7 +1371,7 @@ mainMenu {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #0d2426 0%, #000 100%);
+  background: linear-gradient(135deg, var(--color-background-primary) 0%, var(--color-black) 100%);
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -1351,7 +1400,7 @@ menuLogo {
   background-repeat: no-repeat;
   background-position: center;
   margin-bottom: 20px;
-  filter: drop-shadow(0 0 10px rgba(88, 213, 230, 0.3));
+  filter: drop-shadow(0 0 10px var(--color-primary-glow));
 }
 
 mainMenu menuButtons {
@@ -1370,18 +1419,15 @@ mainMenu menuButton {
   width: 85%;
   max-width: 600px;
   height: 64px;
-  background: url(./assets/add-remove.png);
-  background-size: 100% 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  color: #091e21;
+  color: var(--color-background-secondary);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
   font-family: 'tradeWinds';
   font-size: min(24px, 5vw);
   font-weight: 700;
   line-height: 90%;
   justify-content: center;
   align-items: center;
-  border: none;
   border-radius: 0;
   box-shadow: none;
   filter: drop-shadow(2px 4px 6px black);
@@ -1425,9 +1471,9 @@ mainMenu savesMenu .menuControl.saveSlot {
   width: 80%;
   max-width: 320px;
   height: 54px;
-  background: rgba(17, 62, 64, 0.4);
-  color: #fff;
-  border: 1px solid #58d5e6;
+  background: var(--color-background-overlay-modal);
+  color: var(--color-white);
+  border: 1px solid var(--color-primary);
   border-radius: 6px;
   text-align: center;
   display: flex;
@@ -1440,7 +1486,7 @@ mainMenu savesMenu .menuControl.saveSlot {
 
 mainMenu savesMenu .menuControl.saveReturn {
   margin-top: 24px;
-  color: #58d5e6;
+  color: var(--color-primary);
   cursor: pointer;
   text-align: center;
   width: 100%;
@@ -1488,11 +1534,11 @@ nameCard {
   position: relative;
   display: block;
   width: 100%;
-  padding: 0 48px;
+  padding: 6px 48px 0 48px;
   padding-right: 0px;
-  padding-top: 6px;
   margin-bottom: 16px;
   box-sizing: border-box;
+  container-type: inline-size;
 }
 
 nameCard upper {
@@ -1504,7 +1550,6 @@ nameCard upper {
   box-sizing: border-box;
   padding-left: 28px;
   padding-right: 36px;
-  container-type: inline-size;
   aspect-ratio: 520 / 101;
   pointer-events: none;
 }
@@ -1538,7 +1583,7 @@ nameCard upper activations {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #000;
+  color: var(--color-black);
   font-family: 'tradeWinds';
   font-size: 13cqi;
   padding-top: 4px;
@@ -1597,7 +1642,7 @@ nameCard.upgrade upper points {
 
 nameCard upper nameCardName {
   position: relative;
-  color: #000;
+  color: var(--color-black);
   font-family: 'tradeWinds';
   padding-left: 10cqi;
   font-stretch: condensed;
@@ -1636,7 +1681,7 @@ nameCard upper armor {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #000;
+  color: var(--color-black);
   font-family: 'tradeWinds';
   font-size: 21px;
   padding-top: 1cqi;
@@ -1662,6 +1707,20 @@ nameCard upper armor {
   padding-top: 3cqi;
   background-image: url('./assets/armor.png');
   background-size: contain;
+}
+
+cardNameList {
+  max-width: 528px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+cardnamelist {
+  max-width: 528px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 cardnamelist nameCard:first-child {
@@ -1738,4 +1797,28 @@ lower {
 body[listType="list"] add {
     left: 50%;
     transform: translate(-50%, 0);
+    height: calc(var(--card-width-deck) * 0.3);
+    width: calc(var(--card-width-deck) * 1.2);
+    border-radius: calc(var(--card-width-deck) * 0.02);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'tradeWinds';
+    font-size: calc(var(--card-width-deck) * 0.08);
+    color: var(--color-background-secondary);
+    margin-top: calc(var(--card-width-deck) * 0.15);
+    filter: drop-shadow(2px 4px 6px black);
+}
+
+body[listType="list"] add label {
+    position: relative;
+    bottom: auto;
+    background: none;
+    padding: 0;
+    width: auto;
+    display: inline;
+}
+
+body[listType="list"] add::after {
+    display: none;
 }

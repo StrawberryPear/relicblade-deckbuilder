@@ -339,8 +339,6 @@ export const loadCard = (cardStoreData) => {
     speedEle.innerText = cardStoreData?.speed ?? "?";
     armorEle.innerText = cardStoreData?.armor ?? "?";
 
-    if (cardStoreData.name.toLowerCase().includes('elemental')) debugger
-
     // check if it's a construct
     if (cardStoreData.classes.includes("construct")) {
       nameCardEle.classList.add("construct");
@@ -426,8 +424,13 @@ export const initLibraryEvents = () => {
 
   gridButtonEle.addEventListener('click', () => {
     const currentDisplayType = document.body.getAttribute("displayType");
+    const isHorizontal = window.matchMedia('(orientation: landscape)').matches;
+
     const nextDisplayType = (() => {
-      if (currentDisplayType == 'grid') return 'list';
+      if (currentDisplayType == 'grid') {
+        // Skip list mode in horizontal orientation
+        return isHorizontal ? '' : 'list';
+      }
       if (currentDisplayType == 'list') return '';
       return 'grid';
     })();

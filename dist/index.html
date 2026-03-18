@@ -16,10 +16,10 @@
   <link rel="stylesheet" type="text/css" href="./viewerHorizontal.css">
 </head>
 
-<body class="loading" showing="menu" subfilter="">
+<body class="loading" showing="menu" displaytype="" listtype="" legal="" subfilter="">
   <main>
     <nav>
-      <call>
+      <call class="control-border">
         <edit></edit>
         <deckTitleContainer><input type="text" id="title" contentEditable="true" maxlength="24"
             placeholder="Untitled Deck" />
@@ -27,10 +27,10 @@
         </deckTitleContainer>
         <deckTitlePoints id="points"></deckTitlePoints>
       </call>
-      <description class="horizontal"></description>
+      <description class="horizontal control-border"></description>
       <hamContainer>
-        <share></share>
-        <ham></ham>
+        <share class="control-border-flipped"></share>
+        <ham class="control-border"></ham>
       </hamContainer>
     </nav>
 
@@ -63,10 +63,10 @@
       </cardScroller>
       <cardScroller class="deck">
         <cardList>
-          <add><label>Add Character</label></add>
+          <add class="control-border"><label>Add Character</label></add>
         </cardList>
         <cardNameList>
-          <add><label>Add Character</label></add>
+          <add class="control-border"><label>Add Character</label></add>
         </cardNameList>
       </cardScroller>
     </cardScrollerContainer>
@@ -80,7 +80,7 @@
 
     <cardButtons class="library_">
       <cardButton class="showDeck">Return</cardButton>
-      <cardButton class="grid"></cardButton>
+      <cardButton class="grid control-border-flipped"></cardButton>
       <cardButton class="horizontal search"></cardButton>
       <cardButton class="vertical horizontal addToDeck">Add to<br>Deck</cardButton>
       <cardButton class="vertical horizontal attachUpgrade">Attach<br>Upgrade</cardButton>
@@ -110,10 +110,10 @@
   <mainMenu>
     <menuLogo></menuLogo>
     <menuButtons>
-      <menuButton class="learnToPlay">Learn to Play</menuButton>
-      <menuButton class="myLists">My Lists</menuButton>
-      <menuButton class="shareCodeInput">Enter Share Code</menuButton>
-      <menuButton class="libraryMode">Browse</menuButton>
+      <menuButton class="learnToPlay control-border">Learn to Play</menuButton>
+      <menuButton class="myLists control-border">My Lists</menuButton>
+      <menuButton class="shareCodeInput control-border">Enter Share Code</menuButton>
+      <menuButton class="libraryMode control-border">Browse</menuButton>
     </menuButtons>
 
     <savesMenu class="hidden">
@@ -172,7 +172,7 @@
     <modal>
       <modalText></modalText>
       <modalButtons>
-        <modalButton id="modalReturn">
+        <modalButton id="modalReturn" class="control-border-flipped">
           Return
         </modalButton>
         <modalButton id="modalAccept">
