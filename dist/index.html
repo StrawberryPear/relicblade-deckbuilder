@@ -19,7 +19,7 @@
 <body class="loading" showing="menu" displaytype="" listtype="" legal="" subfilter="">
   <main>
     <nav>
-      <call class="control-border">
+      <call class="control-border-horizontal">
         <edit></edit>
         <deckTitleContainer><input type="text" id="title" contentEditable="true" maxlength="24"
             placeholder="Untitled Deck" />
@@ -27,10 +27,10 @@
         </deckTitleContainer>
         <deckTitlePoints id="points"></deckTitlePoints>
       </call>
-      <description class="horizontal control-border"></description>
+      <description class="horizontal"></description>
       <hamContainer>
-        <share class="control-border-flipped"></share>
-        <ham class="control-border"></ham>
+        <share class="control-border-horizontal"></share>
+        <ham class="control-border-horizontal"></ham>
       </hamContainer>
     </nav>
 
@@ -79,18 +79,18 @@
     </cardCarousel>
 
     <cardButtons class="library_">
-      <cardButton class="showDeck">Return</cardButton>
+      <cardButton class="showDeck control-border">Return</cardButton>
       <cardButton class="grid control-border-flipped"></cardButton>
-      <cardButton class="horizontal search"></cardButton>
-      <cardButton class="vertical horizontal addToDeck">Add to<br>Deck</cardButton>
-      <cardButton class="vertical horizontal attachUpgrade">Attach<br>Upgrade</cardButton>
+      <cardButton class="horizontal search control-border"></cardButton>
+      <cardButton class="vertical horizontal addToDeck control-border">Add to<br>Deck</cardButton>
+      <cardButton class="vertical horizontal attachUpgrade control-border">Attach<br>Upgrade</cardButton>
     </cardButtons>
 
     <cardButtons class="deck_">
-      <cardButton class="vertical horizontal removeFromDeck">Remove</cardButton>
-      <cardButton class="vertical horizontal addUpgrade">Add<br>Upgrade</cardButton>
-      <cardButton class="vertical horizontal randomRelic">Random Relic</cardButton>
-      <cardButton class="showLibrary">Show<br>Library</cardButton>
+      <cardButton class="vertical horizontal removeFromDeck control-border">Remove</cardButton>
+      <cardButton class="vertical horizontal addUpgrade control-border">Add<br>Upgrade</cardButton>
+      <cardButton class="vertical addCharacter control-border">Add<br>Character</cardButton>
+      <cardButton class="showLibrary control-border">Show<br>Library</cardButton>
       <tokenButton>
       </tokenButton>
     </cardButtons>
@@ -110,39 +110,39 @@
   <mainMenu>
     <menuLogo></menuLogo>
     <menuButtons>
-      <menuButton class="learnToPlay control-border">Learn to Play</menuButton>
+      <menuButton class="learnToPlay control-border-flipped">Learn to Play</menuButton>
       <menuButton class="myLists control-border">My Lists</menuButton>
       <menuButton class="shareCodeInput control-border">Enter Share Code</menuButton>
-      <menuButton class="libraryMode control-border">Browse</menuButton>
+      <menuButton class="libraryMode control-border-flipped">Browse</menuButton>
     </menuButtons>
 
     <savesMenu class="hidden">
-      <menuControl class="saveSlot" idx="0">
-        <saveSlotLabel class="control-border"></saveSlotLabel>
-        <saveSlotRename class="control-border-flipped"></saveSlotRename>
-        <saveSlotDelete class="control-border-white"></saveSlotDelete>
-      </menuControl>
-      <menuControl class="saveSlot" idx="1">
-        <saveSlotLabel class="control-border"></saveSlotLabel>
-        <saveSlotRename class="control-border-flipped"></saveSlotRename>
-        <saveSlotDelete class="control-border-white"></saveSlotDelete>
-      </menuControl>
-      <menuControl class="saveSlot" idx="2">
-        <saveSlotLabel class="control-border"></saveSlotLabel>
-        <saveSlotRename class="control-border-flipped"></saveSlotRename>
-        <saveSlotDelete class="control-border-white"></saveSlotDelete>
-      </menuControl>
-      <menuControl class="saveSlot" idx="3">
-        <saveSlotLabel class="control-border"></saveSlotLabel>
-        <saveSlotRename class="control-border-flipped"></saveSlotRename>
-        <saveSlotDelete class="control-border-white"></saveSlotDelete>
-      </menuControl>
-      <menuControl class="saveSlot" idx="4">
-        <saveSlotLabel class="control-border"></saveSlotLabel>
-        <saveSlotRename class="control-border-flipped"></saveSlotRename>
-        <saveSlotDelete class="control-border-white"></saveSlotDelete>
-      </menuControl>
-      <menuControl class="saveReturn">Back</menuControl>
+      <menuButton class="saveSlot control-border" idx="0">
+        <saveSlotLabel></saveSlotLabel>
+        <saveSlotRename></saveSlotRename>
+        <saveSlotDelete></saveSlotDelete>
+      </menuButton>
+      <menuButton class="saveSlot control-border-flipped" idx="1">
+        <saveSlotLabel></saveSlotLabel>
+        <saveSlotRename></saveSlotRename>
+        <saveSlotDelete></saveSlotDelete>
+      </menuButton>
+      <menuButton class="saveSlot control-border" idx="2">
+        <saveSlotLabel></saveSlotLabel>
+        <saveSlotRename></saveSlotRename>
+        <saveSlotDelete></saveSlotDelete>
+      </menuButton>
+      <menuButton class="saveSlot control-border" idx="3">
+        <saveSlotLabel></saveSlotLabel>
+        <saveSlotRename></saveSlotRename>
+        <saveSlotDelete></saveSlotDelete>
+      </menuButton>
+      <menuButton class="saveSlot control-border-flipped" idx="4">
+        <saveSlotLabel></saveSlotLabel>
+        <saveSlotRename></saveSlotRename>
+        <saveSlotDelete></saveSlotDelete>
+      </menuButton>
+      <menuButton class="saveReturn control-border">Back</menuButton>
     </savesMenu>
   </mainMenu>
 
@@ -156,10 +156,10 @@
   <overlayMenu class="hidden" showing="hamMenu">
     <hamMenu>
       <menuControl class="returnToMenu">Return To Main Menu</menuControl>
-      <menuControl class="showList">Show Deck as List</menuControl>
-      <menuControl class="showCards">Show Deck as Cards</menuControl>
-      <menuControl class="showLegal">Hide Illegal Options</menuControl>
-      <menuControl class="showIllegal">Show Illegal Options</menuControl>
+      <menuControl class="showList">Toggle Deck View: Cards</menuControl>
+      <menuControl class="showCards">Toggle Deck View: List</menuControl>
+      <menuControl class="showLegal">Toggle Illegal Options: Show</menuControl>
+      <menuControl class="showIllegal">Toggle Illegal Options: Hide</menuControl>
       <label class="menuControl contact">Contact</label>
       <menuControl class="return">Return</menuControl>
     </hamMenu>
@@ -175,7 +175,7 @@
         <modalButton id="modalReturn" class="control-border-flipped">
           Return
         </modalButton>
-        <modalButton id="modalAccept">
+        <modalButton id="modalAccept" class="control-border">
           Accept
         </modalButton>
       </modalButtons>

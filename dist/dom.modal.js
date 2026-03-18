@@ -201,6 +201,7 @@ export const showOption = async (content, options) => {
       const optionButton = document.createElement("modalButton");
       optionButton.innerHTML = option;
       optionButton.classList.add("fullwidth");
+      optionButton.classList.add(`control-border${["", "-flipped"][Math.round(Math.random())]}`);
 
       optionButton.addEventListener("click", onFinished);
 

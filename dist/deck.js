@@ -26,7 +26,7 @@ export const setScrolledDeckCard = (c) => scrolledDeckCard = c;
 export const cardScrollerDeckEle = document.querySelector('cardScroller.deck');
 export const cardDeckListEle = cardScrollerDeckEle.querySelector('cardList');
 export const cardDeckNameListEle = cardScrollerDeckEle.querySelector('cardNameList');
-export const addCharacterButtonEles = document.querySelectorAll("add");
+export const addCharacterButtonEles = document.querySelectorAll("add, cardButton.addCharacter");
 export const showDeckButton = document.querySelector("cardButton.showDeck");
 
 // imported from base.js originally
@@ -485,6 +485,9 @@ export const onShowDeck = async (fromMainMenu) => {
   setScrolledLibraryCard(getCenterCardEle());
 
   setSubFilter(); // From library.js
+
+  // Clear browse mode when switching to deck
+  document.body.removeAttribute("mode");
 
   // scroll to the last library focused' card
   document.body.setAttribute("showing", "deck");

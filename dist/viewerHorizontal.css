@@ -54,7 +54,7 @@
   }
 
   ham {
-    background: url('./assets/ham-var(--color-black).png');
+    background: url('./assets/ham-black.png');
     background-size: 80%;
     background-position: center;
     background-repeat: no-repeat;
@@ -63,7 +63,7 @@
     filter:drop-shadow(2px 4px 6px var(--color-black));
   }
   share {
-    background: url('./assets/share-var(--color-black).png');
+    background: url('./assets/share-black.png');
     background-size: 80%;
     background-position: center;
     background-repeat: no-repeat;
@@ -153,7 +153,7 @@
     margin-left: -1px;
   }
     
-  hamMenu, savesMenu {
+  hamMenu {
     align-items: flex-end;
     padding-right: 48px;
     box-sizing: border-box;
@@ -227,6 +227,21 @@
   }
   body[showing="deck"] description {
     transform: translate(-50%, calc(-50% - 25vh));
+  }
+
+  /* Control border classes */
+  .control-border-horizontal {
+    border-width: 8px;
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    -webkit-mask-box-image: url(./assets/control.svg) 30 fill;
+  }
+
+  .control-border-flipped-horizontal{
+    border-width: 8px;
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    -webkit-mask-box-image: url(./assets/control3.svg) 30 fill;
   }
 }
 

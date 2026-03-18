@@ -32,7 +32,12 @@ export const getDeckFromShareCode = async (code) => {
     console.error(e);
     return false;
   }
-  return await sharedResponse.json();
+  try {
+    return await sharedResponse.json();
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 }
 
 export const placeDeckFromShareCodeIntoLocal = async (deckData) => {
@@ -70,7 +75,9 @@ export const loadShareDeckFromCode = async (code) => {
   const deckData = await getDeckFromShareCode(code);
   if (!deckData) {
     showToast("Failed to load shared deck");
+
     document.body.className = '';
+    return;
   }
   console.log(`sd: ${JSON.stringify(deckData)}`);
   await placeDeckFromShareCodeIntoLocal(deckData);

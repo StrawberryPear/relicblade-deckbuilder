@@ -387,6 +387,15 @@ export const onShowLibrary = async (event) => {
   if (document.body.getAttribute("showing") == 'library') return;
 
   document.body.setAttribute("showing", "library");
+
+  // Set browse mode if called from the browse button
+  const isBrowseMode = event && event.target && event.target.classList.contains('libraryMode');
+  if (isBrowseMode) {
+    document.body.setAttribute("mode", "browse");
+  } else {
+    document.body.removeAttribute("mode");
+  }
+
   applyCarousel();
 };
 
@@ -497,6 +506,17 @@ export const initLibraryEvents = () => {
         return;
       }
       hideInteractCard(!confirmResult);
+      selectedCardEle.classList.toggle("highlight", false);
+      return;
+    }
+
+    // In browse mode, just show the card without add to deck option
+    const isBrowseMode = document.body.getAttribute("mode") === "browse";
+
+    if (isBrowseMode) {
+      showInteractCard(interactCard);
+      await showConfirm(`${cardsStore[selectedCardUid].name}`);
+      hideInteractCard(true);
       selectedCardEle.classList.toggle("highlight", false);
       return;
     }

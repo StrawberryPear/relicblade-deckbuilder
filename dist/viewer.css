@@ -32,7 +32,7 @@
   --color-text-accent: #59d4e5;
   --color-text-placeholder: #222c;
 
-  --color-gray-light: #ccc0c6;
+  --color-gray-light: #322a2a;
   --color-gray-dark: #111;
   --color-accent-red: #d20;
 
@@ -69,21 +69,21 @@
 
 /* Control border classes */
 .control-border,
+modal,
 footButton,
 cardButton.legal,
 modalbutton.fullwidth {
   border-width: 8px;
+  border-color: var(--color-primary);
+  background-color: var(--color-primary);
   -webkit-mask-box-image: url(./assets/control.svg) 30 fill;
 }
 
 .control-border-flipped,
 cardButton.grid::before {
   border-width: 8px;
-  -webkit-mask-box-image: url(./assets/control2.svg) 30 fill;
-}
-
-.control-border-white {
-  border-width: 8px;
+  border-color: var(--color-primary);
+  background-color: var(--color-primary);
   -webkit-mask-box-image: url(./assets/control3.svg) 30 fill;
 }
 
@@ -301,7 +301,7 @@ random label {
   background: var(--color-background-overlay-light);
   font-family: 'tradeWinds';
   text-align: center;
-  font-size: calc(var(--card-width) * 0.1);
+  font-size: 28px;
   pointer-events: none;
 }
 
@@ -737,8 +737,8 @@ body[displayType="grid"] cardButton.grid::after {
 }
 
 body[displayType="list"] cardButton.grid::after {
-  background-image: url(./assets/list.png);
-  background-size: auto 60%;
+  background-image: url(./assets/ham-black.png);
+  background-size: auto 70%;
 }
 
 searchicon[type="clear"] {
@@ -851,6 +851,9 @@ body[showing="library"][displayType=""] cardcarousel {
 }
 
 cardbutton.addUpgrade {
+  grid-column: 3;
+}
+cardbutton.addCharacter {
   grid-column: 3;
 }
 
@@ -1087,7 +1090,7 @@ modal {
   width: 90%;
   padding: 5%;
   box-sizing: border-box;
-  background: var(--color-background-secondary)ee;
+  background: var(--color-background-secondary);
   z-index: 12;
 }
 
@@ -1105,8 +1108,6 @@ modalbutton#modalReturn {
 }
 
 modalbutton.fullwidth {
-  background: linear-gradient(90deg, transparent 0%, var(--color-primary) 10%, var(--color-primary) 90%, transparent 100%);
-  background-size: 100%;
   filter: none;
   text-shadow: none;
   margin-bottom: min(2%, 13px);
@@ -1403,7 +1404,8 @@ menuLogo {
   filter: drop-shadow(0 0 10px var(--color-primary-glow));
 }
 
-mainMenu menuButtons {
+mainMenu menuButtons,
+mainMenu savesMenu {
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -1437,6 +1439,7 @@ mainMenu menuButton {
   padding: 0 10px;
   user-select: none;
   box-sizing: border-box;
+  container-type: inline-size;
 }
 
 mainMenu menuButton:active {
@@ -1454,12 +1457,24 @@ body[showing="menu"] deckTitleContainer {
   display: none !important;
 }
 
-mainMenu savesMenu {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  align-items: center;
-  gap: 16px;
+/* Conditional visibility for Add Character based on listType */
+body[listType="list"] add {
+  display: none !important;
+}
+
+body:not([listType="list"]) cardButton.addCharacter {
+  display: none !important;
+}
+
+/* Browse mode - hide Return and Add to Deck buttons */
+body[mode="browse"] cardButton.showDeck,
+body[mode="browse"] cardButton.addToDeck {
+  display: none !important;
+}
+
+/* Browse mode - hide the return button in modal, center the accept button */
+body[mode="browse"] modalButton#modalReturn {
+  display: none !important;
 }
 
 mainMenu savesMenu.hidden,
@@ -1467,46 +1482,39 @@ mainMenu menuButtons.hidden {
   display: none;
 }
 
-mainMenu savesMenu .menuControl.saveSlot {
-  width: 85%;
-  max-width: 600px;
+/* Make saves menu elements inherit menuButton styling */
+mainMenu savesMenu .menuControl.saveSlot saveSlotLabel,
+mainMenu savesMenu .menuControl.saveSlot saveSlotRename,
+mainMenu savesMenu .menuControl.saveSlot saveSlotDelete,
+mainMenu savesMenu .menuControl.saveReturn {
   display: flex;
-  gap: 8px;
-  margin: 0;
+  height: 10cqi;
+  color: var(--color-background-secondary);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  font-family: 'tradeWinds';
+  font-size: min(24px, 5vw);
+  font-weight: 700;
+  line-height: 90%;
+  justify-content: center;
   align-items: center;
+  border-radius: 0;
+  box-shadow: none;
+  filter: drop-shadow(2px 4px 6px black);
+  cursor: pointer;
+  transition: transform 0.1s;
+  text-align: center;
+  padding: 0 10px;
+  user-select: none;
+  box-sizing: border-box;
 }
 
 mainMenu savesMenu .menuControl.saveSlot saveSlotLabel {
   flex: 1;
-  height: 54px;
-  background: var(--color-primary);
-  color: var(--color-background-secondary);
-  font-family: 'tradeWinds';
-  font-size: 16px;
-  font-weight: 700;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  cursor: pointer;
-  user-select: none;
-  box-sizing: border-box;
 }
 
 mainMenu savesMenu .menuControl.saveSlot saveSlotRename {
-  width: 54px;
-  height: 54px;
-  background: var(--color-primary);
-  color: var(--color-background-secondary);
-  font-family: 'tradeWinds';
-  font-size: 12px;
-  font-weight: 700;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  user-select: none;
-  box-sizing: border-box;
+  width: 10cqi;
 }
 
 mainMenu savesMenu .menuControl.saveSlot saveSlotRename:before {
@@ -1514,28 +1522,23 @@ mainMenu savesMenu .menuControl.saveSlot saveSlotRename:before {
 }
 
 mainMenu savesMenu .menuControl.saveSlot saveSlotDelete {
-  width: 54px;
-  height: 54px;
-  background: var(--color-primary);
-  color: var(--color-background-secondary);
-  font-family: 'tradeWinds';
-  font-size: 12px;
-  font-weight: 700;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  user-select: none;
-  box-sizing: border-box;
+  width: 10cqi;
 }
 
 mainMenu savesMenu .menuControl.saveSlot saveSlotDelete:before {
   content: "✕";
 }
 
+mainMenu savesMenu .menuControl.saveReturn {
+  width: 85%;
+  max-width: 600px;
+  margin-top: 24px;
+}
+
+mainMenu savesMenu .menuControl.saveSlot saveSlotLabel:active,
 mainMenu savesMenu .menuControl.saveSlot saveSlotRename:active,
 mainMenu savesMenu .menuControl.saveSlot saveSlotDelete:active,
-mainMenu savesMenu .menuControl.saveSlot saveSlotLabel:active {
+mainMenu savesMenu .menuControl.saveReturn:active {
   transform: scale(0.98);
 }
 
@@ -1545,21 +1548,10 @@ mainMenu savesMenu .menuControl.saveSlot.empty-slot saveSlotDelete {
   display: none;
 }
 
-mainMenu savesMenu .menuControl.saveReturn {
-  margin-top: 24px;
-  color: var(--color-primary);
-  cursor: pointer;
-  text-align: center;
-  width: 100%;
-  display: block;
-  text-decoration: underline;
-}
-
 saveSlotLabel {
   text-align: left;
-  padding-left: 16px;
+  padding-left: 12px;
   pointer-events: none;
-  padding-right: 24px;
 }
 
 saveSlotRename {
@@ -1570,8 +1562,9 @@ saveSlotRename {
   background-size: 22px;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.7;
+  opacity: 1;
   cursor: pointer;
+  filter: invert(1);
 }
 
 saveSlotDelete {
@@ -1582,8 +1575,9 @@ saveSlotDelete {
   background-size: 22px;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.7;
+  opacity: 1;
   cursor: pointer;
+  filter: invert(1);
 }
 
 saveSlotRename:hover,
@@ -1705,28 +1699,29 @@ nameCard upper nameCardName {
   position: relative;
   color: var(--color-black);
   font-family: 'tradeWinds';
-  padding-left: 10cqi;
+  padding-left: 6cqi;
   font-stretch: condensed;
-  font-size: 9cqi;
+  font-size: 7cqi;
   text-transform: capitalize;
+  white-space: nowrap;
   padding-top: 1cqi;
 }
 
 nameCard upper nameCardName bellowText {
   position: absolute;
   top: -2cqi;
-  left: 10cqi;
+  left: 7cqi;
   font-size:50%;
   text-transform: capitalize;
 }
 
 nameCard upper nameCardName.long {
-  font-size: 7cqi;
+  font-size: 5.5cqi;
 }
 
 nameCard upper nameCardName.short {
-  font-size: 10cqi;
-  padding-left: 12cqi;
+  font-size: 7.5cqi;
+  padding-left: 8cqi;
 }
 
 nameCard upper points,
@@ -1771,6 +1766,7 @@ nameCard upper armor {
 }
 
 cardNameList {
+  display: block;
   max-width: 528px;
   margin: 0 auto;
   width: 100%;
@@ -1856,19 +1852,25 @@ lower {
 }
 
 body[listType="list"] add {
-    left: 50%;
-    transform: translate(-50%, 0);
-    height: calc(var(--card-width-deck) * 0.3);
-    width: calc(var(--card-width-deck) * 1.2);
-    border-radius: calc(var(--card-width-deck) * 0.02);
     display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'tradeWinds';
-    font-size: calc(var(--card-width-deck) * 0.08);
+    width: 85%;
+    max-width: 600px;
+    height: 64px;
     color: var(--color-background-secondary);
-    margin-top: calc(var(--card-width-deck) * 0.15);
+    background: var(--color-primary);
+    font-family: 'tradeWinds';
+    font-size: min(24px, 5vw);
+    font-weight: 700;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0;
     filter: drop-shadow(2px 4px 6px black);
+    cursor: pointer;
+    transition: transform 0.1s;
+    margin: 16px auto;
+    margin-top: 36px;
+    user-select: none;
+    box-sizing: border-box;
 }
 
 body[listType="list"] add label {
@@ -1882,4 +1884,9 @@ body[listType="list"] add label {
 
 body[listType="list"] add::after {
     display: none;
+}
+
+menubutton.saveSlot {
+    display: grid;
+    grid-template-columns: 1fr min(8cqi, 32px) min(8cqi, 32px);
 }

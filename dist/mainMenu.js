@@ -7,7 +7,7 @@ import { storage } from './storage.js';
 import { showToast } from './cards.shared.js';
 
 const buttonContainerEle = document.querySelector('mainMenu menuButtons');
-const saveSlotEles = document.querySelectorAll('mainMenu menuControl.saveSlot');
+const saveSlotEles = document.querySelectorAll('mainMenu savesmenu menuButton.saveSlot');
 const savesMenuEle = document.querySelector('mainMenu > savesMenu');
 
 const learnButtonEle = buttonContainerEle.querySelector('.learnToPlay');
@@ -129,7 +129,9 @@ export const initMainMenuEvents = () => {
     shareCodeButtonEle.addEventListener('click', async () => {
       const code = await showInput("Enter Share Code");
       if (code) {
-        await loadShareDeckFromCode(code);
+        if (!(await loadShareDeckFromCode(code))) {
+          return;
+        }
         onShowDeck(true);
       }
     });
@@ -143,7 +145,7 @@ export const initMainMenuEvents = () => {
 const updateSaveSlots = () => {
   const storedDecks = storage.getStoredDecks();
 
-  [...document.querySelectorAll("menuControl.saveSlot")].forEach((saveSlotEle) => {
+  [...document.querySelectorAll("menuButton.saveSlot")].forEach((saveSlotEle) => {
     const saveSlotIdx = saveSlotEle.getAttribute("idx");
 
     // update the save slots names
@@ -167,6 +169,8 @@ const updateSaveSlots = () => {
 
 export const showMainMenu = () => {
   document.body.setAttribute("showing", "menu");
+  // Clear any mode when returning to main menu
+  document.body.removeAttribute("mode");
   savesMenuEle.classList.add('hidden');
   buttonContainerEle.classList.remove('hidden');
   updateSaveSlots();
