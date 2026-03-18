@@ -1,5 +1,5 @@
 const Filesystem = Capacitor.Plugins.Filesystem;
-const directory = 'DOCUMENTS';
+const directory = 'EXTERNAL';
 const encoding = 'utf8';
 
 const FILE_SYSTEM_PREFRENCES_PATH = `relicblade-preferences.json`;
