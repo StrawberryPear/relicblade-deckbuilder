@@ -1468,20 +1468,81 @@ mainMenu menuButtons.hidden {
 }
 
 mainMenu savesMenu .menuControl.saveSlot {
-  width: 80%;
-  max-width: 320px;
+  width: 85%;
+  max-width: 600px;
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  align-items: center;
+}
+
+mainMenu savesMenu .menuControl.saveSlot saveSlotLabel {
+  flex: 1;
   height: 54px;
-  background: var(--color-background-overlay-modal);
-  color: var(--color-white);
-  border: 1px solid var(--color-primary);
-  border-radius: 6px;
-  text-align: center;
+  background: var(--color-primary);
+  color: var(--color-background-secondary);
+  font-family: 'tradeWinds';
+  font-size: 16px;
+  font-weight: 700;
   display: flex;
   justify-content: center;
   align-items: center;
   text-decoration: none;
-  margin: 0;
   cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+mainMenu savesMenu .menuControl.saveSlot saveSlotRename {
+  width: 54px;
+  height: 54px;
+  background: var(--color-primary);
+  color: var(--color-background-secondary);
+  font-family: 'tradeWinds';
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+mainMenu savesMenu .menuControl.saveSlot saveSlotRename:before {
+  content: "✎";
+}
+
+mainMenu savesMenu .menuControl.saveSlot saveSlotDelete {
+  width: 54px;
+  height: 54px;
+  background: var(--color-primary);
+  color: var(--color-background-secondary);
+  font-family: 'tradeWinds';
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+mainMenu savesMenu .menuControl.saveSlot saveSlotDelete:before {
+  content: "✕";
+}
+
+mainMenu savesMenu .menuControl.saveSlot saveSlotRename:active,
+mainMenu savesMenu .menuControl.saveSlot saveSlotDelete:active,
+mainMenu savesMenu .menuControl.saveSlot saveSlotLabel:active {
+  transform: scale(0.98);
+}
+
+/* Hide edit and delete buttons for empty slots */
+mainMenu savesMenu .menuControl.saveSlot.empty-slot saveSlotRename,
+mainMenu savesMenu .menuControl.saveSlot.empty-slot saveSlotDelete {
+  display: none;
 }
 
 mainMenu savesMenu .menuControl.saveReturn {

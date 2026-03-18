@@ -154,12 +154,14 @@ const updateSaveSlots = () => {
 
     if (!localJsonDeckIdx) {
       labelEle.innerText = `Empty Slot`;
+      saveSlotEle.classList.add('empty-slot');
       return;
     }
 
     const deckValue = getValueFromDeckCards(localJsonDeckIdx.deck);
     const deckFaction = localJsonDeckIdx.deckFaction ?? "Wild";
     labelEle.innerText = `${localJsonDeckIdx.deckName} - (${deckValue})`;
+    saveSlotEle.classList.remove('empty-slot');
   });
 }
 
