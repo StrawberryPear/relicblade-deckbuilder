@@ -224,4 +224,10 @@ export const init = () => {
   const _cardEleBoundingRect = templateCardEle.getBoundingClientRect();
   CARD_WIDTH = _cardEleBoundingRect.width;
   CARD_HEIGHT = _cardEleBoundingRect.width * CARD_RATIO;
+
+  modalOverlayEle.addEventListener("click", (event) => {
+    if (event.target === modalOverlayEle || event.target.tagName === 'MODAL' || event.target.tagName === 'MODALTEXT') {
+      modalOverlayReturnButtonEle.click();
+    }
+  });
 };

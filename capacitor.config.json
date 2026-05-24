@@ -1,7 +1,6 @@
 {
   "appId": "relicblade.deckbuilder",
   "appName": "Relicblade Deck Builder",
-  "bundledWebRuntime": false,
   "webDir": "dist",
   "server": {
     "androidScheme": "https"

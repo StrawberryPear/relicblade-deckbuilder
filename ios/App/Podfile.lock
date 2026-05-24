@@ -3,8 +3,6 @@ PODS:
     - CapacitorCordova
   - CapacitorApp (6.0.0):
     - Capacitor
-  - CapacitorCamera (6.0.1):
-    - Capacitor
   - CapacitorClipboard (6.0.0):
     - Capacitor
   - CapacitorCordova (6.1.0)
@@ -18,13 +16,10 @@ PODS:
     - Capacitor
   - CapacitorStatusBar (6.0.0):
     - Capacitor
-  - CapawesomeCapacitorFilePicker (6.0.0):
-    - Capacitor
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
-  - "CapacitorCamera (from `../../node_modules/@capacitor/camera`)"
   - "CapacitorClipboard (from `../../node_modules/@capacitor/clipboard`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
@@ -32,15 +27,12 @@ DEPENDENCIES:
   - CapacitorPluginSafeArea (from `../../node_modules/capacitor-plugin-safe-area`)
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
-  - "CapawesomeCapacitorFilePicker (from `../../node_modules/@capawesome/capacitor-file-picker`)"
 
 EXTERNAL SOURCES:
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorApp:
     :path: "../../node_modules/@capacitor/app"
-  CapacitorCamera:
-    :path: "../../node_modules/@capacitor/camera"
   CapacitorClipboard:
     :path: "../../node_modules/@capacitor/clipboard"
   CapacitorCordova:
@@ -55,13 +47,10 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/splash-screen"
   CapacitorStatusBar:
     :path: "../../node_modules/@capacitor/status-bar"
-  CapawesomeCapacitorFilePicker:
-    :path: "../../node_modules/@capawesome/capacitor-file-picker"
 
 SPEC CHECKSUMS:
   Capacitor: 3aff4dee0552f6badcd04f47ab3174387d71f47d
   CapacitorApp: 30145f2ea2311e4f3744472119ec87d2ddf4c0a7
-  CapacitorCamera: 4792443e91e3cf83c36d72f16500f4bcd3a8e20a
   CapacitorClipboard: c1cb27fea166aab5c99bda605d3bc768cf00eabe
   CapacitorCordova: be703980ca797f847c3356f78fa175d21c8330c2
   CapacitorFilesystem: 9c2cc1e89d3b8b91503b316e9f6c2915c9bf9419
@@ -69,8 +58,7 @@ SPEC CHECKSUMS:
   CapacitorPluginSafeArea: 8aef11f038728ea5d52f9f419ee3f52c2e323400
   CapacitorSplashScreen: d2d8fe9541d7bebdf735839b89edf6e762cea969
   CapacitorStatusBar: 129c68650d3f950e080e8e7e03d69c3b361dbe52
-  CapawesomeCapacitorFilePicker: 9f81333cae7945e4f54c51489145d60fbef7d724
 
-PODFILE CHECKSUM: 60ca2d075a2cef2118e4e1573ecf00ead282f9de
+PODFILE CHECKSUM: a8feb9336bd8aa601656dab056f2519b26e9832c
 
 COCOAPODS: 1.16.2
