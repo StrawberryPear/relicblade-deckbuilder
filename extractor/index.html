@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF Card Extractor</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.mjs" type="module"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    margin:0;
+    background:#ececec;
+}
+
+header{
+    background:#1f1f1f;
+    color:white;
+    padding:18px;
+    font-size:24px;
+    font-weight:bold;
+}
+
+main{
+    display:flex;
+    height:calc(100vh - 64px);
+}
+
+#sidebar{
+    width:350px;
+    background:white;
+    border-right:1px solid #ccc;
+    overflow:auto;
+    padding:20px;
+}
+
+#previewContainer{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:auto;
+    background:#999;
+}
+
+#previewCanvas{
+    background:white;
+    box-shadow:0 0 15px rgba(0,0,0,.4);
+}
+
+#dropZone{
+    border:3px dashed #888;
+    border-radius:10px;
+    padding:35px;
+    text-align:center;
+    cursor:pointer;
+    margin-bottom:20px;
+    background:#fafafa;
+}
+
+#dropZone.drag{
+    background:#d8ecff;
+}
+
+.control{
+    margin-bottom:14px;
+}
+
+.control label{
+    display:block;
+    margin-bottom:4px;
+    font-weight:bold;
+}
+
+.control input{
+    width:100%;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:6px;
+    background:#1976d2;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#145ca3;
+}
+
+button:disabled{
+    background:#999;
+}
+
+#progressOuter{
+    margin-top:20px;
+    height:24px;
+    border-radius:12px;
+    overflow:hidden;
+    background:#ddd;
+}
+
+#progressInner{
+    width:0%;
+    height:100%;
+    background:#3fa93f;
+}
+
+#status{
+    margin-top:8px;
+    font-size:14px;
+}
+
+#fileList{
+    margin-top:20px;
+    font-size:14px;
+}
+
+#fileList div{
+    padding:3px 0;
+}
+
+.checkbox{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:15px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+PDF Card Extractor
+</header>
+
+<main>
+
+<div id="sidebar">
+
+<div id="dropZone">
+<b>Drop PDFs Here</b><br><br>
+or click to browse
+<input id="fileInput"
+       type="file"
+       accept=".pdf"
+       multiple
+       hidden>
+</div>
+
+<div class="control">
+<label>X Offset</label>
+<input id="offsetX" type="number" value="147">
+</div>
+
+<div class="control">
+<label>Y Offset</label>
+<input id="offsetY" type="number" value="75">
+</div>
+
+<div class="control">
+<label>Card Width</label>
+<input id="cardWidth" type="number" value="720">
+</div>
+
+<div class="control">
+<label>Card Height</label>
+<input id="cardHeight" type="number" value="1000">
+</div>
+
+<div class="control">
+<label>Columns</label>
+<input id="columns" type="number" value="3">
+</div>
+
+<div class="control">
+<label>Rows</label>
+<input id="rows" type="number" value="3">
+</div>
+
+<div class="control">
+<label>Row Drift</label>
+<input id="rowDrift" type="number" value="10">
+</div>
+
+<div class="control">
+<label>PDF Render Scale</label>
+<input id="scale" type="number" step="0.1" value="4">
+</div>
+
+<div class="checkbox">
+<input id="skipBlank" type="checkbox" checked>
+<label for="skipBlank">Skip blank cards</label>
+</div>
+
+<button id="previewBtn">
+Preview First Page
+</button>
+
+<button id="exportBtn" disabled>
+Export ZIP
+</button>
+
+<div id="progressOuter">
+<div id="progressInner"></div>
+</div>
+
+<div id="status">
+No files loaded.
+</div>
+
+<div id="fileList">
+</div>
+
+</div>
+
+<div id="previewContainer">
+
+<canvas id="previewCanvas"></canvas>
+
+</div>
+
+</main>
+
+<script type="module" src="app.js"></script>
+
+</body>
+</html>
