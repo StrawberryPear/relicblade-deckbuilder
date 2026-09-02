@@ -5722,5 +5722,55 @@
         0
       ]
     ]
+  },
+  "Severed Hand Cards - 12": {
+    "uid": "Severed Hand Cards - 12",
+    "cost": "23",
+    "name": "Moth Dancer",
+    "classes": "demon monk",
+    "keywords": "poison range move jump climb leap",
+    "types": "character",
+    "activations": "5",
+    "speed": "3",
+    "armor": "1",
+    "criticalHealthBox": 2,
+    "upgradeTypes": "tactic spell item potion",
+    "factions": "advocate",
+    "markBoxes": [
+      [
+        0.1632,
+        0.9125,
+        0
+      ],
+      [
+        0.2451,
+        0.9125,
+        0
+      ],
+      [
+        0.3319,
+        0.9125,
+        0
+      ],
+      [
+        0.4153,
+        0.9125,
+        0
+      ],
+      [
+        0.5021,
+        0.9125,
+        0
+      ]
+    ]
+  },
+  "Severed Hand Cards - 13": {
+    "uid": "Severed Hand Cards - 13",
+    "cost": "2",
+    "name": "Otherworldly Poise",
+    "classes": "monk",
+    "keywords": "focus twice per activation",
+    "types": "upgrade tactic",
+    "factions": ""
   }
 }
